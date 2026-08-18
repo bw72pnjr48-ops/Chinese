@@ -1,0 +1,3297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chinese restaurant phrases — stroke order practice</title>
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7.3/dist/hanzi-writer.min.js"></script>
+<style>
+  :root{
+    --paper:#F6F0E4;
+    --paper-2:#EFE6D3;
+    --ink:#2A2620;
+    --ink-soft:#6B6357;
+    --seal:#A8402E;
+    --seal-soft:#C9755F;
+    --line:#D9CDB4;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family: "Songti SC","STSong","Noto Serif SC",Georgia,serif;
+    padding:32px 24px 56px;
+  }
+  .wrap{max-width:920px;margin:0 auto;}
+  header{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:14px;
+    margin-bottom:8px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  h1{
+    font-size:26px;
+    font-weight:600;
+    margin:0;
+    letter-spacing:0.5px;
+  }
+  .sub{
+    font-size:13px;
+    color:var(--ink-soft);
+    font-family:Georgia,serif;
+    font-style:italic;
+  }
+  .stamp{
+    width:40px;height:40px;
+    border:2.5px solid var(--seal);
+    color:var(--seal);
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;font-weight:700;
+    border-radius:3px;
+    flex-shrink:0;
+  }
+  .section-title{
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    color:var(--seal);
+    font-family:Georgia,serif;
+    margin:40px 0 4px;
+  }
+  .section-phrase{
+    font-size:15px;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+    font-family:Georgia,serif;
+  }
+  .phrase-en{color:var(--ink);font-style:normal;}
+  .card-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .card{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:14px 14px 12px;
+    width:150px;
+    text-align:center;
+    flex-shrink:0;
+  }
+  .canvas-holder{
+    width:120px;height:120px;
+    margin:0 auto 8px;
+    background:#FFFDF8;
+    border:1px solid var(--line);
+    border-radius:4px;
+    position:relative;
+  }
+  .canvas-holder svg{position:absolute;top:0;left:0;}
+  .grid-bg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+  .pinyin{
+    font-family:Georgia,serif;
+    font-size:14px;
+    color:var(--ink);
+    margin:2px 0 0;
+    font-weight:600;
+  }
+  .gloss{
+    font-family:Georgia,serif;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin:1px 0 8px;
+    min-height:13px;
+  }
+  button.replay{
+    font-family:Georgia,serif;
+    font-size:11px;
+    letter-spacing:0.5px;
+    background:transparent;
+    border:1px solid var(--seal-soft);
+    color:var(--seal);
+    padding:4px 10px;
+    border-radius:20px;
+    cursor:pointer;
+  }
+  button.replay:hover{background:var(--seal);color:var(--paper);}
+  button.replay:active{transform:scale(0.96);}
+  .full-line{
+    margin-top:12px;
+    font-size:13px;
+    color:var(--ink-soft);
+    font-family:Georgia,serif;
+  }
+  .full-line b{color:var(--ink);font-weight:600;}
+  footer{
+    margin-top:44px;
+    border-top:1px solid var(--line);
+    padding-top:12px;
+    font-size:12px;
+    color:var(--ink-soft);
+    font-family:Georgia,serif;
+    text-align:center;
+  }
+  .mode-toggle{
+    display:flex;
+    gap:8px;
+    margin:20px 0 4px;
+  }
+  .mode-btn{
+    flex:1;
+    font-family:Georgia,serif;
+    font-size:13px;
+    letter-spacing:0.3px;
+    padding:11px 8px;
+    border:1px solid var(--line);
+    background:var(--paper-2);
+    color:var(--ink-soft);
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .mode-btn.active{
+    background:var(--ink);
+    color:var(--paper);
+    border-color:var(--ink);
+  }
+  .view{display:none;}
+  .view.active{display:block;}
+  .progress-bar{
+    height:5px;
+    background:var(--line);
+    border-radius:3px;
+    overflow:hidden;
+    margin:22px 0 6px;
+    max-width:320px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--seal);
+    width:0%;
+    transition:width .25s;
+  }
+  .progress-text{
+    font-size:12px;
+    color:var(--ink-soft);
+    font-family:Georgia,serif;
+    text-align:center;
+    margin-bottom:24px;
+  }
+  .flash-card{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:14px;
+    max-width:320px;
+    margin:0 auto;
+    padding:36px 20px;
+    text-align:center;
+    cursor:pointer;
+    min-height:230px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+  .flash-hz{
+    font-size:96px;
+    line-height:1;
+    margin-bottom:6px;
+  }
+  .flash-answer{display:none;}
+  .flash-answer.show{display:block;}
+  .flash-py{
+    font-size:22px;
+    font-weight:600;
+    font-family:Georgia,serif;
+    margin-bottom:4px;
+    color:var(--seal);
+  }
+  .flash-en{
+    font-size:14px;
+    color:var(--ink-soft);
+    font-family:Georgia,serif;
+  }
+  .flash-hint{
+    font-size:12px;
+    color:var(--ink-soft);
+    font-family:Georgia,serif;
+    margin-top:16px;
+  }
+  .flash-actions{
+    display:flex;
+    gap:10px;
+    max-width:320px;
+    margin:16px auto 0;
+  }
+  .flash-actions button{
+    flex:1;
+    font-family:Georgia,serif;
+    font-size:14px;
+    padding:13px;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .btn-again{background:transparent;border:1px solid var(--seal-soft);color:var(--seal);}
+  .btn-good{background:var(--ink);border:1px solid var(--ink);color:var(--paper);}
+  .practice-done{
+    text-align:center;
+    padding:50px 0;
+    font-family:Georgia,serif;
+  }
+  .practice-done button{
+    margin-top:16px;
+    font-family:Georgia,serif;
+    font-size:14px;
+    padding:10px 22px;
+    border-radius:20px;
+    border:1px solid var(--seal-soft);
+    background:transparent;
+    color:var(--seal);
+    cursor:pointer;
+  }
+  .practice-topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    max-width:320px;
+    margin:18px auto 0;
+  }
+  .exit-practice{
+    font-family:Georgia,serif;
+    font-size:12px;
+    background:none;
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+    padding:5px 10px;
+    border-radius:14px;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .exit-practice:hover{border-color:var(--seal-soft);color:var(--seal);}
+  .flash-context-row{
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px dashed var(--line);
+    font-family:Georgia,serif;
+    font-size:12px;
+    line-height:1.5;
+    text-align:left;
+  }
+  .flash-context-label{
+    color:var(--ink-soft);
+    font-style:italic;
+    margin-right:4px;
+  }
+  .flash-context-hz{
+    font-family:"Songti SC","STSong","Noto Serif SC",serif;
+    color:var(--ink);
+    font-weight:600;
+    margin-right:6px;
+  }
+  .flash-context-py{
+    color:var(--seal);
+    font-weight:600;
+    margin-right:4px;
+  }
+  .flash-context-en{
+    color:var(--ink-soft);
+  }
+  .flash-context-example{
+    border-top:none;
+    padding-top:4px;
+  }
+  .flash-context-breakdown{
+    margin-top:3px;
+    font-size:11px;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+  .flash-stats-line{
+    margin-top:10px;
+    padding-top:8px;
+    border-top:1px dashed var(--line);
+    font-size:11px;
+    color:var(--ink-soft);
+    font-family:Georgia,serif;
+    font-style:italic;
+    text-align:center;
+  }
+  .flash-card{
+    position:relative;
+  }
+  .mastery-dot{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+  }
+  .mastery-dot-new{background:var(--line);}
+  .mastery-dot-learning{background:var(--seal-soft);}
+  .mastery-dot-weak{background:var(--seal);}
+  .mastery-dot-medium{background:#B8923F;}
+  .mastery-dot-strong{background:#5B7A5B;}
+  .reset-stats-btn{
+    margin-top:10px;
+    font-family:Georgia,serif;
+    font-size:11px;
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    cursor:pointer;
+    padding:4px;
+  }
+  .search-wrap{
+    position:relative;
+    margin:18px 0 8px;
+  }
+  .search-wrap input{
+    width:100%;
+    box-sizing:border-box;
+    font-family:Georgia,serif;
+    font-size:14px;
+    padding:11px 36px 11px 14px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--paper-2);
+    color:var(--ink);
+  }
+  .search-wrap input::placeholder{color:var(--ink-soft);}
+  .search-wrap input:focus{outline:none;border-color:var(--seal-soft);}
+  .search-clear{
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    font-size:16px;
+    cursor:pointer;
+    display:none;
+    padding:4px 6px;
+  }
+  .search-hint{
+    font-size:12px;
+    color:var(--ink-soft);
+    font-family:Georgia,serif;
+    margin-bottom:8px;
+  }
+  .no-results{
+    text-align:center;
+    color:var(--ink-soft);
+    font-family:Georgia,serif;
+    font-size:14px;
+    padding:30px 0;
+    display:none;
+  }
+  .offline-banner{
+    background:#F3E6DC;
+    border:1px solid var(--seal-soft);
+    color:var(--seal);
+    font-family:Georgia,serif;
+    font-size:12px;
+    padding:9px 12px;
+    border-radius:8px;
+    margin-bottom:14px;
+    text-align:center;
+  }
+  .setup-wrap{
+    max-width:420px;
+    margin:20px auto 0;
+    font-family:Georgia,serif;
+  }
+  .setup-title{
+    font-size:16px;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:2px;
+  }
+  .setup-sub{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-bottom:16px;
+  }
+  .setup-block{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:14px;
+  }
+  .setup-block-label{
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .setup-quickbtns{
+    display:flex;
+    gap:8px;
+    margin-bottom:10px;
+  }
+  .setup-quickbtns button{
+    font-family:Georgia,serif;
+    font-size:11px;
+    background:none;
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+    padding:4px 10px;
+    border-radius:12px;
+    cursor:pointer;
+  }
+  .setup-quickbtns button:hover{border-color:var(--seal-soft);color:var(--seal);}
+  .section-checklist{
+    max-height:220px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+  }
+  .section-check-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .section-check-row input{accent-color:var(--seal);}
+  .section-check-count{
+    color:var(--ink-soft);
+    font-size:11px;
+    margin-left:auto;
+  }
+  .setup-toggle-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .setup-toggle-row input{accent-color:var(--seal);}
+  .setup-select-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .setup-select-row select{
+    font-family:Georgia,serif;
+    font-size:13px;
+    padding:5px 8px;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .setup-pool-count{
+    text-align:center;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin:4px 0 16px;
+  }
+  .setup-actions{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .setup-btn-primary{
+    font-family:Georgia,serif;
+    font-size:14px;
+    background:var(--ink);
+    border:1px solid var(--ink);
+    color:var(--paper);
+    padding:12px;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .setup-btn-secondary{
+    font-family:Georgia,serif;
+    font-size:13px;
+    background:none;
+    border:1px solid var(--seal-soft);
+    color:var(--seal);
+    padding:10px;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .change-session-btn{
+    font-family:Georgia,serif;
+    font-size:12px;
+    background:none;
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+    padding:5px 10px;
+    border-radius:14px;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .change-session-btn:hover{border-color:var(--seal-soft);color:var(--seal);}
+  .readthrough-header{
+    max-width:420px;
+    margin:0 auto 6px;
+    font-family:Georgia,serif;
+    font-size:13px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+  .honesty-note{
+    text-align:center;
+    font-size:11px;
+    font-style:italic;
+    color:var(--ink-soft);
+    font-family:Georgia,serif;
+    margin-top:8px;
+    max-width:320px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .mastery-breakdown-bar{
+    display:flex;
+    height:10px;
+    border-radius:5px;
+    overflow:hidden;
+    background:var(--line);
+    margin-bottom:10px;
+  }
+  .mb-segment{height:100%;}
+  .mb-strong{background:#5B7A5B;}
+  .mb-medium{background:#B8923F;}
+  .mb-learning{background:var(--seal-soft);}
+  .mb-weak{background:var(--seal);}
+  .mb-new{background:var(--line);}
+  .mastery-breakdown-legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 14px;
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+  .mb-dot{
+    display:inline-block;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    margin-right:4px;
+  }
+  .section-block.hidden,
+  .card.hidden,
+  .full-line.hidden{
+    display:none !important;
+  }
+  .pinyin-list{
+    columns: 1;
+  }
+  .pinyin-row{
+    padding:9px 0;
+    border-bottom:1px dashed var(--line);
+    display:flex;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .pinyin-row:last-child{border-bottom:none;}
+  .pinyin-main{
+    font-family:Georgia,serif;
+    font-size:15px;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .pinyin-hz{
+    font-family:"Songti SC","STSong","Noto Serif SC",serif;
+    font-size:13px;
+    color:var(--seal-soft);
+  }
+  .pinyin-en{
+    font-family:Georgia,serif;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    width:100%;
+    margin-top:-2px;
+  }
+  .pinyin-row.pinyin-line .pinyin-main{
+    font-weight:600;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>Chinese restaurant phrases</h1>
+    <div class="sub">Pinyin · characters · animated stroke order — click a card to replay</div>
+  </div>
+  <div class="stamp">餐</div>
+</header>
+
+<div class="mode-toggle">
+  <button class="mode-btn active" id="btn-browse">Browse &amp; stroke order</button>
+  <button class="mode-btn" id="btn-practice">Practice (quiz)</button>
+  <button class="mode-btn" id="btn-pinyin">Pinyin only</button>
+</div>
+
+<div id="browseView" class="view active">
+  <div class="offline-banner" id="offline-banner" style="display:none;">
+    You're offline — stroke animations need a connection. Practice quiz and Pinyin view work fine without one.
+  </div>
+  <div class="search-wrap">
+    <input type="text" id="search-input" placeholder="Search by pinyin, character, or meaning — e.g. 'li'" autocomplete="off">
+    <button class="search-clear" id="search-clear">✕</button>
+  </div>
+  <div class="search-hint" id="search-hint" style="display:none;"></div>
+  <div id="app"></div>
+  <div class="no-results" id="no-results">No characters match that search.</div>
+</div>
+
+<div id="practiceView" class="view"></div>
+
+<div id="pinyinView" class="view"></div>
+
+<footer>Tap or click any character to watch it write itself, stroke by stroke.</footer>
+</div>
+
+<script>
+const sections = [
+  {
+    title: "Greetings",
+    phrase: null,
+    items: [
+      { hz: "早", py: "zǎo", en: "morning" },
+      { hz: "上", py: "shàng", en: "on/above (in 早上 'morning', 晚上 'evening')" },
+      { hz: "中", py: "zhōng", en: "middle" },
+      { hz: "午", py: "wǔ", en: "noon" },
+      { hz: "下", py: "xià", en: "down/after" },
+      { hz: "晚", py: "wǎn", en: "evening" },
+      { hz: "好", py: "hǎo", en: "good" },
+      { hz: "我", py: "wǒ", en: "I" },
+      { hz: "的", py: "de", en: "'s" },
+      { hz: "文", py: "wén", en: "language" },
+      { hz: "不", py: "bù", en: "not" },
+      { hz: "太", py: "tài", en: "too" },
+      { hz: "但", py: "dàn", en: "but" },
+      { hz: "是", py: "shì", en: "to be" },
+      { hz: "会", py: "huì", en: "will/can" },
+      { hz: "试", py: "shì", en: "try" },
+      { hz: "请", py: "qǐng", en: "please" },
+      { hz: "说", py: "shuō", en: "speak" },
+      { hz: "慢", py: "màn", en: "slow" },
+      { hz: "一", py: "yī", en: "one" },
+      { hz: "点", py: "diǎn", en: "a bit" },
+      { hz: "儿", py: "ér", en: "suffix (in 一点儿 'a bit')" },
+      { hz: "遍", py: "biàn", en: "one full time" },
+      { hz: "再", py: "zài", en: "again" },
+      { hz: "也", py: "yě", en: "also/too" },
+      { hz: "很", py: "hěn", en: "very" },
+      { hz: "高", py: "gāo", en: "tall/high (in 高兴 'happy')" },
+      { hz: "兴", py: "xìng", en: "excited (in 高兴 'happy')" },
+      { hz: "认", py: "rèn", en: "recognize (in 认识 'to know someone')" },
+      { hz: "识", py: "shí", en: "know (in 认识 'to know someone')" },
+      { hz: "你", py: "nǐ", en: "you" }
+    ],
+    lines: [
+      ["早上好", "zǎoshang hǎo", "good morning"],
+      ["中午好", "zhōngwǔ hǎo", "good noon"],
+      ["下午好", "xiàwǔ hǎo", "good afternoon"],
+      ["晚上好", "wǎnshang hǎo", "good evening"],
+      ["我的中文不太好，但是我会试试。", "Wǒ de Zhōngwén bú tài hǎo, dànshì wǒ huì shìshi.", "my Chinese isn't very good, but I'll try"],
+      ["请说慢一点儿。", "Qǐng shuō màn yìdiǎnr.", "please speak a bit slower"],
+      ["请再说一遍。", "Qǐng zài shuō yí biàn.", "please say that again"],
+      ["我也很高兴认识你。", "Wǒ yě hěn gāoxìng rènshi nǐ.", "nice to meet you too"]
+    ]
+  },
+  {
+    title: "Courtesy & extras",
+    phrase: null,
+    items: [
+      { hz: "谢", py: "xiè", en: "thank" },
+      { hz: "不", py: "bù", en: "not" },
+      { hz: "客", py: "kè", en: "guest (in 客气 'polite')" },
+      { hz: "气", py: "qì", en: "manner/spirit (in 客气 'polite')" },
+      { hz: "再", py: "zài", en: "again" },
+      { hz: "见", py: "jiàn", en: "see" },
+      { hz: "好", py: "hǎo", en: "good" },
+      { hz: "意", py: "yì", en: "meaning (in 不好意思 'excuse me', 意思 'meaning')" },
+      { hz: "思", py: "sī", en: "think (in 不好意思 'excuse me')" },
+      { hz: "对", py: "duì", en: "correct" },
+      { hz: "起", py: "qǐ", en: "rise" },
+      { hz: "服", py: "fú", en: "serve" },
+      { hz: "务", py: "wù", en: "affair" },
+      { hz: "员", py: "yuán", en: "staff" },
+      { hz: "买", py: "mǎi", en: "buy" },
+      { hz: "单", py: "dān", en: "bill/list" },
+      { hz: "很", py: "hěn", en: "very" },
+      { hz: "吃", py: "chī", en: "eat" },
+      { hz: "干", py: "gān", en: "dry" },
+      { hz: "杯", py: "bēi", en: "cup" }
+    ],
+    lines: [
+      ["谢谢。", "Xièxie.", "thank you"],
+      ["不客气。", "Bú kèqi.", "you're welcome"],
+      ["再见。", "Zàijiàn.", "goodbye"],
+      ["不好意思。", "Bù hǎoyìsi.", "excuse me (to get attention, or a light apology)"],
+      ["对不起。", "Duìbuqǐ.", "sorry (more direct apology)"],
+      ["服务员！", "Fúwùyuán!", "waiter! (how to call staff over)"],
+      ["买单，谢谢。", "Mǎidān, xièxie.", "the bill, please"],
+      ["很好吃！", "Hěn hǎochī!", "delicious!"],
+      ["干杯！", "Gānbēi!", "cheers!"]
+    ]
+  },
+  {
+    title: "Ordering — chicken dumplings",
+    phrase: "Wǒ xiǎng yào jīròu jiǎozi — I'd like chicken dumplings, please",
+    items: [
+      { hz: "我", py: "wǒ", en: "I" },
+      { hz: "想", py: "xiǎng", en: "want to" },
+      { hz: "要", py: "yào", en: "would like" },
+      { hz: "鸡", py: "jī", en: "chicken" },
+      { hz: "肉", py: "ròu", en: "meat" },
+      { hz: "饺", py: "jiǎo", en: "dumpling" },
+      { hz: "子", py: "zi", en: "suffix (in 饺子 'dumplings')" }
+    ]
+  },
+  {
+    title: "Ordering — prawn noodles",
+    phrase: "Wǒ xiǎng yào xiārén miàntiáo — I'd like prawn noodles, please",
+    items: [
+      { hz: "虾", py: "xiā", en: "prawn/shrimp" },
+      { hz: "仁", py: "rén", en: "shelled meat (in 虾仁 'prawn meat')" },
+      { hz: "面", py: "miàn", en: "noodle" },
+      { hz: "条", py: "tiáo", en: "strip" }
+    ]
+  },
+  {
+    title: "Ordering — vegetable rice",
+    phrase: "Wǒ xiǎng yào shūcài mǐfàn — I'd like rice with vegetables",
+    items: [
+      { hz: "蔬", py: "shū", en: "vegetable" },
+      { hz: "菜", py: "cài", en: "dish/veg" },
+      { hz: "米", py: "mǐ", en: "rice (raw)" },
+      { hz: "饭", py: "fàn", en: "cooked rice" }
+    ]
+  },
+  {
+    title: "Dietary needs",
+    phrase: "Wǒ bù chī ròu, zhǐ chī shūcài hé hǎixiān. Nǐmen yǒu sùcài huòzhě hǎixiān cài ma?",
+    items: [
+      { hz: "只", py: "zhǐ", en: "only" },
+      { hz: "和", py: "hé", en: "and" },
+      { hz: "海", py: "hǎi", en: "sea (in 海鲜 'seafood')" },
+      { hz: "鲜", py: "xiān", en: "fresh (in 海鲜 'seafood')" },
+      { hz: "你", py: "nǐ", en: "you" },
+      { hz: "素", py: "sù", en: "vegetarian/plain (in 素菜 'vegetarian dish')" },
+      { hz: "或", py: "huò", en: "or (in 或者 'or')" },
+      { hz: "者", py: "zhě", en: "(in 或者 'or')" },
+      { hz: "吗", py: "ma", en: "question particle" }
+    ],
+    lines: [
+      ["我不吃肉，只吃蔬菜和海鲜。", "Wǒ bù chī ròu, zhǐ chī shūcài hé hǎixiān.", "I don't eat meat, only vegetables and seafood"],
+      ["你们有素菜或者海鲜菜吗？", "Nǐmen yǒu sùcài huòzhě hǎixiān cài ma?", "do you have any vegetarian or seafood dishes?"]
+    ]
+  },
+  {
+    title: "Main dishes",
+    phrase: null,
+    items: [
+      { hz: "麻", py: "má", en: "numb/sesame (in 麻婆豆腐 'mapo tofu')" },
+      { hz: "婆", py: "pó", en: "old woman (in 麻婆豆腐 'mapo tofu')" },
+      { hz: "豆", py: "dòu", en: "bean" },
+      { hz: "腐", py: "fǔ", en: "ferment (in 豆腐 'tofu')" },
+      { hz: "北", py: "běi", en: "north (in 北京 'Beijing')" },
+      { hz: "京", py: "jīng", en: "capital (in 北京 'Beijing')" },
+      { hz: "烤", py: "kǎo", en: "roasted" },
+      { hz: "鸭", py: "yā", en: "duck" },
+      { hz: "春", py: "chūn", en: "spring" },
+      { hz: "卷", py: "juǎn", en: "roll" },
+      { hz: "炒", py: "chǎo", en: "stir-fried" },
+      { hz: "火", py: "huǒ", en: "fire (in 火锅 'hot pot')" },
+      { hz: "锅", py: "guō", en: "pot (in 火锅 'hot pot')" },
+      { hz: "包", py: "bāo", en: "wrap (in 包子 'stuffed bun')" },
+      { hz: "子", py: "zi", en: "suffix (in 包子 'stuffed bun')" },
+      { hz: "小", py: "xiǎo", en: "small (in 小笼包 'soup dumplings')" },
+      { hz: "笼", py: "lóng", en: "steamer basket (in 小笼包 'soup dumplings')" },
+      { hz: "馄", py: "hún", en: "(in 馄饨 'wonton')" },
+      { hz: "饨", py: "tun", en: "(in 馄饨 'wonton')" },
+      { hz: "糖", py: "táng", en: "sugar (in 糖醋里脊 'sweet & sour pork')" },
+      { hz: "醋", py: "cù", en: "vinegar (in 糖醋里脊 'sweet & sour pork')" },
+      { hz: "里", py: "lǐ", en: "(in 里脊 'tenderloin')" },
+      { hz: "脊", py: "jǐ", en: "spine/back (in 里脊 'tenderloin')" },
+      { hz: "猪", py: "zhū", en: "pig (in 猪肉 'pork')" },
+      { hz: "肉", py: "ròu", en: "meat" },
+      { hz: "牛", py: "niú", en: "cow/ox (in 牛肉 'beef')" },
+      { hz: "夹", py: "jiā", en: "sandwich/clip (in 肉夹馍 'roujiamo')" },
+      { hz: "馍", py: "mó", en: "flatbread (in 肉夹馍 'roujiamo', 羊肉泡馍)" },
+      { hz: "凉", py: "liáng", en: "cool/cold (in 凉皮 'liangpi')" },
+      { hz: "皮", py: "pí", en: "skin (in 凉皮 'liangpi')" },
+      { hz: "羊", py: "yáng", en: "sheep/lamb (in 羊肉 'lamb')" }
+    ],
+    lines: [
+      ["麻婆豆腐", "mápó dòufu", "mapo tofu"],
+      ["北京烤鸭", "Běijīng kǎoyā", "peking duck"],
+      ["春卷", "chūnjuǎn", "spring rolls"],
+      ["炒饭", "chǎofàn", "fried rice"],
+      ["火锅", "huǒguō", "hot pot"],
+      ["包子", "bāozi", "steamed stuffed bun"],
+      ["小笼包", "xiǎolóngbāo", "soup dumplings (Shanghai specialty)"],
+      ["馄饨", "húntun", "wonton"],
+      ["糖醋里脊", "tángcù lǐjǐ", "sweet & sour pork"],
+      ["猪肉", "zhūròu", "pork"],
+      ["牛肉", "niúròu", "beef"],
+      ["肉夹馍", "ròujiāmó", "Xi'an 'Chinese hamburger' — braised pork in flatbread"],
+      ["凉皮", "liángpí", "Xi'an cold skin noodles"],
+      ["羊肉泡馍", "yángròu pàomó", "Xi'an lamb soup with torn flatbread"]
+    ]
+  },
+  {
+    title: "Drinks",
+    phrase: null,
+    items: [
+      { hz: "茶", py: "chá", en: "tea" },
+      { hz: "啤", py: "pí", en: "(in 啤酒 'beer')" },
+      { hz: "酒", py: "jiǔ", en: "alcohol" },
+      { hz: "可", py: "kě", en: "can/may (in 可乐 'cola', 可是 'but')" },
+      { hz: "乐", py: "lè", en: "happy (in 可乐 'cola')" },
+      { hz: "果", py: "guǒ", en: "fruit" },
+      { hz: "汁", py: "zhī", en: "juice" },
+      { hz: "橙", py: "chéng", en: "orange (in 橙汁 'orange juice')" },
+      { hz: "苹", py: "píng", en: "(in 苹果 'apple')" },
+      { hz: "西", py: "xī", en: "west (in 西瓜 'watermelon', lit. 'western melon')" },
+      { hz: "瓜", py: "guā", en: "melon (in 西瓜 'watermelon')" },
+      { hz: "芒", py: "máng", en: "(in 芒果 'mango')" },
+      { hz: "葡", py: "pú", en: "(in 葡萄 'grape')" },
+      { hz: "萄", py: "táo", en: "(in 葡萄 'grape')" },
+      { hz: "椰", py: "yē", en: "coconut (in 椰汁 'coconut juice')" },
+      { hz: "酸", py: "suān", en: "sour (in 酸梅汤 'sour plum drink')" },
+      { hz: "梅", py: "méi", en: "plum (in 酸梅汤 'sour plum drink')" },
+      { hz: "汤", py: "tāng", en: "soup/broth (in 酸梅汤 'sour plum drink')" },
+      { hz: "水", py: "shuǐ", en: "water" },
+      { hz: "自", py: "zì", en: "self (in 自来水 'tap water')" },
+      { hz: "来", py: "lái", en: "come (in 自来水 'tap water')" },
+      { hz: "矿", py: "kuàng", en: "mineral (in 矿泉水 'mineral water')" },
+      { hz: "泉", py: "quán", en: "spring (in 矿泉水 'mineral water')" },
+      { hz: "纯", py: "chún", en: "pure (in 纯净水 'purified water')" },
+      { hz: "净", py: "jìng", en: "clean (in 纯净水 'purified water')" },
+      { hz: "气", py: "qì", en: "gas (in 气泡水 'sparkling water')" },
+      { hz: "泡", py: "pào", en: "bubble (in 气泡水 'sparkling water')" },
+      { hz: "无", py: "wú", en: "without (in 无气水 'still water')" },
+      { hz: "瓶", py: "píng", en: "bottle (measure word, e.g. 一瓶水 'a bottle of water')" },
+      { hz: "豆", py: "dòu", en: "bean (in 豆浆 'soy milk')" },
+      { hz: "浆", py: "jiāng", en: "thick liquid (in 豆浆 'soy milk')" },
+      { hz: "燕", py: "yàn", en: "(in 燕麦 'oat')" },
+      { hz: "麦", py: "mài", en: "wheat/grain (in 燕麦 'oat')" },
+      { hz: "奶", py: "nǎi", en: "milk (in 燕麦奶 'oat milk', 牛奶 'cow's milk', 咖啡 drinks)" },
+      { hz: "牛", py: "niú", en: "cow/ox (in 牛奶 'cow's milk')" },
+      { hz: "咖", py: "kā", en: "(in 咖啡 'coffee')" },
+      { hz: "啡", py: "fēi", en: "(in 咖啡 'coffee')" },
+      { hz: "绿", py: "lǜ", en: "green (in 绿茶 'green tea')" },
+      { hz: "红", py: "hóng", en: "red (in 红茶 'black tea', lit. 'red tea')" },
+      { hz: "茉", py: "mò", en: "(in 茉莉花茶 'jasmine tea')" },
+      { hz: "莉", py: "lì", en: "(in 茉莉花茶 'jasmine tea')" },
+      { hz: "花", py: "huā", en: "flower (in 茉莉花茶 'jasmine tea')" },
+      { hz: "乌", py: "wū", en: "black/crow (in 乌龙茶 'oolong tea')" },
+      { hz: "龙", py: "lóng", en: "dragon (in 乌龙茶 'oolong tea')" },
+      { hz: "菊", py: "jú", en: "chrysanthemum (in 菊花茶 'chrysanthemum tea')" },
+      { hz: "洋", py: "yáng", en: "foreign/ocean (in 洋甘菊茶 'chamomile tea')" },
+      { hz: "甘", py: "gān", en: "sweet (in 洋甘菊茶 'chamomile tea')" },
+      { hz: "薄", py: "bò", en: "(in 薄荷茶 'mint tea')" },
+      { hz: "荷", py: "hé", en: "lotus (in 薄荷茶 'mint tea')" },
+      { hz: "普", py: "pǔ", en: "common (in 普洱茶 'pu-erh tea')" },
+      { hz: "洱", py: "ěr", en: "(in 普洱茶 'pu-erh tea')" }
+    ],
+    lines: [
+      ["茶", "chá", "tea"],
+      ["啤酒", "píjiǔ", "beer"],
+      ["可乐", "kělè", "cola"],
+      ["果汁", "guǒzhī", "juice"],
+      ["橙汁", "chéngzhī", "orange juice"],
+      ["苹果汁", "píngguǒzhī", "apple juice"],
+      ["西瓜汁", "xīguāzhī", "watermelon juice"],
+      ["芒果汁", "mángguǒzhī", "mango juice"],
+      ["葡萄汁", "pútáozhī", "grape juice"],
+      ["椰汁", "yēzhī", "coconut juice — very popular, sold everywhere"],
+      ["酸梅汤", "suānméitāng", "sour plum drink — iconic traditional Chinese drink, especially in summer"],
+      ["水", "shuǐ", "water"],
+      ["自来水", "zìláishuǐ", "tap water"],
+      ["矿泉水", "kuàngquánshuǐ", "mineral water"],
+      ["纯净水", "chúnjìngshuǐ", "purified / filtered water"],
+      ["气泡水", "qìpàoshuǐ", "sparkling water (water with gas)"],
+      ["无气水", "wúqìshuǐ", "still water (water without gas)"],
+      ["豆浆", "dòujiāng", "soy milk"],
+      ["燕麦奶", "yànmài nǎi", "oat milk"],
+      ["牛奶", "niúnǎi", "cow's milk / regular milk"],
+      ["咖啡", "kāfēi", "coffee"],
+      ["我要一杯燕麦奶咖啡。", "Wǒ yào yì bēi yànmài nǎi kāfēi.", "I'd like an oat milk coffee, please"],
+      ["绿茶", "lǜchá", "green tea"],
+      ["红茶", "hóngchá", "black tea"],
+      ["茉莉花茶", "mòlì huāchá", "jasmine tea"],
+      ["乌龙茶", "wūlóngchá", "oolong tea"],
+      ["菊花茶", "júhuā chá", "chrysanthemum tea (very popular — Chinese equivalent to chamomile)"],
+      ["洋甘菊茶", "yánggānjú chá", "chamomile tea (literal translation, less common in China)"],
+      ["薄荷茶", "bòhé chá", "mint tea"],
+      ["普洱茶", "pǔ'ěr chá", "pu-erh tea (popular fermented tea)"]
+    ]
+  },
+  {
+    title: "About me",
+    phrase: null,
+    items: [
+      { hz: "我", py: "wǒ", en: "I" },
+      { hz: "住", py: "zhù", en: "live" },
+      { hz: "在", py: "zài", en: "at/in" },
+      { hz: "伦", py: "lún", en: "(in 伦敦 'London')" },
+      { hz: "敦", py: "dūn", en: "(in 伦敦 'London')" },
+      { hz: "英", py: "yīng", en: "English" },
+      { hz: "国", py: "guó", en: "country" },
+      { hz: "可", py: "kě", en: "but/may" },
+      { hz: "奥", py: "ào", en: "(in 奥地利 'Austria')" },
+      { hz: "地", py: "dì", en: "land" },
+      { hz: "利", py: "lì", en: "benefit" },
+      { hz: "人", py: "rén", en: "person" },
+      { hz: "的", py: "de", en: "'s" },
+      { hz: "护", py: "hù", en: "protect" },
+      { hz: "照", py: "zhào", en: "document" },
+      { hz: "是", py: "shì", en: "to be" }
+    ],
+    lines: [
+      ["我住在伦敦，英国。", "Wǒ zhù zài Lúndūn, Yīngguó.", "I live in London, UK"],
+      ["可是我是奥地利人。", "Kěshì wǒ shì Àodìlì rén.", "but I am Austrian"],
+      ["我的护照是奥地利护照。", "Wǒ de hùzhào shì Àodìlì hùzhào.", "my passport is Austrian"]
+    ]
+  },
+  {
+    title: "About my partner",
+    phrase: null,
+    items: [
+      { hz: "我", py: "wǒ", en: "I" },
+      { hz: "们", py: "men", en: "plural marker (in 我们 'we')" },
+      { hz: "一", py: "yī", en: "one" },
+      { hz: "起", py: "qǐ", en: "together" },
+      { hz: "住", py: "zhù", en: "live" },
+      { hz: "在", py: "zài", en: "at/in" },
+      { hz: "英", py: "yīng", en: "English" },
+      { hz: "格", py: "gé", en: "(in 英格兰 'England')" },
+      { hz: "兰", py: "lán", en: "(in 英格兰 'England', 爱尔兰 'Ireland')" },
+      { hz: "但", py: "dàn", en: "but" },
+      { hz: "他", py: "tā", en: "he" },
+      { hz: "有", py: "yǒu", en: "have" },
+      { hz: "爱", py: "ài", en: "love; (in 爱尔兰 'Ireland')" },
+      { hz: "护", py: "hù", en: "protect" },
+      { hz: "照", py: "zhào", en: "document" },
+      { hz: "因", py: "yīn", en: "because" },
+      { hz: "为", py: "wèi", en: "because" },
+      { hz: "出", py: "chū", en: "out" },
+      { hz: "生", py: "shēng", en: "born" }
+    ],
+    lines: [
+      ["我们一起住在英格兰。", "Wǒmen yìqǐ zhù zài Yīnggélán.", "we live in England together"],
+      ["但他有爱尔兰护照，", "Dàn tā yǒu Àiěrlán hùzhào,", "but he has an Irish passport,"],
+      ["因为他在爱尔兰出生。", "Yīnwèi tā zài Àiěrlán chūshēng.", "because he was born in Ireland"]
+    ]
+  },
+  {
+    title: "Cities",
+    phrase: null,
+    items: [
+      { hz: "北", py: "běi", en: "north (in 北京 'Beijing')" },
+      { hz: "京", py: "jīng", en: "capital (in 北京 'Beijing')" },
+      { hz: "上", py: "shàng", en: "on/above (in 上海 'Shanghai')" },
+      { hz: "海", py: "hǎi", en: "sea (in 上海 'Shanghai')" },
+      { hz: "香", py: "xiāng", en: "fragrant (in 香港 'Hong Kong')" },
+      { hz: "港", py: "gǎng", en: "harbour (in 香港 'Hong Kong')" },
+      { hz: "西", py: "xī", en: "west (in 西安 'Xi'an')" },
+      { hz: "安", py: "ān", en: "peace (in 西安 'Xi'an')" },
+      { hz: "重", py: "chóng", en: "repeat/heavy (in 重庆 'Chongqing')" },
+      { hz: "庆", py: "qìng", en: "celebrate (in 重庆 'Chongqing')" },
+      { hz: "张", py: "zhāng", en: "(in 张家界 'Zhangjiajie')" },
+      { hz: "家", py: "jiā", en: "home/family (in 张家界 'Zhangjiajie')" },
+      { hz: "界", py: "jiè", en: "boundary (in 张家界 'Zhangjiajie')" },
+      { hz: "武", py: "wǔ", en: "military (in 武陵源 'Wulingyuan')" },
+      { hz: "陵", py: "líng", en: "hill/mound (in 武陵源 'Wulingyuan')" },
+      { hz: "源", py: "yuán", en: "source (in 武陵源 'Wulingyuan')" }
+    ],
+    lines: [
+      ["北京", "Běijīng", "Beijing"],
+      ["上海", "Shànghǎi", "Shanghai"],
+      ["香港", "Xiānggǎng", "Hong Kong"],
+      ["西安", "Xī'ān", "Xi'an"],
+      ["重庆", "Chóngqìng", "Chongqing"],
+      ["张家界", "Zhāngjiājiè", "Zhangjiajie"],
+      ["武陵源", "Wǔlíngyuán", "Wulingyuan"]
+    ]
+  },
+  {
+    title: "Directions & transport",
+    phrase: null,
+    items: [
+      { hz: "北", py: "běi", en: "north" },
+      { hz: "南", py: "nán", en: "south" },
+      { hz: "西", py: "xī", en: "west" },
+      { hz: "东", py: "dōng", en: "east" },
+      { hz: "火", py: "huǒ", en: "fire (in 火车 'train', lit. 'fire vehicle')" },
+      { hz: "车", py: "chē", en: "vehicle" },
+      { hz: "站", py: "zhàn", en: "station (in 火车站 'train station')" },
+      { hz: "机", py: "jī", en: "machine (in 机场 'airport', 飞机 'airplane')" },
+      { hz: "场", py: "chǎng", en: "field/venue (in 机场 'airport')" },
+      { hz: "飞", py: "fēi", en: "fly (in 飞机 'airplane')" },
+      { hz: "公", py: "gōng", en: "public (in 公交车 'bus')" },
+      { hz: "交", py: "jiāo", en: "exchange (in 公交车 'bus')" },
+      { hz: "地", py: "dì", en: "land (in 地铁 'metro/subway')" },
+      { hz: "铁", py: "tiě", en: "iron (in 地铁 'metro', 港铁 'Hong Kong MTR')" },
+      { hz: "轻", py: "qīng", en: "light (in 轻轨 'light rail')" },
+      { hz: "轨", py: "guǐ", en: "rail/track (in 轻轨 'light rail')" },
+      { hz: "港", py: "gǎng", en: "harbour (in 港铁 'Hong Kong MTR')" }
+    ],
+    lines: [
+      ["北", "běi", "north"],
+      ["南", "nán", "south"],
+      ["西", "xī", "west"],
+      ["东", "dōng", "east"],
+      ["火车站", "huǒchēzhàn", "railway station"],
+      ["火车", "huǒchē", "train"],
+      ["机场", "jīchǎng", "airport"],
+      ["飞机", "fēijī", "airplane"],
+      ["公交车", "gōngjiāochē", "bus"],
+      ["地铁", "dìtiě", "metro / subway / underground — used in Beijing, Shanghai, Xi'an, Chongqing"],
+      ["轻轨", "qīngguǐ", "light rail — Chongqing's famous monorail system runs on this"],
+      ["港铁", "Gǎngtiě", "MTR — what locals call the Hong Kong metro system"]
+    ]
+  },
+  {
+    title: "Directions conversations",
+    phrase: "Qǐngwèn, huǒchēzhàn zài nǎlǐ? — Excuse me, where is the train station?",
+    items: [
+      { hz: "问", py: "wèn", en: "ask (in 请问 'excuse me, may I ask')" },
+      { hz: "哪", py: "nǎ", en: "which (in 哪里 'where')" },
+      { hz: "里", py: "lǐ", en: "inside (in 哪里 'where')" },
+      { hz: "直", py: "zhí", en: "straight (in 一直走 'go straight')" },
+      { hz: "走", py: "zǒu", en: "walk/go" },
+      { hz: "然", py: "rán", en: "so (in 然后 'and then')" },
+      { hz: "后", py: "hòu", en: "after (in 然后 'and then')" },
+      { hz: "往", py: "wǎng", en: "towards" },
+      { hz: "左", py: "zuǒ", en: "left" },
+      { hz: "转", py: "zhuǎn", en: "turn" },
+      { hz: "右", py: "yòu", en: "right" },
+      { hz: "近", py: "jìn", en: "near/close" },
+      { hz: "五", py: "wǔ", en: "five" },
+      { hz: "分", py: "fēn", en: "minute (in 分钟 'minutes')" },
+      { hz: "钟", py: "zhōng", en: "clock (in 分钟 'minutes')" },
+      { hz: "就", py: "jiù", en: "then/right away" },
+      { hz: "到", py: "dào", en: "arrive" },
+      { hz: "可", py: "kě", en: "can (in 可以 'can/may')" },
+      { hz: "以", py: "yǐ", en: "(in 可以 'can/may')" },
+      { hz: "坐", py: "zuò", en: "sit/take (a vehicle)" },
+      { hz: "去", py: "qù", en: "go (to a place)" },
+      { hz: "红", py: "hóng", en: "red (in 红绿灯 'traffic light')" },
+      { hz: "绿", py: "lǜ", en: "green (in 红绿灯 'traffic light')" },
+      { hz: "灯", py: "dēng", en: "light (in 红绿灯 'traffic light')" },
+      { hz: "桥", py: "qiáo", en: "bridge" },
+      { hz: "路", py: "lù", en: "road" },
+      { hz: "尽", py: "jìn", en: "end (in 尽头 'the far end')" }
+    ],
+    lines: [
+      ["请问，火车站在哪里？", "Qǐngwèn, huǒchēzhàn zài nǎlǐ?", "excuse me, where is the train station?"],
+      ["一直走，然后往左转。", "Yìzhí zǒu, ránhòu wǎng zuǒ zhuǎn.", "go straight, then turn left"],
+      ["往右转。", "Wǎng yòu zhuǎn.", "turn right"],
+      ["很近，走路五分钟就到。", "Hěn jìn, zǒulù wǔ fēnzhōng jiù dào.", "it's close, a 5-minute walk"],
+      ["我可以坐地铁去吗？", "Wǒ kěyǐ zuò dìtiě qù ma?", "can I get there by metro?"],
+      ["在红绿灯那里左转。", "Zài hónglǜdēng nàlǐ zuǒ zhuǎn.", "turn left at the traffic light"],
+      ["过了桥就到了。", "Guòle qiáo jiù dào le.", "once you cross the bridge, you're there"],
+      ["就在这条路的尽头。", "Jiù zài zhè tiáo lù de jìntóu.", "it's at the end of this road"]
+    ]
+  },
+  {
+    title: "Numbers",
+    phrase: "Chinese counts in units of 万 (10,000), not 1,000 — so 100,000 is 十万 ('ten 10,000s') and 1,000,000 is 一百万 ('one hundred 10,000s').",
+    items: [
+      { hz: "零", py: "líng", en: "zero" },
+      { hz: "一", py: "yī", en: "one" },
+      { hz: "二", py: "èr", en: "two" },
+      { hz: "三", py: "sān", en: "three" },
+      { hz: "四", py: "sì", en: "four" },
+      { hz: "五", py: "wǔ", en: "five" },
+      { hz: "六", py: "liù", en: "six" },
+      { hz: "七", py: "qī", en: "seven" },
+      { hz: "八", py: "bā", en: "eight" },
+      { hz: "九", py: "jiǔ", en: "nine" },
+      { hz: "十", py: "shí", en: "ten" },
+      { hz: "百", py: "bǎi", en: "hundred" },
+      { hz: "千", py: "qiān", en: "thousand" },
+      { hz: "万", py: "wàn", en: "ten thousand (base unit of Chinese counting)" },
+      { hz: "两", py: "liǎng", en: "two — used instead of 二 right before a measure word, e.g. 两杯 not 二杯" },
+      { hz: "第", py: "dì", en: "ordinal prefix (in 第一 'first', 第二 'second')" }
+    ],
+    lines: [
+      ["零", "líng", "0"],
+      ["一", "yī", "1"],
+      ["二", "èr", "2"],
+      ["三", "sān", "3"],
+      ["四", "sì", "4"],
+      ["五", "wǔ", "5"],
+      ["六", "liù", "6"],
+      ["七", "qī", "7"],
+      ["八", "bā", "8"],
+      ["九", "jiǔ", "9"],
+      ["十", "shí", "10"],
+      ["十一", "shíyī", "11"],
+      ["二十", "èrshí", "20"],
+      ["一百", "yìbǎi", "100"],
+      ["一千", "yìqiān", "1,000"],
+      ["一万", "yíwàn", "10,000"],
+      ["十万", "shíwàn", "100,000"],
+      ["一百万", "yìbǎiwàn", "1,000,000"],
+      ["两杯", "liǎng bēi", "two cups/glasses (例: 两杯茶 'two teas')"],
+      ["第一", "dì yī", "first"],
+      ["第二", "dì èr", "second"],
+      ["第三", "dì sān", "third"]
+    ]
+  },
+  {
+    title: "Time & dates",
+    phrase: "月 (month) and 号 (date) follow the same number pattern as the days of the week — just swap in a number: 二月 'February', 十五号 'the 15th'.",
+    items: [
+      { hz: "现", py: "xiàn", en: "present (in 现在 'now')" },
+      { hz: "在", py: "zài", en: "at (in 现在 'now')" },
+      { hz: "今", py: "jīn", en: "present (in 今天 'today')" },
+      { hz: "天", py: "tiān", en: "day (in 今天 'today')" },
+      { hz: "明", py: "míng", en: "next (in 明天 'tomorrow')" },
+      { hz: "昨", py: "zuó", en: "yesterday (in 昨天 'yesterday')" },
+      { hz: "年", py: "nián", en: "year" },
+      { hz: "去", py: "qù", en: "past/go (in 去年 'last year')" },
+      { hz: "星", py: "xīng", en: "star (in 星期 'week')" },
+      { hz: "期", py: "qī", en: "period (in 星期 'week')" },
+      { hz: "一", py: "yī", en: "one" },
+      { hz: "二", py: "èr", en: "two" },
+      { hz: "三", py: "sān", en: "three" },
+      { hz: "四", py: "sì", en: "four" },
+      { hz: "五", py: "wǔ", en: "five" },
+      { hz: "六", py: "liù", en: "six" },
+      { hz: "月", py: "yuè", en: "month" },
+      { hz: "十", py: "shí", en: "ten" },
+      { hz: "几", py: "jǐ", en: "how many/what (in 几号 'what date', 几点 'what time')" },
+      { hz: "号", py: "hào", en: "date (in 几号 'what date')" },
+      { hz: "点", py: "diǎn", en: "o'clock (in 几点 'what time')" },
+      { hz: "半", py: "bàn", en: "half (in 三点半 'half past three')" }
+    ],
+    lines: [
+      ["现在", "xiànzài", "now"],
+      ["今天", "jīntiān", "today"],
+      ["明天", "míngtiān", "tomorrow"],
+      ["昨天", "zuótiān", "yesterday"],
+      ["今年", "jīnnián", "this year"],
+      ["去年", "qùnián", "last year"],
+      ["明年", "míngnián", "next year"],
+      ["星期一", "xīngqīyī", "Monday"],
+      ["星期二", "xīngqī'èr", "Tuesday"],
+      ["星期三", "xīngqīsān", "Wednesday"],
+      ["星期四", "xīngqīsì", "Thursday"],
+      ["星期五", "xīngqīwǔ", "Friday"],
+      ["星期六", "xīngqīliù", "Saturday"],
+      ["星期天", "xīngqītiān", "Sunday"],
+      ["一月", "yīyuè", "January"],
+      ["十二月", "shí'èryuè", "December"],
+      ["几号？", "Jǐ hào?", "what date is it? (day of the month)"],
+      ["现在几点？", "Xiànzài jǐ diǎn?", "what time is it now?"],
+      ["三点半", "sān diǎn bàn", "half past three (3:30)"]
+    ]
+  },
+  {
+    title: "Money & shopping",
+    phrase: null,
+    items: [
+      { hz: "多", py: "duō", en: "many (in 多少 'how much/many')" },
+      { hz: "少", py: "shǎo", en: "few (in 多少 'how much/many')" },
+      { hz: "钱", py: "qián", en: "money" },
+      { hz: "便", py: "pián", en: "(in 便宜 'cheap')" },
+      { hz: "宜", py: "yí", en: "suitable (in 便宜 'cheap')" },
+      { hz: "贵", py: "guì", en: "expensive" },
+      { hz: "太", py: "tài", en: "too" },
+      { hz: "了", py: "le", en: "grammar particle (marks change or completion)" },
+      { hz: "可", py: "kě", en: "can (in 可以 'may/can')" },
+      { hz: "以", py: "yǐ", en: "(in 可以 'may/can')" },
+      { hz: "点", py: "diǎn", en: "a bit (in 一点 'a bit')" },
+      { hz: "吗", py: "ma", en: "question particle" },
+      { hz: "打", py: "dǎ", en: "hit/make (in 打折 'discount')" },
+      { hz: "折", py: "zhé", en: "discount (in 打折 'discount')" },
+      { hz: "现", py: "xiàn", en: "present (in 现金 'cash')" },
+      { hz: "金", py: "jīn", en: "gold/money (in 现金 'cash')" },
+      { hz: "信", py: "xìn", en: "trust (in 信用卡 'credit card')" },
+      { hz: "用", py: "yòng", en: "use (in 信用卡 'credit card')" },
+      { hz: "卡", py: "kǎ", en: "card (in 信用卡 'credit card')" },
+      { hz: "发", py: "fā", en: "issue (in 发票 'receipt')" },
+      { hz: "票", py: "piào", en: "ticket/note (in 发票 'receipt')" },
+      { hz: "找", py: "zhǎo", en: "look for/give change (in 找零 'change')" },
+      { hz: "零", py: "líng", en: "small change (in 找零 'change')" },
+      { hz: "块", py: "kuài", en: "yuan (spoken currency unit)" },
+      { hz: "元", py: "yuán", en: "yuan (written currency unit)" }
+    ],
+    lines: [
+      ["多少钱？", "Duōshǎo qián?", "how much is it?"],
+      ["便宜", "piányi", "cheap"],
+      ["贵", "guì", "expensive"],
+      ["太贵了。", "Tài guì le.", "that's too expensive"],
+      ["可以便宜一点吗？", "Kěyǐ piányi yìdiǎn ma?", "can you make it a bit cheaper?"],
+      ["打折", "dǎzhé", "discount"],
+      ["现金", "xiànjīn", "cash"],
+      ["信用卡", "xìnyòngkǎ", "credit card"],
+      ["发票", "fāpiào", "receipt / invoice"],
+      ["找零", "zhǎolíng", "change (money given back)"],
+      ["块", "kuài", "yuan (spoken currency unit)"],
+      ["元", "yuán", "yuan (written currency unit)"]
+    ]
+  },
+  {
+    title: "Common adjectives",
+    phrase: null,
+    items: [
+      { hz: "大", py: "dà", en: "big" },
+      { hz: "小", py: "xiǎo", en: "small" },
+      { hz: "好", py: "hǎo", en: "good" },
+      { hz: "坏", py: "huài", en: "bad" },
+      { hz: "新", py: "xīn", en: "new" },
+      { hz: "旧", py: "jiù", en: "old (for objects)" },
+      { hz: "热", py: "rè", en: "hot" },
+      { hz: "冷", py: "lěng", en: "cold" },
+      { hz: "快", py: "kuài", en: "fast" },
+      { hz: "慢", py: "màn", en: "slow" },
+      { hz: "长", py: "cháng", en: "long" },
+      { hz: "短", py: "duǎn", en: "short" },
+      { hz: "漂", py: "piào", en: "(in 漂亮 'pretty')" },
+      { hz: "亮", py: "liàng", en: "bright (in 漂亮 'pretty')" },
+      { hz: "干", py: "gān", en: "dry (in 干净 'clean')" },
+      { hz: "净", py: "jìng", en: "clean (in 干净 'clean')" },
+      { hz: "脏", py: "zāng", en: "dirty" },
+      { hz: "容", py: "róng", en: "(in 容易 'easy')" },
+      { hz: "易", py: "yì", en: "easy (in 容易 'easy')" },
+      { hz: "难", py: "nán", en: "difficult" },
+      { hz: "忙", py: "máng", en: "busy" },
+      { hz: "累", py: "lèi", en: "tired" }
+    ],
+    lines: [
+      ["大", "dà", "big"],
+      ["小", "xiǎo", "small"],
+      ["好", "hǎo", "good"],
+      ["坏", "huài", "bad"],
+      ["新", "xīn", "new"],
+      ["旧", "jiù", "old (for objects)"],
+      ["热", "rè", "hot"],
+      ["冷", "lěng", "cold"],
+      ["快", "kuài", "fast"],
+      ["慢", "màn", "slow"],
+      ["长", "cháng", "long"],
+      ["短", "duǎn", "short"],
+      ["漂亮", "piàoliang", "pretty / beautiful"],
+      ["干净", "gānjìng", "clean"],
+      ["脏", "zāng", "dirty"],
+      ["容易", "róngyì", "easy"],
+      ["难", "nán", "difficult"],
+      ["忙", "máng", "busy"],
+      ["累", "lèi", "tired"]
+    ]
+  },
+  {
+    title: "Question words",
+    phrase: null,
+    items: [
+      { hz: "什", py: "shén", en: "what (in 什么 'what')" },
+      { hz: "么", py: "me", en: "(in 什么 'what')" },
+      { hz: "谁", py: "shéi", en: "who" },
+      { hz: "哪", py: "nǎ", en: "which (in 哪里 'where')" },
+      { hz: "里", py: "lǐ", en: "inside (in 哪里 'where')" },
+      { hz: "时", py: "shí", en: "time (in 什么时候 'when')" },
+      { hz: "候", py: "hòu", en: "time/wait (in 什么时候 'when')" },
+      { hz: "为", py: "wèi", en: "for (in 为什么 'why')" },
+      { hz: "怎", py: "zěn", en: "how (in 怎么 'how')" },
+      { hz: "样", py: "yàng", en: "manner (in 怎么样 'how is it')" },
+      { hz: "几", py: "jǐ", en: "how many (small numbers)" },
+      { hz: "多", py: "duō", en: "many (in 多少 'how much/many')" },
+      { hz: "少", py: "shǎo", en: "few (in 多少 'how much/many')" },
+      { hz: "个", py: "gè", en: "general measure word (in 哪个 'which one')" }
+    ],
+    lines: [
+      ["什么", "shénme", "what"],
+      ["谁", "shéi", "who"],
+      ["哪里", "nǎlǐ", "where"],
+      ["什么时候", "shénme shíhou", "when"],
+      ["为什么", "wèishénme", "why"],
+      ["怎么", "zěnme", "how"],
+      ["怎么样", "zěnmeyàng", "how is it? / how about it?"],
+      ["几", "jǐ", "how many (small numbers)"],
+      ["多少", "duōshǎo", "how much / how many"],
+      ["哪个", "nǎge", "which one"]
+    ]
+  },
+  {
+    title: "Common verbs",
+    phrase: "Note: 做 (zuò, 'do/make') and 坐 (zuò, 'sit', from your Directions section) are pronounced identically but written differently.",
+    items: [
+      { hz: "看", py: "kàn", en: "look/see/watch" },
+      { hz: "听", py: "tīng", en: "listen" },
+      { hz: "喝", py: "hē", en: "drink" },
+      { hz: "卖", py: "mài", en: "sell" },
+      { hz: "做", py: "zuò", en: "do/make" },
+      { hz: "知", py: "zhī", en: "know (in 知道 'to know')" },
+      { hz: "道", py: "dào", en: "way/path (in 知道 'to know')" },
+      { hz: "觉", py: "jué", en: "feel (in 觉得 'to feel/think')" },
+      { hz: "得", py: "de", en: "(in 觉得 'to feel/think')" },
+      { hz: "喜", py: "xǐ", en: "like (in 喜欢 'to like')" },
+      { hz: "欢", py: "huān", en: "happy (in 喜欢 'to like')" },
+      { hz: "需", py: "xū", en: "need (in 需要 'to need')" },
+      { hz: "要", py: "yào", en: "want/need" },
+      { hz: "帮", py: "bāng", en: "help (in 帮助 'to help')" },
+      { hz: "助", py: "zhù", en: "assist (in 帮助 'to help')" },
+      { hz: "懂", py: "dǒng", en: "understand" },
+      { hz: "明", py: "míng", en: "clear (in 明白 'to understand')" },
+      { hz: "白", py: "bái", en: "white/clear (in 明白 'to understand')" }
+    ],
+    lines: [
+      ["看", "kàn", "to look / see / watch"],
+      ["听", "tīng", "to listen"],
+      ["喝", "hē", "to drink"],
+      ["卖", "mài", "to sell"],
+      ["做", "zuò", "to do / make"],
+      ["知道", "zhīdào", "to know (a fact)"],
+      ["觉得", "juéde", "to feel / think"],
+      ["喜欢", "xǐhuan", "to like"],
+      ["需要", "xūyào", "to need"],
+      ["帮助", "bāngzhù", "to help"],
+      ["懂", "dǒng", "to understand"],
+      ["明白", "míngbai", "to understand / be clear — 我不明白 = 'I don't understand'"]
+    ]
+  },
+  {
+    title: "Health & emergency basics",
+    phrase: null,
+    items: [
+      { hz: "医", py: "yī", en: "medical (in 医院 'hospital', 医生 'doctor')" },
+      { hz: "院", py: "yuàn", en: "institution (in 医院 'hospital')" },
+      { hz: "生", py: "shēng", en: "person (in 医生 'doctor')" },
+      { hz: "药", py: "yào", en: "medicine" },
+      { hz: "疼", py: "téng", en: "pain/hurts" },
+      { hz: "救", py: "jiù", en: "rescue (in 救命 'help!', 救护车 'ambulance')" },
+      { hz: "命", py: "mìng", en: "life (in 救命 'help!')" },
+      { hz: "急", py: "jí", en: "urgent (in 急诊 'emergency room')" },
+      { hz: "诊", py: "zhěn", en: "diagnose (in 急诊 'emergency room')" },
+      { hz: "护", py: "hù", en: "protect (in 救护车 'ambulance')" },
+      { hz: "车", py: "chē", en: "vehicle (in 救护车 'ambulance')" },
+      { hz: "过", py: "guò", en: "pass (in 过敏 'allergic')" },
+      { hz: "敏", py: "mǐn", en: "sensitive (in 过敏 'allergic')" },
+      { hz: "发", py: "fā", en: "emit (in 发烧 'fever')" },
+      { hz: "烧", py: "shāo", en: "burn (in 发烧 'fever')" },
+      { hz: "不", py: "bù", en: "not" },
+      { hz: "舒", py: "shū", en: "comfortable (in 舒服 'well/comfortable')" },
+      { hz: "服", py: "fú", en: "(in 舒服 'well/comfortable')" },
+      { hz: "警", py: "jǐng", en: "alert (in 警察 'police')" },
+      { hz: "察", py: "chá", en: "examine (in 警察 'police')" },
+      { hz: "丢", py: "diū", en: "lose (in 丢了 'lost (something)')" },
+      { hz: "了", py: "le", en: "grammar particle (marks a completed action)" },
+      { hz: "帮", py: "bāng", en: "help (in 帮我 'help me')" },
+      { hz: "报", py: "bào", en: "report (in 报警 'to report to police')" }
+    ],
+    lines: [
+      ["医院", "yīyuàn", "hospital"],
+      ["医生", "yīshēng", "doctor"],
+      ["药", "yào", "medicine"],
+      ["疼", "téng", "pain / it hurts"],
+      ["救命！", "Jiùmìng!", "help! (emergency shout)"],
+      ["急诊", "jízhěn", "emergency room"],
+      ["救护车", "jiùhùchē", "ambulance"],
+      ["过敏", "guòmǐn", "allergic"],
+      ["发烧", "fāshāo", "fever"],
+      ["不舒服", "bù shūfu", "unwell / not feeling well"],
+      ["警察", "jǐngchá", "police"],
+      ["我的护照丢了。", "Wǒ de hùzhào diū le.", "I've lost my passport"],
+      ["帮我！", "Bāng wǒ!", "help me!"],
+      ["我要报警。", "Wǒ yào bàojǐng.", "I need to report this to the police"]
+    ]
+  },
+  {
+    title: "Family & people words",
+    phrase: null,
+    items: [
+      { hz: "爸", py: "bà", en: "dad (in 爸爸 'dad')" },
+      { hz: "妈", py: "mā", en: "mom (in 妈妈 'mom')" },
+      { hz: "儿", py: "ér", en: "son/child (in 儿子 'son')" },
+      { hz: "子", py: "zi", en: "suffix (in 儿子 'son', 孩子 'child')" },
+      { hz: "女", py: "nǚ", en: "female (in 女儿 'daughter')" },
+      { hz: "哥", py: "gē", en: "older brother (in 哥哥 'older brother')" },
+      { hz: "姐", py: "jiě", en: "older sister (in 姐姐 'older sister', 小姐 'Miss')" },
+      { hz: "弟", py: "dì", en: "younger brother (in 弟弟 'younger brother')" },
+      { hz: "妹", py: "mèi", en: "younger sister (in 妹妹 'younger sister')" },
+      { hz: "朋", py: "péng", en: "friend (in 朋友 'friend')" },
+      { hz: "友", py: "yǒu", en: "friend (in 朋友 'friend')" },
+      { hz: "先", py: "xiān", en: "first (in 先生 'Mr./sir')" },
+      { hz: "生", py: "shēng", en: "person (in 先生 'Mr./sir')" },
+      { hz: "小", py: "xiǎo", en: "young (in 小姐 'Miss')" },
+      { hz: "孩", py: "hái", en: "child (in 孩子 'child')" },
+      { hz: "家", py: "jiā", en: "family (in 家人 'family')" },
+      { hz: "人", py: "rén", en: "person (in 家人 'family')" },
+      { hz: "爷", py: "yé", en: "grandfather (in 爷爷 'paternal grandfather')" },
+      { hz: "奶", py: "nǎi", en: "grandmother (in 奶奶 'paternal grandmother')" },
+      { hz: "外", py: "wài", en: "outside/maternal (in 外公 'maternal grandfather')" },
+      { hz: "婆", py: "pó", en: "old woman (in 外婆 'maternal grandmother')" },
+      { hz: "叔", py: "shū", en: "uncle (in 叔叔 'uncle')" },
+      { hz: "阿", py: "ā", en: "(in 阿姨 'aunt')" },
+      { hz: "姨", py: "yí", en: "aunt (in 阿姨 'aunt')" },
+      { hz: "丈", py: "zhàng", en: "(in 丈夫 'husband')" },
+      { hz: "夫", py: "fū", en: "husband (in 丈夫 'husband')" },
+      { hz: "妻", py: "qī", en: "wife (in 妻子 'wife')" },
+      { hz: "兄", py: "xiōng", en: "elder brother (in 兄弟姐妹 'siblings')" },
+      { hz: "双", py: "shuāng", en: "pair/double (in 双胞胎 'twins')" },
+      { hz: "胞", py: "bāo", en: "womb (in 双胞胎 'twins')" },
+      { hz: "胎", py: "tāi", en: "fetus (in 双胞胎 'twins')" }
+    ],
+    lines: [
+      ["爸爸", "bàba", "dad"],
+      ["妈妈", "māma", "mom"],
+      ["儿子", "érzi", "son"],
+      ["女儿", "nǚ'ér", "daughter"],
+      ["哥哥", "gēge", "older brother"],
+      ["姐姐", "jiějie", "older sister"],
+      ["弟弟", "dìdi", "younger brother"],
+      ["妹妹", "mèimei", "younger sister"],
+      ["朋友", "péngyou", "friend"],
+      ["先生", "xiānsheng", "Mr. / sir"],
+      ["小姐", "xiǎojiě", "Miss / young lady"],
+      ["孩子", "háizi", "child"],
+      ["家人", "jiārén", "family (members)"],
+      ["爷爷", "yéye", "grandfather (paternal side)"],
+      ["奶奶", "nǎinai", "grandmother (paternal side)"],
+      ["外公", "wàigōng", "grandfather (maternal side)"],
+      ["外婆", "wàipó", "grandmother (maternal side)"],
+      ["叔叔", "shūshu", "uncle"],
+      ["阿姨", "āyí", "aunt"],
+      ["丈夫", "zhàngfu", "husband"],
+      ["妻子", "qīzi", "wife"],
+      ["兄弟姐妹", "xiōngdì jiěmèi", "siblings"],
+      ["双胞胎", "shuāngbāotāi", "twins"]
+    ]
+  },
+  {
+    title: "Weather & seasons",
+    phrase: null,
+    items: [
+      { hz: "天", py: "tiān", en: "sky (in 天气 'weather')" },
+      { hz: "气", py: "qì", en: "air (in 天气 'weather')" },
+      { hz: "晴", py: "qíng", en: "clear/sunny (in 晴天 'sunny day')" },
+      { hz: "阴", py: "yīn", en: "overcast (in 阴天 'overcast day')" },
+      { hz: "下", py: "xià", en: "fall (in 下雨 'to rain', 下雪 'to snow')" },
+      { hz: "雨", py: "yǔ", en: "rain" },
+      { hz: "雪", py: "xuě", en: "snow" },
+      { hz: "刮", py: "guā", en: "blow (in 刮风 'windy')" },
+      { hz: "风", py: "fēng", en: "wind" },
+      { hz: "春", py: "chūn", en: "spring" },
+      { hz: "夏", py: "xià", en: "summer" },
+      { hz: "秋", py: "qiū", en: "autumn" },
+      { hz: "冬", py: "dōng", en: "winter" }
+    ],
+    lines: [
+      ["天气", "tiānqì", "weather"],
+      ["晴天", "qíngtiān", "sunny day"],
+      ["阴天", "yīntiān", "overcast / cloudy day"],
+      ["下雨", "xiàyǔ", "to rain"],
+      ["下雪", "xiàxuě", "to snow"],
+      ["刮风", "guāfēng", "windy / to blow wind"],
+      ["春天", "chūntiān", "spring"],
+      ["夏天", "xiàtiān", "summer"],
+      ["秋天", "qiūtiān", "autumn"],
+      ["冬天", "dōngtiān", "winter"],
+      ["今天天气很好。", "Jīntiān tiānqì hěn hǎo.", "the weather is nice today"],
+      ["明天会下雨吗？", "Míngtiān huì xiàyǔ ma?", "will it rain tomorrow?"]
+    ]
+  },
+  {
+    title: "Emotions",
+    phrase: null,
+    items: [
+      { hz: "难", py: "nán", en: "difficult (in 难过 'sad')" },
+      { hz: "过", py: "guò", en: "pass (in 难过 'sad')" },
+      { hz: "紧", py: "jǐn", en: "tight (in 紧张 'nervous')" },
+      { hz: "张", py: "zhāng", en: "stretch (in 紧张 'nervous')" },
+      { hz: "害", py: "hài", en: "harm (in 害怕 'afraid')" },
+      { hz: "怕", py: "pà", en: "fear (in 害怕 'afraid')" },
+      { hz: "惊", py: "jīng", en: "startle (in 惊讶 'surprised')" },
+      { hz: "讶", py: "yà", en: "surprise (in 惊讶 'surprised')" },
+      { hz: "满", py: "mǎn", en: "full (in 满意 'satisfied')" },
+      { hz: "意", py: "yì", en: "meaning (in 满意 'satisfied')" },
+      { hz: "生", py: "shēng", en: "(in 生气 'angry')" },
+      { hz: "气", py: "qì", en: "anger (in 生气 'angry')" },
+      { hz: "开", py: "kāi", en: "open (in 开心 'happy')" },
+      { hz: "心", py: "xīn", en: "heart (in 开心 'happy')" },
+      { hz: "别", py: "bié", en: "don't" }
+    ],
+    lines: [
+      ["难过", "nánguò", "sad"],
+      ["紧张", "jǐnzhāng", "nervous"],
+      ["害怕", "hàipà", "afraid / scared"],
+      ["惊讶", "jīngyà", "surprised"],
+      ["满意", "mǎnyì", "satisfied"],
+      ["生气", "shēngqì", "angry"],
+      ["开心", "kāixīn", "happy"],
+      ["我很紧张。", "Wǒ hěn jǐnzhāng.", "I'm very nervous"],
+      ["别害怕。", "Bié hàipà.", "don't be afraid"]
+    ]
+  },
+  {
+    title: "Workplace & study",
+    phrase: null,
+    items: [
+      { hz: "公", py: "gōng", en: "public (in 公司 'company')" },
+      { hz: "司", py: "sī", en: "manage (in 公司 'company')" },
+      { hz: "工", py: "gōng", en: "work (in 工作 'work/job')" },
+      { hz: "作", py: "zuò", en: "make (in 工作 'work/job')" },
+      { hz: "老", py: "lǎo", en: "old (in 老板 'boss', 老师 'teacher')" },
+      { hz: "板", py: "bǎn", en: "board (in 老板 'boss')" },
+      { hz: "同", py: "tóng", en: "same (in 同事 'colleague')" },
+      { hz: "事", py: "shì", en: "matter (in 同事 'colleague')" },
+      { hz: "会", py: "huì", en: "meeting (in 会议 'meeting')" },
+      { hz: "议", py: "yì", en: "discuss (in 会议 'meeting')" },
+      { hz: "考", py: "kǎo", en: "test (in 考试 'exam')" },
+      { hz: "试", py: "shì", en: "try/test (in 考试 'exam')" },
+      { hz: "学", py: "xué", en: "study (in 学生 'student')" },
+      { hz: "生", py: "shēng", en: "person (in 学生 'student')" },
+      { hz: "师", py: "shī", en: "teacher/master (in 老师 'teacher')" }
+    ],
+    lines: [
+      ["公司", "gōngsī", "company"],
+      ["工作", "gōngzuò", "work / job"],
+      ["老板", "lǎobǎn", "boss"],
+      ["同事", "tóngshì", "colleague"],
+      ["会议", "huìyì", "meeting"],
+      ["考试", "kǎoshì", "exam / test"],
+      ["学生", "xuésheng", "student"],
+      ["老师", "lǎoshī", "teacher"],
+      ["我明天有一个会议。", "Wǒ míngtiān yǒu yí ge huìyì.", "I have a meeting tomorrow"],
+      ["他是我的同事。", "Tā shì wǒ de tóngshì.", "he is my colleague"]
+    ]
+  },
+  {
+    title: "Connectors & grammar words",
+    phrase: null,
+    items: [
+      { hz: "虽", py: "suī", en: "although (in 虽然 'although')" },
+      { hz: "然", py: "rán", en: "so (in 虽然 'although', 然后 'and then')" },
+      { hz: "但", py: "dàn", en: "but (in 但是 'but')" },
+      { hz: "是", py: "shì", en: "to be (in 但是 'but')" },
+      { hz: "因", py: "yīn", en: "because (in 因为 'because')" },
+      { hz: "为", py: "wèi", en: "for (in 因为 'because')" },
+      { hz: "所", py: "suǒ", en: "place (in 所以 'so/therefore')" },
+      { hz: "以", py: "yǐ", en: "(in 所以 'so/therefore')" },
+      { hz: "如", py: "rú", en: "if (in 如果 'if')" },
+      { hz: "果", py: "guǒ", en: "result (in 如果 'if')" },
+      { hz: "一", py: "yī", en: "one (in 一直 'always')" },
+      { hz: "直", py: "zhí", en: "straight (in 一直 'always')" },
+      { hz: "已", py: "yǐ", en: "already (in 已经 'already')" },
+      { hz: "经", py: "jīng", en: "pass through (in 已经 'already')" },
+      { hz: "还", py: "hái", en: "still (in 还是 'still')" },
+      { hz: "休", py: "xiū", en: "rest (in 休息 'rest')" },
+      { hz: "息", py: "xī", en: "rest (in 休息 'rest')" }
+    ],
+    lines: [
+      ["虽然", "suīrán", "although"],
+      ["但是", "dànshì", "but"],
+      ["因为", "yīnwèi", "because"],
+      ["所以", "suǒyǐ", "so / therefore"],
+      ["如果", "rúguǒ", "if"],
+      ["一直", "yìzhí", "always / continuously"],
+      ["已经", "yǐjīng", "already"],
+      ["虽然下雨，但是我们还是要去。", "Suīrán xiàyǔ, dànshì wǒmen háishi yào qù.", "although it's raining, we still want to go"],
+      ["如果你累了，我们可以休息。", "Rúguǒ nǐ lèi le, wǒmen kěyǐ xiūxi.", "if you're tired, we can rest"]
+    ]
+  },
+  {
+    title: "Body & senses",
+    phrase: null,
+    items: [
+      { hz: "眼", py: "yǎn", en: "eye (in 眼睛 'eyes')" },
+      { hz: "睛", py: "jīng", en: "eyeball (in 眼睛 'eyes')" },
+      { hz: "耳", py: "ěr", en: "ear (in 耳朵 'ears')" },
+      { hz: "朵", py: "duǒ", en: "(in 耳朵 'ears')" },
+      { hz: "头", py: "tóu", en: "head" },
+      { hz: "手", py: "shǒu", en: "hand" },
+      { hz: "脚", py: "jiǎo", en: "foot" },
+      { hz: "鼻", py: "bí", en: "nose (in 鼻子 'nose')" },
+      { hz: "子", py: "zi", en: "suffix (in 鼻子 'nose')" },
+      { hz: "嘴", py: "zuǐ", en: "mouth" },
+      { hz: "洗", py: "xǐ", en: "wash" }
+    ],
+    lines: [
+      ["眼睛", "yǎnjīng", "eyes"],
+      ["耳朵", "ěrduo", "ears"],
+      ["头", "tóu", "head"],
+      ["手", "shǒu", "hand"],
+      ["脚", "jiǎo", "foot"],
+      ["鼻子", "bízi", "nose"],
+      ["嘴", "zuǐ", "mouth"],
+      ["我头疼。", "Wǒ tóu téng.", "my head hurts"],
+      ["洗手", "xǐ shǒu", "wash hands"]
+    ]
+  },
+  {
+    title: "Shopping — clothes & objects",
+    phrase: null,
+    items: [
+      { hz: "衣", py: "yī", en: "clothes (in 衣服 'clothes')" },
+      { hz: "服", py: "fú", en: "garment (in 衣服 'clothes')" },
+      { hz: "裤", py: "kù", en: "pants (in 裤子 'pants')" },
+      { hz: "子", py: "zi", en: "suffix (in 裤子 'pants')" },
+      { hz: "鞋", py: "xié", en: "shoes" },
+      { hz: "手", py: "shǒu", en: "hand (in 手机 'mobile phone')" },
+      { hz: "机", py: "jī", en: "machine (in 手机 'mobile phone')" },
+      { hz: "电", py: "diàn", en: "electric (in 电脑 'computer')" },
+      { hz: "脑", py: "nǎo", en: "brain (in 电脑 'computer')" },
+      { hz: "件", py: "jiàn", en: "measure word for clothing/items" }
+    ],
+    lines: [
+      ["衣服", "yīfu", "clothes"],
+      ["裤子", "kùzi", "pants"],
+      ["鞋", "xié", "shoes"],
+      ["手机", "shǒujī", "mobile phone"],
+      ["电脑", "diànnǎo", "computer"],
+      ["我想买一件新衣服。", "Wǒ xiǎng mǎi yí jiàn xīn yīfu.", "I want to buy a new piece of clothing"]
+    ]
+  },
+  {
+    title: "Travel & geography extras",
+    phrase: null,
+    items: [
+      { hz: "签", py: "qiān", en: "sign (in 签证 'visa')" },
+      { hz: "证", py: "zhèng", en: "certificate (in 签证 'visa')" },
+      { hz: "地", py: "dì", en: "land (in 地图 'map')" },
+      { hz: "图", py: "tú", en: "picture/map (in 地图 'map')" },
+      { hz: "护", py: "hù", en: "protect (in 护照 'passport')" },
+      { hz: "照", py: "zhào", en: "document (in 护照 'passport')" },
+      { hz: "行", py: "xíng", en: "travel (in 行李 'luggage')" },
+      { hz: "李", py: "lǐ", en: "(in 行李 'luggage')" },
+      { hz: "给", py: "gěi", en: "give" }
+    ],
+    lines: [
+      ["签证", "qiānzhèng", "visa"],
+      ["地图", "dìtú", "map"],
+      ["护照", "hùzhào", "passport (already in your vocabulary!)"],
+      ["行李", "xínglǐ", "luggage"],
+      ["请给我看一下你的护照和签证。", "Qǐng gěi wǒ kàn yíxià nǐ de hùzhào hé qiānzhèng.", "please show me your passport and visa"]
+    ]
+  },
+  {
+    title: "Public transport",
+    phrase: null,
+    items: [
+      { hz: "辆", py: "liàng", en: "measure word for vehicles (in 这辆车 'this vehicle')" },
+      { hz: "车", py: "chē", en: "vehicle" },
+      { hz: "去", py: "qù", en: "go" },
+      { hz: "站", py: "zhàn", en: "station/stop" },
+      { hz: "是", py: "shì", en: "to be" },
+      { hz: "什", py: "shén", en: "what (in 什么 'what')" },
+      { hz: "么", py: "me", en: "(in 什么 'what')" },
+      { hz: "一", py: "yī", en: "one" },
+      { hz: "哪", py: "nǎ", en: "which" },
+      { hz: "下", py: "xià", en: "get off (in 下车 'get off a vehicle')" },
+      { hz: "换", py: "huàn", en: "change/exchange (in 换乘 'transfer')" },
+      { hz: "乘", py: "chéng", en: "ride (in 换乘 'transfer')" },
+      { hz: "票", py: "piào", en: "ticket" },
+      { hz: "多", py: "duō", en: "many (in 多少 'how much')" },
+      { hz: "少", py: "shǎo", en: "few (in 多少 'how much')" },
+      { hz: "钱", py: "qián", en: "money" },
+      { hz: "可", py: "kě", en: "can (in 可以 'may/can')" },
+      { hz: "以", py: "yǐ", en: "(in 可以 'may/can')" },
+      { hz: "用", py: "yòng", en: "use" },
+      { hz: "手", py: "shǒu", en: "hand (in 手机 'mobile phone')" },
+      { hz: "机", py: "jī", en: "machine (in 手机 'mobile phone')" },
+      { hz: "支", py: "zhī", en: "pay out (in 支付 'to pay')" },
+      { hz: "付", py: "fù", en: "pay (in 支付 'to pay')" },
+      { hz: "吗", py: "ma", en: "question particle" },
+      { hz: "出", py: "chū", en: "exit (in 出口 'exit')" },
+      { hz: "口", py: "kǒu", en: "opening (in 出口 'exit', 入口 'entrance')" },
+      { hz: "入", py: "rù", en: "enter (in 入口 'entrance')" },
+      { hz: "安", py: "ān", en: "safe (in 安检 'security check')" },
+      { hz: "检", py: "jiǎn", en: "inspect (in 安检 'security check')" },
+      { hz: "请", py: "qǐng", en: "please" },
+      { hz: "勿", py: "wù", en: "do not (in 请勿 'please do not')" },
+      { hz: "吸", py: "xī", en: "inhale (in 吸烟 'to smoke')" },
+      { hz: "烟", py: "yān", en: "smoke (in 吸烟 'to smoke')" },
+      { hz: "小", py: "xiǎo", en: "small (in 小心 'caution/be careful')" },
+      { hz: "心", py: "xīn", en: "heart (in 小心 'caution/be careful')" },
+      { hz: "滑", py: "huá", en: "slippery (in 地滑 'slippery floor')" },
+      { hz: "终", py: "zhōng", en: "end (in 终点站 'terminus')" },
+      { hz: "点", py: "diǎn", en: "point (in 终点站 'terminus')" },
+      { hz: "地", py: "dì", en: "ground (in 小心地滑 'caution, slippery floor')" },
+      { hz: "洗", py: "xǐ", en: "wash (in 洗手间 'restroom')" },
+      { hz: "间", py: "jiān", en: "room (in 洗手间 'restroom')" }
+    ],
+    lines: [
+      ["这辆车去...吗？", "Zhè liàng chē qù ... ma?", "does this bus/train go to...?"],
+      ["下一站是什么站？", "Xià yí zhàn shì shénme zhàn?", "what's the next stop?"],
+      ["我要在哪一站下车？", "Wǒ yào zài nǎ yí zhàn xiàchē?", "which stop do I get off at?"],
+      ["我要换乘。", "Wǒ yào huànchéng.", "I need to transfer"],
+      ["车票多少钱？", "Chēpiào duōshǎo qián?", "how much is the ticket?"],
+      ["我可以用手机支付吗？", "Wǒ kěyǐ yòng shǒujī zhīfù ma?", "can I pay by phone?"],
+      ["出口", "chūkǒu", "exit (sign)"],
+      ["入口", "rùkǒu", "entrance (sign)"],
+      ["安检", "ānjiǎn", "security check (sign)"],
+      ["请勿吸烟", "qǐng wù xīyān", "no smoking (sign)"],
+      ["小心地滑", "xiǎoxīn dì huá", "caution: slippery floor (sign)"],
+      ["终点站", "zhōngdiǎnzhàn", "terminus / last stop (sign)"],
+      ["洗手间", "xǐshǒujiān", "restroom (sign)"]
+    ]
+  },
+  {
+    title: "Small talk",
+    phrase: null,
+    items: [
+      { hz: "经", py: "jīng", en: "pass through (in 经理 'manager')" },
+      { hz: "理", py: "lǐ", en: "manage (in 经理 'manager')" },
+      { hz: "丹", py: "dān", en: "(name, 'Dan')" },
+      { hz: "业", py: "yè", en: "profession/industry (in 行业 'industry')" },
+      { hz: "离", py: "lí", en: "away from/distance from (in 离...很近 'close to...')" }
+    ],
+    lines: [
+      ["经理", "jīnglǐ", "manager"],
+      ["丹是经理。", "Dān shì jīnglǐ.", "Dan is a manager"],
+      ["我在IT行业工作。", "Wǒ zài IT hángyè gōngzuò.", "I work in the IT industry"],
+      ["我们住得离伦敦很近。", "Wǒmen zhù de lí Lúndūn hěn jìn.", "we live very close to London"]
+    ]
+  },
+  {
+    title: "Airport, hotel & payments",
+    phrase: null,
+    items: [
+      { hz: "登", py: "dēng", en: "board (in 登机牌 'boarding pass')" },
+      { hz: "机", py: "jī", en: "machine (in 登机牌 'boarding pass')" },
+      { hz: "牌", py: "pái", en: "sign/card (in 登机牌 'boarding pass')" },
+      { hz: "口", py: "kǒu", en: "gate/opening (in 登机口 'boarding gate')" },
+      { hz: "值", py: "zhí", en: "duty (in 值机 'flight check-in')" },
+      { hz: "转", py: "zhuǎn", en: "change (in 转机 'flight transfer')" },
+      { hz: "高", py: "gāo", en: "high (in 高铁 'high-speed rail')" },
+      { hz: "铁", py: "tiě", en: "iron/rail (in 高铁 'high-speed rail')" },
+      { hz: "出", py: "chū", en: "out (in 出租车 'taxi')" },
+      { hz: "租", py: "zū", en: "rent (in 出租车 'taxi')" },
+      { hz: "车", py: "chē", en: "vehicle (in 出租车 'taxi')" },
+      { hz: "酒", py: "jiǔ", en: "alcohol (in 酒店 'hotel')" },
+      { hz: "店", py: "diàn", en: "shop (in 酒店 'hotel')" },
+      { hz: "前", py: "qián", en: "front (in 前台 'front desk')" },
+      { hz: "台", py: "tái", en: "counter (in 前台 'front desk')" },
+      { hz: "入", py: "rù", en: "enter (in 入住 'to check in')" },
+      { hz: "住", py: "zhù", en: "stay (in 入住 'to check in')" },
+      { hz: "退", py: "tuì", en: "return (in 退房 'to check out')" },
+      { hz: "房", py: "fáng", en: "room (in 退房 'check out', 房卡 'room card')" },
+      { hz: "卡", py: "kǎ", en: "card (in 房卡 'room key card')" },
+      { hz: "男", py: "nán", en: "male (signage) — homophone of 南 'south'!" },
+      { hz: "微", py: "wēi", en: "micro (in 微信 'WeChat')" },
+      { hz: "信", py: "xìn", en: "message (in 微信 'WeChat')" },
+      { hz: "支", py: "zhī", en: "pay out (in 支付宝 'Alipay')" },
+      { hz: "付", py: "fù", en: "pay (in 支付宝 'Alipay')" },
+      { hz: "宝", py: "bǎo", en: "treasure (in 支付宝 'Alipay')" },
+      { hz: "扫", py: "sǎo", en: "sweep/scan (in 扫码 'scan the QR code')" },
+      { hz: "码", py: "mǎ", en: "code (in 扫码 'scan the QR code')" },
+      { hz: "滴", py: "dī", en: "drip (in 滴滴 'Didi', the ride-hailing app)" }
+    ],
+    lines: [
+      ["登机牌", "dēngjīpái", "boarding pass"],
+      ["登机口", "dēngjīkǒu", "boarding gate"],
+      ["值机", "zhíjī", "flight check-in"],
+      ["转机", "zhuǎnjī", "flight transfer / connection"],
+      ["高铁", "gāotiě", "high-speed rail — how you'll likely move between these cities"],
+      ["出租车", "chūzūchē", "taxi"],
+      ["酒店", "jiǔdiàn", "hotel"],
+      ["前台", "qiántái", "front desk / reception"],
+      ["入住", "rùzhù", "to check in (hotel)"],
+      ["退房", "tuìfáng", "to check out (hotel)"],
+      ["房卡", "fángkǎ", "room key card"],
+      ["男", "nán", "male (as in restroom signage)"],
+      ["微信", "Wēixìn", "WeChat"],
+      ["支付宝", "Zhīfùbǎo", "Alipay"],
+      ["扫码", "sǎomǎ", "scan the QR code — how almost everything is paid for in China"],
+      ["滴滴", "Dīdī", "Didi — the main ride-hailing app, like Uber"]
+    ]
+  },
+  {
+    title: "Sightseeing",
+    phrase: null,
+    items: [
+      { hz: "景", py: "jǐng", en: "scenery (in 景点 'scenic spot')" },
+      { hz: "点", py: "diǎn", en: "point/spot (in 景点 'scenic spot')" },
+      { hz: "门", py: "mén", en: "door/gate (in 门票 'admission ticket')" },
+      { hz: "票", py: "piào", en: "ticket (in 门票 'admission ticket')" },
+      { hz: "长", py: "cháng", en: "long (in 长城 'Great Wall')" },
+      { hz: "城", py: "chéng", en: "wall/city (in 长城 'Great Wall')" },
+      { hz: "兵", py: "bīng", en: "soldier (in 兵马俑 'Terracotta Warriors')" },
+      { hz: "马", py: "mǎ", en: "horse (in 兵马俑 'Terracotta Warriors')" },
+      { hz: "俑", py: "yǒng", en: "figurine (in 兵马俑 'Terracotta Warriors')" },
+      { hz: "缆", py: "lǎn", en: "cable (in 缆车 'cable car')" },
+      { hz: "玻", py: "bō", en: "glass (in 玻璃 'glass')" },
+      { hz: "璃", py: "lí", en: "glass (in 玻璃 'glass')" },
+      { hz: "山", py: "shān", en: "mountain" },
+      { hz: "园", py: "yuán", en: "garden/park (in 国家公园 'national park')" },
+      { hz: "博", py: "bó", en: "abundant (in 博物馆 'museum')" },
+      { hz: "物", py: "wù", en: "object/thing (in 博物馆 'museum')" },
+      { hz: "馆", py: "guǎn", en: "hall/building (in 博物馆 'museum')" }
+    ],
+    lines: [
+      ["景点", "jǐngdiǎn", "scenic spot / attraction"],
+      ["门票", "ménpiào", "admission ticket"],
+      ["长城", "Chángchéng", "the Great Wall (near Beijing)"],
+      ["兵马俑", "Bīngmǎyǒng", "the Terracotta Warriors (Xi'an!)"],
+      ["缆车", "lǎnchē", "cable car (Zhangjiajie's mountains)"],
+      ["玻璃桥", "bōlíqiáo", "glass bridge (Zhangjiajie's famous glass-bottomed bridge)"],
+      ["山", "shān", "mountain"],
+      ["国家公园", "guójiā gōngyuán", "national park (Zhangjiajie / Wulingyuan)"],
+      ["博物馆", "bówùguǎn", "museum"]
+    ]
+  },
+  {
+    title: "Jobs & professions",
+    phrase: null,
+    items: [
+      { hz: "工", py: "gōng", en: "work (in 工程师 'engineer')" },
+      { hz: "程", py: "chéng", en: "process (in 工程师 'engineer')" },
+      { hz: "师", py: "shī", en: "master/teacher (in 工程师 'engineer')" },
+      { hz: "律", py: "lǜ", en: "law (in 律师 'lawyer')" },
+      { hz: "护", py: "hù", en: "protect (in 护士 'nurse')" },
+      { hz: "士", py: "shì", en: "professional (in 护士 'nurse')" },
+      { hz: "厨", py: "chú", en: "kitchen (in 厨师 'chef')" },
+      { hz: "司", py: "sī", en: "manage (in 司机 'driver')" },
+      { hz: "机", py: "jī", en: "machine (in 司机 'driver')" },
+      { hz: "会", py: "huì", en: "count/meet (in 会计 'accountant')" },
+      { hz: "计", py: "jì", en: "calculate (in 会计 'accountant')" },
+      { hz: "销", py: "xiāo", en: "sell (in 销售 'salesperson')" },
+      { hz: "售", py: "shòu", en: "sell (in 销售 'salesperson')" },
+      { hz: "科", py: "kē", en: "subject/branch (in 科学家 'scientist')" },
+      { hz: "学", py: "xué", en: "study (in 科学家 'scientist')" },
+      { hz: "家", py: "jiā", en: "expert/-ist (in 科学家 'scientist', 艺术家 'artist')" },
+      { hz: "艺", py: "yì", en: "art (in 艺术家 'artist')" },
+      { hz: "术", py: "shù", en: "skill (in 艺术家 'artist')" },
+      { hz: "农", py: "nóng", en: "agriculture (in 农民 'farmer')" },
+      { hz: "民", py: "mín", en: "people/civilian (in 农民 'farmer')" },
+      { hz: "消", py: "xiāo", en: "extinguish (in 消防员 'firefighter')" },
+      { hz: "防", py: "fáng", en: "prevent (in 消防员 'firefighter')" },
+      { hz: "员", py: "yuán", en: "staff member (in 消防员 'firefighter', 飞行员 'pilot')" },
+      { hz: "飞", py: "fēi", en: "fly (in 飞行员 'pilot')" },
+      { hz: "行", py: "xíng", en: "travel (in 飞行员 'pilot')" },
+      { hz: "空", py: "kōng", en: "sky/empty (in 空姐 'flight attendant')" },
+      { hz: "姐", py: "jiě", en: "young lady (in 空姐 'flight attendant')" },
+      { hz: "记", py: "jì", en: "record (in 记者 'journalist')" },
+      { hz: "者", py: "zhě", en: "-er/one who (in 记者 'journalist')" },
+      { hz: "演", py: "yǎn", en: "perform (in 演员 'actor')" },
+      { hz: "歌", py: "gē", en: "song (in 歌手 'singer')" },
+      { hz: "手", py: "shǒu", en: "hand/-ist (in 歌手 'singer')" },
+      { hz: "教", py: "jiào", en: "teach (in 教授 'professor')" },
+      { hz: "授", py: "shòu", en: "instruct (in 教授 'professor')" },
+      { hz: "秘", py: "mì", en: "secret (in 秘书 'secretary')" },
+      { hz: "书", py: "shū", en: "book/document (in 秘书 'secretary')" },
+      { hz: "兽", py: "shòu", en: "beast (in 兽医 'vet')" },
+      { hz: "医", py: "yī", en: "medical (in 兽医 'vet')" }
+    ],
+    lines: [
+      ["工程师", "gōngchéngshī", "engineer"],
+      ["律师", "lǜshī", "lawyer"],
+      ["护士", "hùshi", "nurse"],
+      ["厨师", "chúshī", "chef"],
+      ["司机", "sījī", "driver"],
+      ["会计", "kuàijì", "accountant"],
+      ["销售", "xiāoshòu", "salesperson"],
+      ["科学家", "kēxuéjiā", "scientist"],
+      ["艺术家", "yìshùjiā", "artist"],
+      ["农民", "nóngmín", "farmer"],
+      ["消防员", "xiāofángyuán", "firefighter"],
+      ["飞行员", "fēixíngyuán", "pilot"],
+      ["空姐", "kōngjiě", "flight attendant"],
+      ["记者", "jìzhě", "journalist"],
+      ["演员", "yǎnyuán", "actor"],
+      ["歌手", "gēshǒu", "singer"],
+      ["教授", "jiàoshòu", "professor"],
+      ["秘书", "mìshū", "secretary"],
+      ["兽医", "shòuyī", "vet"]
+    ]
+  },
+  {
+    title: "Colours",
+    phrase: null,
+    items: [
+      { hz: "颜", py: "yán", en: "colour (in 颜色 'colour')" },
+      { hz: "色", py: "sè", en: "colour (in 颜色 'colour')" },
+      { hz: "红", py: "hóng", en: "red" },
+      { hz: "橙", py: "chéng", en: "orange" },
+      { hz: "黄", py: "huáng", en: "yellow" },
+      { hz: "绿", py: "lǜ", en: "green" },
+      { hz: "蓝", py: "lán", en: "blue" },
+      { hz: "紫", py: "zǐ", en: "purple" },
+      { hz: "黑", py: "hēi", en: "black" },
+      { hz: "白", py: "bái", en: "white" },
+      { hz: "灰", py: "huī", en: "grey" },
+      { hz: "粉", py: "fěn", en: "pink (in 粉色 'pink')" },
+      { hz: "棕", py: "zōng", en: "brown (in 棕色 'brown')" },
+      { hz: "银", py: "yín", en: "silver (in 银色 'silver')" },
+      { hz: "深", py: "shēn", en: "dark (prefix, e.g. 深蓝 'dark blue')" },
+      { hz: "浅", py: "qiǎn", en: "light (prefix, e.g. 浅蓝 'light blue')" },
+      { hz: "彩", py: "cǎi", en: "colourful (in 彩虹 'rainbow')" },
+      { hz: "虹", py: "hóng", en: "rainbow (in 彩虹 'rainbow')" }
+    ],
+    lines: [
+      ["颜色", "yánsè", "colour"],
+      ["红色", "hóngsè", "red"],
+      ["橙色", "chéngsè", "orange"],
+      ["黄色", "huángsè", "yellow"],
+      ["绿色", "lǜsè", "green"],
+      ["蓝色", "lánsè", "blue"],
+      ["紫色", "zǐsè", "purple"],
+      ["黑色", "hēisè", "black"],
+      ["白色", "báisè", "white"],
+      ["灰色", "huīsè", "grey"],
+      ["粉色", "fěnsè", "pink"],
+      ["棕色", "zōngsè", "brown"],
+      ["银色", "yínsè", "silver"],
+      ["深蓝色", "shēn lánsè", "dark blue"],
+      ["浅蓝色", "qiǎn lánsè", "light blue"],
+      ["彩虹", "cǎihóng", "rainbow"]
+    ]
+  },
+  {
+    title: "Hobbies",
+    phrase: null,
+    items: [
+      { hz: "爱", py: "ài", en: "love (in 爱好 'hobby')" },
+      { hz: "好", py: "hào", en: "like/favor (in 爱好 'hobby')" },
+      { hz: "读", py: "dú", en: "read (in 读书 'reading')" },
+      { hz: "书", py: "shū", en: "book (in 读书 'reading')" },
+      { hz: "运", py: "yùn", en: "move/carry (in 运动 'sports/exercise')" },
+      { hz: "动", py: "dòng", en: "move (in 运动 'sports/exercise')" },
+      { hz: "游", py: "yóu", en: "swim/travel (in 游泳 'swimming')" },
+      { hz: "泳", py: "yǒng", en: "swim (in 游泳 'swimming')" },
+      { hz: "跑", py: "pǎo", en: "run (in 跑步 'running')" },
+      { hz: "步", py: "bù", en: "step (in 跑步 'running')" },
+      { hz: "音", py: "yīn", en: "sound (in 音乐 'music')" },
+      { hz: "乐", py: "yuè", en: "music (in 音乐 'music')" },
+      { hz: "画", py: "huà", en: "draw/paint (in 画画 'drawing')" },
+      { hz: "摄", py: "shè", en: "capture (in 摄影 'photography')" },
+      { hz: "影", py: "yǐng", en: "shadow/image (in 摄影 'photography')" },
+      { hz: "旅", py: "lǚ", en: "travel (in 旅行 'traveling')" },
+      { hz: "行", py: "xíng", en: "go/travel (in 旅行 'traveling')" },
+      { hz: "打", py: "dǎ", en: "hit/play (in 打篮球 'play basketball')" },
+      { hz: "篮", py: "lán", en: "basket (in 打篮球 'play basketball')" },
+      { hz: "球", py: "qiú", en: "ball (in 打篮球 'play basketball')" },
+      { hz: "爬", py: "pá", en: "climb (in 爬山 'hiking')" },
+      { hz: "山", py: "shān", en: "mountain (in 爬山 'hiking')" },
+      { hz: "唱", py: "chàng", en: "sing (in 唱歌 'singing')" },
+      { hz: "歌", py: "gē", en: "song (in 唱歌 'singing')" },
+      { hz: "跳", py: "tiào", en: "jump/dance (in 跳舞 'dancing')" },
+      { hz: "舞", py: "wǔ", en: "dance (in 跳舞 'dancing')" },
+      { hz: "骑", py: "qí", en: "ride (in 骑自行车 'cycling')" },
+      { hz: "自", py: "zì", en: "self (in 自行车 'bicycle')" },
+      { hz: "收", py: "shōu", en: "collect (in 收藏 'collecting')" },
+      { hz: "藏", py: "cáng", en: "store/hide (in 收藏 'collecting')" },
+      { hz: "钓", py: "diào", en: "fish with a rod (in 钓鱼 'fishing')" },
+      { hz: "鱼", py: "yú", en: "fish (in 钓鱼 'fishing')" }
+    ],
+    lines: [
+      ["爱好", "àihào", "hobby"],
+      ["读书", "dúshū", "reading"],
+      ["运动", "yùndòng", "sports / exercise"],
+      ["游泳", "yóuyǒng", "swimming"],
+      ["跑步", "pǎobù", "running"],
+      ["音乐", "yīnyuè", "music"],
+      ["画画", "huàhuà", "drawing / painting"],
+      ["摄影", "shèyǐng", "photography"],
+      ["旅行", "lǚxíng", "traveling"],
+      ["打篮球", "dǎ lánqiú", "playing basketball"],
+      ["爬山", "páshān", "hiking / mountain climbing"],
+      ["唱歌", "chànggē", "singing"],
+      ["跳舞", "tiàowǔ", "dancing"],
+      ["骑自行车", "qí zìxíngchē", "cycling"],
+      ["收藏", "shōucáng", "collecting"],
+      ["钓鱼", "diàoyú", "fishing"]
+    ]
+  },
+  {
+    title: "Phone & connectivity",
+    phrase: null,
+    items: [
+      { hz: "号", py: "hào", en: "number (in 手机号 'phone number')" },
+      { hz: "无", py: "wú", en: "without (in 无线网络 'WiFi')" },
+      { hz: "线", py: "xiàn", en: "line/wire (in 无线网络 'WiFi')" },
+      { hz: "网", py: "wǎng", en: "net (in 无线网络 'WiFi')" },
+      { hz: "络", py: "luò", en: "network (in 无线网络 'WiFi')" },
+      { hz: "密", py: "mì", en: "secret (in 密码 'password')" },
+      { hz: "电", py: "diàn", en: "electric (in 打电话 'phone call', 充电 'to charge')" },
+      { hz: "话", py: "huà", en: "speech (in 打电话 'to make a phone call')" },
+      { hz: "充", py: "chōng", en: "fill/charge (in 充电 'to charge a battery')" }
+    ],
+    lines: [
+      ["手机号", "shǒujī hào", "phone number"],
+      ["无线网络", "wúxiàn wǎngluò", "WiFi / wireless network"],
+      ["密码", "mìmǎ", "password"],
+      ["打电话", "dǎ diànhuà", "to make a phone call"],
+      ["充电", "chōngdiàn", "to charge (a phone/battery)"]
+    ]
+  },
+  {
+    title: "Conversational reactions",
+    phrase: null,
+    items: [
+      { hz: "真", py: "zhēn", en: "real/really (in 真的吗 'really?')" },
+      { hz: "哎", py: "āi", en: "hey/oh (in 哎呀 'oh no/oops')" },
+      { hz: "呀", py: "ya", en: "(in 哎呀 'oh no/oops')" },
+      { hz: "天", py: "tiān", en: "sky/heaven (in 天啊 'oh my god')" },
+      { hz: "没", py: "méi", en: "not/without (in 没关系 'no worries')" },
+      { hz: "关", py: "guān", en: "relate/close (in 没关系 'no worries')" },
+      { hz: "系", py: "xì", en: "connection (in 没关系 'no worries')" },
+      { hz: "当", py: "dāng", en: "should/when (in 当然 'of course')" },
+      { hz: "随", py: "suí", en: "follow (in 随便 'whatever, anything is fine')" },
+      { hz: "加", py: "jiā", en: "add (in 加油 'go for it!')" },
+      { hz: "油", py: "yóu", en: "oil (in 加油 'go for it!', lit. 'add fuel')" }
+    ],
+    lines: [
+      ["真的吗？", "Zhēn de ma?", "really?"],
+      ["太好了！", "Tài hǎo le!", "great! / awesome!"],
+      ["哎呀", "āiyā", "oh no / oops"],
+      ["天啊", "tiān a", "oh my god"],
+      ["没关系", "méi guānxi", "no worries / it's okay"],
+      ["当然", "dāngrán", "of course"],
+      ["随便", "suíbiàn", "whatever / anything is fine"],
+      ["加油！", "jiāyóu!", "go for it! / good luck!"]
+    ]
+  },
+  {
+    title: "Sound-alikes: shi / shu family",
+    phrase: "These aren't just similar — several are TRUE homophones (identical pinyin AND tone), so listening practice alone can't separate them. The fix: stop recalling these by sound and anchor each one to its specific compound word instead — that's what the 'anchor on' phrase does for each entry below.",
+    items: [
+      { hz: "是", py: "shì", en: "to be" },
+      { hz: "试", py: "shì", en: "try" },
+      { hz: "事", py: "shì", en: "matter (in 同事 'colleague')" },
+      { hz: "士", py: "shì", en: "professional (in 护士 'nurse')" },
+      { hz: "识", py: "shí", en: "know a person (in 认识 'to know someone')" },
+      { hz: "十", py: "shí", en: "ten" },
+      { hz: "时", py: "shí", en: "time (in 什么时候 'when')" },
+      { hz: "蔬", py: "shū", en: "vegetable (in 蔬菜 'vegetables')" },
+      { hz: "舒", py: "shū", en: "comfortable (in 舒服 'well/comfortable')" },
+      { hz: "叔", py: "shū", en: "uncle" },
+      { hz: "书", py: "shū", en: "book (in 读书 'reading', 秘书 'secretary')" },
+      { hz: "说", py: "shuō", en: "speak — different tone from the shì/shí/shū groups, but still worth noting" },
+      { hz: "术", py: "shù", en: "skill (in 艺术家 'artist') — different tone" },
+      { hz: "师", py: "shī", en: "teacher/master (in 老师 'teacher') — different tone" },
+      { hz: "双", py: "shuāng", en: "pair/double (in 双胞胎 'twins') — different tone" },
+      { hz: "水", py: "shuǐ", en: "water — different tone" }
+    ],
+    lines: [
+      ["是", "shì", "to be — anchor on: 你是英国人吗？'are you British?'"],
+      ["试", "shì", "try — anchor on: 我可以试试吗？'can I try it?'"],
+      ["事", "shì", "matter, in 同事 'colleague' — anchor on: 她是我的同事"],
+      ["士", "shì", "professional, in 护士 'nurse' — anchor on: 护士很忙"],
+      ["识", "shí", "know a person, in 认识 — anchor on: 很高兴认识你"],
+      ["十", "shí", "ten — anchor on: 我要十个饺子"],
+      ["时", "shí", "time, in 什么时候 'when' — anchor on: 你什么时候到？"],
+      ["蔬", "shū", "vegetable, in 蔬菜 — anchor on: 我喜欢吃蔬菜"],
+      ["舒", "shū", "comfortable, in 舒服 — anchor on: 我今天不舒服"],
+      ["叔", "shū", "uncle, in 叔叔 — anchor on: 叔叔是厨师"],
+      ["书", "shū", "book, in 读书/秘书 — anchor on: 我喜欢读书"]
+    ]
+  }
+];
+
+const app = document.getElementById('app');
+
+// ---- Offline awareness ----
+// Practice quiz and Pinyin view need zero network access — everything they
+// use is baked into this page. Only the stroke-order animations in Browse
+// mode fetch data live, so that's the only thing worth warning about.
+const offlineBanner = document.getElementById('offline-banner');
+function updateOfflineBanner() {
+  offlineBanner.style.display = navigator.onLine ? 'none' : 'block';
+}
+updateOfflineBanner();
+window.addEventListener('online', updateOfflineBanner);
+window.addEventListener('offline', updateOfflineBanner);
+
+let counter = 0;
+const writerMap = new Map(); // holder element -> HanziWriter instance
+
+function ensureWriter(holder, hz) {
+  if (writerMap.has(holder)) return writerMap.get(holder);
+  const writer = HanziWriter.create(holder, hz, {
+    width: 118,
+    height: 118,
+    padding: 6,
+    strokeColor: '#2A2620',
+    radicalColor: '#A8402E',
+    strokeAnimationSpeed: 1,
+    delayBetweenStrokes: 250,
+    showOutline: true,
+    outlineColor: '#D9CDB4'
+  });
+  writerMap.set(holder, writer);
+  return writer;
+}
+
+// Lazy-load: only build + animate a character once its card actually scrolls
+// into view, instead of creating all of them (network + render cost) on load.
+const lazyObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const holder = entry.target;
+      const hz = holder.dataset.hz;
+      const writer = ensureWriter(holder, hz);
+      writer.animateCharacter();
+      lazyObserver.unobserve(holder);
+    }
+  });
+}, { rootMargin: '300px 0px', threshold: 0.01 });
+
+sections.forEach(sec => {
+  const block = document.createElement('div');
+  block.className = 'section-block';
+
+  const st = document.createElement('div');
+  st.className = 'section-title';
+  st.textContent = sec.title;
+  block.appendChild(st);
+
+  if (sec.phrase) {
+    const p = document.createElement('div');
+    p.className = 'section-phrase';
+    p.innerHTML = sec.phrase.replace(/^([^—]+)—(.+)$/, '<b>$1</b>—<span class="phrase-en">$2</span>');
+    block.appendChild(p);
+  }
+
+  const row = document.createElement('div');
+  row.className = 'card-row';
+
+  sec.items.forEach(it => {
+    const id = 'hw-' + (counter++);
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.search = normalizePinyin(`${it.hz} ${it.py} ${it.en || ''}`);
+    card.innerHTML = `
+      <div class="canvas-holder" id="${id}" data-hz="${it.hz}"></div>
+      <div class="pinyin">${it.py}</div>
+      <div class="gloss">${it.en || ''}</div>
+      <button class="replay">replay</button>
+    `;
+    row.appendChild(card);
+
+    const holder = card.querySelector('.canvas-holder');
+    const btn = card.querySelector('.replay');
+
+    lazyObserver.observe(holder);
+
+    const play = () => {
+      lazyObserver.unobserve(holder);
+      ensureWriter(holder, it.hz).animateCharacter();
+    };
+    holder.addEventListener('click', play);
+    btn.addEventListener('click', play);
+  });
+
+  block.appendChild(row);
+
+  if (sec.lines) {
+    sec.lines.forEach(([hz, py, en]) => {
+      const l = document.createElement('div');
+      l.className = 'full-line';
+      l.dataset.search = normalizePinyin(`${hz} ${py} ${en}`);
+      l.innerHTML = `<b>${hz}</b> &nbsp; ${py} &nbsp;— ${en}`;
+      block.appendChild(l);
+    });
+  }
+
+  app.appendChild(block);
+});
+
+// ---- Search ----
+function normalizePinyin(str) {
+  const toneMap = {
+    'ā':'a','á':'a','ǎ':'a','à':'a',
+    'ē':'e','é':'e','ě':'e','è':'e',
+    'ī':'i','í':'i','ǐ':'i','ì':'i',
+    'ō':'o','ó':'o','ǒ':'o','ò':'o',
+    'ū':'u','ú':'u','ǔ':'u','ù':'u',
+    'ǖ':'v','ǘ':'v','ǚ':'v','ǜ':'v','ü':'v'
+  };
+  return str.toLowerCase().replace(/[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü]/g, ch => toneMap[ch] || ch);
+}
+
+const searchInput = document.getElementById('search-input');
+const searchClear = document.getElementById('search-clear');
+const searchHint = document.getElementById('search-hint');
+const noResults = document.getElementById('no-results');
+const sectionBlocks = document.querySelectorAll('.section-block');
+
+function runSearch() {
+  const raw = searchInput.value.trim();
+  const query = normalizePinyin(raw);
+  searchClear.style.display = raw ? 'block' : 'none';
+
+  if (!query) {
+    searchHint.style.display = 'none';
+    noResults.style.display = 'none';
+    sectionBlocks.forEach(block => {
+      block.classList.remove('hidden');
+      block.querySelectorAll('.card, .full-line').forEach(el => el.classList.remove('hidden'));
+    });
+    return;
+  }
+
+  let totalMatches = 0;
+
+  sectionBlocks.forEach(block => {
+    let blockMatches = 0;
+    block.querySelectorAll('.card, .full-line').forEach(el => {
+      const matches = el.dataset.search.includes(query);
+      el.classList.toggle('hidden', !matches);
+      if (matches) blockMatches++;
+    });
+    block.classList.toggle('hidden', blockMatches === 0);
+    totalMatches += blockMatches;
+  });
+
+  searchHint.style.display = 'block';
+  searchHint.textContent = `${totalMatches} match${totalMatches === 1 ? '' : 'es'} for "${raw}"`;
+  noResults.style.display = totalMatches === 0 ? 'block' : 'none';
+}
+
+searchInput.addEventListener('input', runSearch);
+searchClear.addEventListener('click', () => {
+  searchInput.value = '';
+  runSearch();
+  searchInput.focus();
+});
+
+// ---- Practice (quiz) mode ----
+// Every section is now in the quiz rotation.
+const quizSections = sections.map(sec => sec.title);
+const vocab = [];
+const seenHz = new Set();
+sections.filter(sec => quizSections.includes(sec.title)).forEach(sec => {
+  sec.items.forEach(it => {
+    if (!seenHz.has(it.hz)) {
+      seenHz.add(it.hz);
+      vocab.push(it);
+    }
+  });
+});
+
+// Full character -> {py, en} lookup across ALL sections, used to break down
+// each character inside a compound word shown on the quiz card's flip side.
+const allCharInfo = {};
+sections.forEach(sec => {
+  sec.items.forEach(it => {
+    if (!(it.hz in allCharInfo)) {
+      allCharInfo[it.hz] = { py: it.py, en: it.en };
+    }
+  });
+});
+function simpleGloss(en) {
+  if (!en) return '';
+  return en.replace(/\s*\(.*$/, '').replace(/;.*$/, '').trim();
+}
+
+const btnBrowse = document.getElementById('btn-browse');
+const btnPractice = document.getElementById('btn-practice');
+const btnPinyin = document.getElementById('btn-pinyin');
+const browseView = document.getElementById('browseView');
+const practiceView = document.getElementById('practiceView');
+const pinyinView = document.getElementById('pinyinView');
+
+const allTabs = [
+  { btn: btnBrowse, view: browseView },
+  { btn: btnPractice, view: practiceView },
+  { btn: btnPinyin, view: pinyinView }
+];
+
+function activateTab(target) {
+  allTabs.forEach(({ btn, view }) => {
+    const isTarget = view === target.view;
+    btn.classList.toggle('active', isTarget);
+    view.classList.toggle('active', isTarget);
+  });
+}
+
+btnBrowse.addEventListener('click', () => activateTab({ view: browseView }));
+
+btnPractice.addEventListener('click', () => {
+  activateTab({ view: practiceView });
+  if (!practiceStarted && practiceView.innerHTML.trim() === '') renderSetup();
+});
+
+let pinyinBuilt = false;
+btnPinyin.addEventListener('click', () => {
+  activateTab({ view: pinyinView });
+  if (!pinyinBuilt) {
+    buildPinyinView();
+    pinyinBuilt = true;
+  }
+});
+
+function buildPinyinView() {
+  sections.forEach(sec => {
+    const block = document.createElement('div');
+    block.className = 'section-block';
+
+    const st = document.createElement('div');
+    st.className = 'section-title';
+    st.textContent = sec.title;
+    block.appendChild(st);
+
+    const list = document.createElement('div');
+    list.className = 'pinyin-list';
+
+    sec.items.forEach(it => {
+      const row = document.createElement('div');
+      row.className = 'pinyin-row';
+      row.innerHTML = `
+        <span class="pinyin-main">${it.py}</span>
+        <span class="pinyin-hz">${it.hz}</span>
+        <div class="pinyin-en">${it.en || ''}</div>
+      `;
+      list.appendChild(row);
+    });
+
+    if (sec.lines) {
+      sec.lines.forEach(([hz, py, en]) => {
+        const row = document.createElement('div');
+        row.className = 'pinyin-row pinyin-line';
+        row.innerHTML = `
+          <span class="pinyin-main">${py}</span>
+          <span class="pinyin-hz">${hz}</span>
+          <div class="pinyin-en">${en}</div>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    block.appendChild(list);
+    pinyinView.appendChild(block);
+  });
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+let deck = [];
+let totalCount = 0;
+let learnedCount = 0;
+let revealed = false;
+let practiceStarted = false;
+
+// ---- Persistent per-character stats (localStorage) ----
+// Tracks how many times each character has been seen and how often it was
+// marked "got it" vs "still learning", so weaker characters can be surfaced
+// more often and you can see your own progress over time.
+const STATS_KEY = 'hanzi-quiz-stats-v1';
+
+function loadStats() {
+  try {
+    const raw = localStorage.getItem(STATS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveStats() {
+  try {
+    localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+  } catch (e) {
+    // storage unavailable (private browsing, etc.) — fail silently, quiz still works
+  }
+}
+
+let stats = loadStats();
+
+function recordResult(hz, gotIt) {
+  if (!stats[hz]) stats[hz] = { seen: 0, good: 0, again: 0, lastSeen: null };
+  stats[hz].seen++;
+  if (gotIt) stats[hz].good++; else stats[hz].again++;
+  stats[hz].lastSeen = Date.now();
+  saveStats();
+}
+
+function masteryLevel(hz) {
+  const s = stats[hz];
+  if (!s || s.seen === 0) return 'new';
+  const ratio = s.good / s.seen;
+  if (s.seen < 2) return 'learning';
+  if (ratio >= 0.8) return 'strong';
+  if (ratio >= 0.5) return 'medium';
+  return 'weak';
+}
+
+const masteryLabel = {
+  new: 'not yet practiced',
+  learning: 'still learning',
+  weak: 'needs work',
+  medium: 'getting there',
+  strong: 'strong'
+};
+
+function resetStats() {
+  stats = {};
+  saveStats();
+  renderCard();
+}
+
+// ---- Word context: compound word + example sentence for every quiz character ----
+// Shown on the flip side of the flashcard so a character is never learned in isolation.
+const wordContext = {
+  "夹": { cw: "肉夹馍", cpy: "ròujiāmó", cen: "roujiamo", ex: "肉夹馍很好吃。", expy: "Ròujiāmó hěn hǎochī.", exen: "Roujiamo is delicious." },
+  "馍": { cw: "肉夹馍", cpy: "ròujiāmó", cen: "roujiamo", ex: "西安的馍很有名。", expy: "Xī'ān de mó hěn yǒumíng.", exen: "Xi'an's flatbread is famous." },
+  "凉": { cw: "凉皮", cpy: "liángpí", cen: "liangpi (cold noodles)", ex: "天热的时候我喜欢吃凉皮。", expy: "Tiān rè de shíhou wǒ xǐhuan chī liángpí.", exen: "When it's hot I like eating liangpi." },
+  "皮": { cw: "凉皮", cpy: "liángpí", cen: "liangpi (cold noodles)", ex: "凉皮很爽口。", expy: "Liángpí hěn shuǎngkǒu.", exen: "Liangpi is refreshing." },
+  "羊": { cw: "羊肉", cpy: "yángròu", cen: "lamb", ex: "我从来没吃过羊肉。", expy: "Wǒ cónglái méi chīguo yángròu.", exen: "I've never eaten lamb before." },
+  "茶": { ex: "我要一杯茶。", expy: "Wǒ yào yì bēi chá.", exen: "I'd like a cup of tea." },
+  "啤": { cw: "啤酒", cpy: "píjiǔ", cen: "beer", ex: "他喜欢喝啤酒。", expy: "Tā xǐhuan hē píjiǔ.", exen: "He likes drinking beer." },
+  "果": { cw: "果汁", cpy: "guǒzhī", cen: "juice", ex: "这是苹果汁吗？", expy: "Zhè shì píngguǒzhī ma?", exen: "Is this apple juice?" },
+  "汁": { cw: "果汁", cpy: "guǒzhī", cen: "juice", ex: "我要橙汁。", expy: "Wǒ yào chéngzhī.", exen: "I'd like orange juice." },
+  "苹": { cw: "苹果汁", cpy: "píngguǒzhī", cen: "apple juice", ex: "苹果汁很甜。", expy: "Píngguǒzhī hěn tián.", exen: "Apple juice is very sweet." },
+  "瓜": { cw: "西瓜汁", cpy: "xīguāzhī", cen: "watermelon juice", ex: "夏天喝西瓜汁很舒服。", expy: "Xiàtiān hē xīguāzhī hěn shūfu.", exen: "Drinking watermelon juice in summer feels great." },
+  "芒": { cw: "芒果汁", cpy: "mángguǒzhī", cen: "mango juice", ex: "我喜欢芒果汁。", expy: "Wǒ xǐhuan mángguǒzhī.", exen: "I like mango juice." },
+  "葡": { cw: "葡萄汁", cpy: "pútáozhī", cen: "grape juice", ex: "葡萄汁是紫色的。", expy: "Pútáozhī shì zǐsè de.", exen: "Grape juice is purple." },
+  "萄": { cw: "葡萄汁", cpy: "pútáozhī", cen: "grape juice", ex: "这些葡萄很甜。", expy: "Zhèxiē pútao hěn tián.", exen: "These grapes are very sweet." },
+  "椰": { cw: "椰汁", cpy: "yēzhī", cen: "coconut juice", ex: "椰汁很受欢迎。", expy: "Yēzhī hěn shòu huānyíng.", exen: "Coconut juice is very popular." },
+  "酸": { cw: "酸梅汤", cpy: "suānméitāng", cen: "sour plum drink", ex: "酸梅汤又酸又甜。", expy: "Suānméitāng yòu suān yòu tián.", exen: "Sour plum drink is both sour and sweet." },
+  "梅": { cw: "酸梅汤", cpy: "suānméitāng", cen: "sour plum drink", ex: "夏天喝酸梅汤很解暑。", expy: "Xiàtiān hē suānméitāng hěn jiěshǔ.", exen: "Drinking sour plum drink in summer cools you down." },
+  "汤": { cw: "酸梅汤", cpy: "suānméitāng", cen: "sour plum drink", ex: "这碗汤很好喝。", expy: "Zhè wǎn tāng hěn hǎohē.", exen: "This soup tastes great." },
+  "水": { ex: "请给我一杯水。", expy: "Qǐng gěi wǒ yì bēi shuǐ.", exen: "Please give me a glass of water." },
+  "来": { cw: "自来水", cpy: "zìláishuǐ", cen: "tap water", ex: "这里的自来水能喝吗？", expy: "Zhèlǐ de zìláishuǐ néng hē ma?", exen: "Can you drink the tap water here?" },
+  "矿": { cw: "矿泉水", cpy: "kuàngquánshuǐ", cen: "mineral water", ex: "我要一瓶矿泉水。", expy: "Wǒ yào yì píng kuàngquánshuǐ.", exen: "I'd like a bottle of mineral water." },
+  "泉": { cw: "矿泉水", cpy: "kuàngquánshuǐ", cen: "mineral water", ex: "矿泉水多少钱？", expy: "Kuàngquánshuǐ duōshǎo qián?", exen: "How much is the mineral water?" },
+  "纯": { cw: "纯净水", cpy: "chúnjìngshuǐ", cen: "purified water", ex: "这是纯净水吗？", expy: "Zhè shì chúnjìngshuǐ ma?", exen: "Is this purified water?" },
+  "净": { cw: "纯净水", cpy: "chúnjìngshuǐ", cen: "purified water", ex: "纯净水比较安全。", expy: "Chúnjìngshuǐ bǐjiào ānquán.", exen: "Purified water is relatively safe." },
+  "泡": { cw: "气泡水", cpy: "qìpàoshuǐ", cen: "sparkling water", ex: "我要气泡水，不要普通水。", expy: "Wǒ yào qìpàoshuǐ, bú yào pǔtōng shuǐ.", exen: "I'd like sparkling water, not regular water." },
+  "瓶": { ex: "请给我两瓶水。", expy: "Qǐng gěi wǒ liǎng píng shuǐ.", exen: "Please give me two bottles of water." },
+  "浆": { cw: "豆浆", cpy: "dòujiāng", cen: "soy milk", ex: "早上喝豆浆很健康。", expy: "Zǎoshang hē dòujiāng hěn jiànkāng.", exen: "Drinking soy milk in the morning is healthy." },
+  "燕": { cw: "燕麦奶", cpy: "yànmàinǎi", cen: "oat milk", ex: "我要燕麦奶拿铁。", expy: "Wǒ yào yànmàinǎi nátiě.", exen: "I'd like an oat milk latte." },
+  "麦": { cw: "燕麦奶", cpy: "yànmàinǎi", cen: "oat milk", ex: "燕麦奶咖啡很好喝。", expy: "Yànmàinǎi kāfēi hěn hǎohē.", exen: "Oat milk coffee tastes great." },
+  "咖": { cw: "咖啡", cpy: "kāfēi", cen: "coffee", ex: "我每天喝咖啡。", expy: "Wǒ měitiān hē kāfēi.", exen: "I drink coffee every day." },
+  "啡": { cw: "咖啡", cpy: "kāfēi", cen: "coffee", ex: "你要黑咖啡吗？", expy: "Nǐ yào hēi kāfēi ma?", exen: "Do you want black coffee?" },
+  "茉": { cw: "茉莉花茶", cpy: "mòlì huāchá", cen: "jasmine tea", ex: "茉莉花茶很香。", expy: "Mòlì huāchá hěn xiāng.", exen: "Jasmine tea is very fragrant." },
+  "莉": { cw: "茉莉花茶", cpy: "mòlì huāchá", cen: "jasmine tea", ex: "我喜欢茉莉花茶。", expy: "Wǒ xǐhuan mòlì huāchá.", exen: "I like jasmine tea." },
+  "花": { cw: "茉莉花茶", cpy: "mòlì huāchá", cen: "jasmine tea", ex: "这是什么花？", expy: "Zhè shì shénme huā?", exen: "What flower is this?" },
+  "乌": { cw: "乌龙茶", cpy: "wūlóngchá", cen: "oolong tea", ex: "乌龙茶很受欢迎。", expy: "Wūlóngchá hěn shòu huānyíng.", exen: "Oolong tea is very popular." },
+  "龙": { cw: "乌龙茶", cpy: "wūlóngchá", cen: "oolong tea", ex: "乌龙茶来自中国。", expy: "Wūlóngchá láizì Zhōngguó.", exen: "Oolong tea comes from China." },
+  "菊": { cw: "菊花茶", cpy: "júhuāchá", cen: "chrysanthemum tea", ex: "菊花茶对身体好。", expy: "Júhuāchá duì shēntǐ hǎo.", exen: "Chrysanthemum tea is good for your health." },
+  "洋": { cw: "洋甘菊茶", cpy: "yánggānjúchá", cen: "chamomile tea", ex: "睡前喝洋甘菊茶很放松。", expy: "Shuì qián hē yánggānjúchá hěn fàngsōng.", exen: "Drinking chamomile tea before bed is relaxing." },
+  "甘": { cw: "洋甘菊茶", cpy: "yánggānjúchá", cen: "chamomile tea", ex: "这个茶有点甘甜。", expy: "Zhège chá yǒudiǎn gāntián.", exen: "This tea is a bit sweet." },
+  "薄": { cw: "薄荷茶", cpy: "bòhéchá", cen: "mint tea", ex: "薄荷茶很清凉。", expy: "Bòhéchá hěn qīngliáng.", exen: "Mint tea is very refreshing." },
+  "荷": { cw: "薄荷茶", cpy: "bòhéchá", cen: "mint tea", ex: "我要一杯薄荷茶。", expy: "Wǒ yào yì bēi bòhéchá.", exen: "I'd like a mint tea." },
+  "普": { cw: "普洱茶", cpy: "pǔ'ěrchá", cen: "pu-erh tea", ex: "普洱茶帮助消化。", expy: "Pǔ'ěrchá bāngzhù xiāohuà.", exen: "Pu-erh tea helps digestion." },
+  "洱": { cw: "普洱茶", cpy: "pǔ'ěrchá", cen: "pu-erh tea", ex: "普洱茶来自云南。", expy: "Pǔ'ěrchá láizì Yúnnán.", exen: "Pu-erh tea comes from Yunnan." },
+  "香": { cw: "香港", cpy: "Xiānggǎng", cen: "Hong Kong", ex: "香港的夜景很美。", expy: "Xiānggǎng de yèjǐng hěn měi.", exen: "Hong Kong's night view is beautiful." },
+  "重": { cw: "重庆", cpy: "Chóngqìng", cen: "Chongqing", ex: "重庆的火锅非常辣。", expy: "Chóngqìng de huǒguō fēicháng là.", exen: "Chongqing's hot pot is extremely spicy." },
+  "庆": { cw: "重庆", cpy: "Chóngqìng", cen: "Chongqing", ex: "我们要去重庆旅行。", expy: "Wǒmen yào qù Chóngqìng lǚxíng.", exen: "We're going to travel to Chongqing." },
+  "张": { cw: "张家界", cpy: "Zhāngjiājiè", cen: "Zhangjiajie", ex: "张家界的山很奇特。", expy: "Zhāngjiājiè de shān hěn qítè.", exen: "Zhangjiajie's mountains are unique." },
+  "界": { cw: "张家界", cpy: "Zhāngjiājiè", cen: "Zhangjiajie", ex: "张家界是一个世界遗产。", expy: "Zhāngjiājiè shì yí ge shìjiè yíchǎn.", exen: "Zhangjiajie is a World Heritage site." },
+  "武": { cw: "武陵源", cpy: "Wǔlíngyuán", cen: "Wulingyuan", ex: "武陵源风景很美。", expy: "Wǔlíngyuán fēngjǐng hěn měi.", exen: "Wulingyuan's scenery is beautiful." },
+  "陵": { cw: "武陵源", cpy: "Wǔlíngyuán", cen: "Wulingyuan", ex: "武陵源在张家界。", expy: "Wǔlíngyuán zài Zhāngjiājiè.", exen: "Wulingyuan is in Zhangjiajie." },
+  "源": { cw: "武陵源", cpy: "Wǔlíngyuán", cen: "Wulingyuan", ex: "武陵源有很多山峰。", expy: "Wǔlíngyuán yǒu hěn duō shānfēng.", exen: "Wulingyuan has many mountain peaks." },
+  "零": { ex: "现在是零度。", expy: "Xiànzài shì líng dù.", exen: "It's zero degrees now." },
+  "四": { ex: "我们有四个人。", expy: "Wǒmen yǒu sì ge rén.", exen: "There are four of us." },
+  "六": { ex: "现在六点。", expy: "Xiànzài liù diǎn.", exen: "It's six o'clock now." },
+  "七": { ex: "一个星期有七天。", expy: "Yí ge xīngqī yǒu qī tiān.", exen: "A week has seven days." },
+  "八": { ex: "她八岁了。", expy: "Tā bā suì le.", exen: "She is eight years old." },
+  "九": { ex: "商店九点开门。", expy: "Shāngdiàn jiǔ diǎn kāimén.", exen: "The shop opens at nine." },
+  "十": { ex: "我要十个饺子。", expy: "Wǒ yào shí ge jiǎozi.", exen: "I'd like ten dumplings." },
+  "百": { ex: "一共一百块。", expy: "Yígòng yìbǎi kuài.", exen: "That's 100 kuai in total." },
+  "千": { ex: "这个手机一千块。", expy: "Zhège shǒujī yìqiān kuài.", exen: "This phone is 1,000 kuai." },
+  "万": { ex: "这辆车十万块。", expy: "Zhè liàng chē shíwàn kuài.", exen: "This car is 100,000 kuai." },
+  "两": { ex: "我要两杯咖啡。", expy: "Wǒ yào liǎng bēi kāfēi.", exen: "I'd like two coffees." },
+  "现": { cw: "现在", cpy: "xiànzài", cen: "now", ex: "我们现在出发。", expy: "Wǒmen xiànzài chūfā.", exen: "We're leaving now." },
+  "今": { cw: "今天", cpy: "jīntiān", cen: "today", ex: "今天天气很好。", expy: "Jīntiān tiānqì hěn hǎo.", exen: "The weather is nice today." },
+  "天": { cw: "今天", cpy: "jīntiān", cen: "today", ex: "明天见！", expy: "Míngtiān jiàn!", exen: "See you tomorrow!" },
+  "明": { cw: "明天", cpy: "míngtiān", cen: "tomorrow", ex: "我们明天出发。", expy: "Wǒmen míngtiān chūfā.", exen: "We're leaving tomorrow." },
+  "昨": { cw: "昨天", cpy: "zuótiān", cen: "yesterday", ex: "昨天很热。", expy: "Zuótiān hěn rè.", exen: "Yesterday was very hot." },
+  "年": { ex: "今年是我第一次来中国。", expy: "Jīnnián shì wǒ dì yī cì lái Zhōngguó.", exen: "This year is my first time coming to China." },
+  "星": { cw: "星期", cpy: "xīngqī", cen: "week", ex: "下星期我们去西安。", expy: "Xià xīngqī wǒmen qù Xī'ān.", exen: "Next week we're going to Xi'an." },
+  "期": { cw: "星期", cpy: "xīngqī", cen: "week", ex: "这个星期很忙。", expy: "Zhège xīngqī hěn máng.", exen: "This week is very busy." },
+  "月": { ex: "我们八月去中国。", expy: "Wǒmen bāyuè qù Zhōngguó.", exen: "We're going to China in August." },
+  "几": { cw: "几点", cpy: "jǐdiǎn", cen: "what time", ex: "现在几点？", expy: "Xiànzài jǐ diǎn?", exen: "What time is it now?" },
+  "半": { cw: "三点半", cpy: "sān diǎn bàn", cen: "half past three", ex: "火车三点半出发。", expy: "Huǒchē sān diǎn bàn chūfā.", exen: "The train departs at half past three." },
+  "便": { cw: "便宜", cpy: "piányi", cen: "cheap", ex: "这个很便宜。", expy: "Zhège hěn piányi.", exen: "This is very cheap." },
+  "宜": { cw: "便宜", cpy: "piányi", cen: "cheap", ex: "可以便宜一点吗？", expy: "Kěyǐ piányi yìdiǎn ma?", exen: "Can it be a bit cheaper?" },
+  "贵": { ex: "这个太贵了。", expy: "Zhège tài guì le.", exen: "This is too expensive." },
+  "折": { cw: "打折", cpy: "dǎzhé", cen: "discount", ex: "这里在打折。", expy: "Zhèlǐ zài dǎzhé.", exen: "There's a discount here." },
+  "金": { cw: "现金", cpy: "xiànjīn", cen: "cash", ex: "我只有现金。", expy: "Wǒ zhǐyǒu xiànjīn.", exen: "I only have cash." },
+  "找": { cw: "找零", cpy: "zhǎolíng", cen: "change", ex: "请给我找零。", expy: "Qǐng gěi wǒ zhǎolíng.", exen: "Please give me my change." },
+  "块": { ex: "一共三十块。", expy: "Yígòng sānshí kuài.", exen: "That's 30 kuai in total." },
+  "元": { ex: "这个五十元。", expy: "Zhège wǔshí yuán.", exen: "This is 50 yuan." },
+  "大": { ex: "这个房间很大。", expy: "Zhège fángjiān hěn dà.", exen: "This room is very big." },
+  "坏": { ex: "这个不好也不坏。", expy: "Zhège bù hǎo yě bú huài.", exen: "This is neither good nor bad." },
+  "新": { ex: "这是我的新手机。", expy: "Zhè shì wǒ de xīn shǒujī.", exen: "This is my new phone." },
+  "旧": { ex: "这辆车很旧了。", expy: "Zhè liàng chē hěn jiù le.", exen: "This car is quite old." },
+  "热": { ex: "今天很热。", expy: "Jīntiān hěn rè.", exen: "It's hot today." },
+  "冷": { ex: "冬天很冷。", expy: "Dōngtiān hěn lěng.", exen: "Winter is very cold." },
+  "快": { ex: "高铁很快。", expy: "Gāotiě hěn kuài.", exen: "The high-speed rail is very fast." },
+  "短": { ex: "这条路很短。", expy: "Zhè tiáo lù hěn duǎn.", exen: "This road is very short." },
+  "漂": { cw: "漂亮", cpy: "piàoliang", cen: "pretty", ex: "这个景点很漂亮。", expy: "Zhège jǐngdiǎn hěn piàoliang.", exen: "This scenic spot is very beautiful." },
+  "亮": { cw: "漂亮", cpy: "piàoliang", cen: "pretty", ex: "她很漂亮。", expy: "Tā hěn piàoliang.", exen: "She is very pretty." },
+  "脏": { ex: "我的衣服脏了。", expy: "Wǒ de yīfu zāng le.", exen: "My clothes are dirty." },
+  "容": { cw: "容易", cpy: "róngyì", cen: "easy", ex: "这个很容易。", expy: "Zhège hěn róngyì.", exen: "This is very easy." },
+  "易": { cw: "容易", cpy: "róngyì", cen: "easy", ex: "中文不容易。", expy: "Zhōngwén bù róngyì.", exen: "Chinese isn't easy." },
+  "难": { ex: "这个问题很难。", expy: "Zhège wèntí hěn nán.", exen: "This question is very difficult." },
+  "忙": { ex: "我最近很忙。", expy: "Wǒ zuìjìn hěn máng.", exen: "I've been very busy recently." },
+  "累": { ex: "我今天很累。", expy: "Wǒ jīntiān hěn lèi.", exen: "I'm very tired today." },
+  "谁": { ex: "他是谁？", expy: "Tā shì shéi?", exen: "Who is he?" },
+  "时": { cw: "什么时候", cpy: "shénme shíhou", cen: "when", ex: "你什么时候到？", expy: "Nǐ shénme shíhou dào?", exen: "When will you arrive?" },
+  "候": { cw: "什么时候", cpy: "shénme shíhou", cen: "when", ex: "什么时候出发？", expy: "Shénme shíhou chūfā?", exen: "When are we leaving?" },
+  "怎": { cw: "怎么", cpy: "zěnme", cen: "how", ex: "这个怎么说？", expy: "Zhège zěnme shuō?", exen: "How do you say this?" },
+  "样": { cw: "怎么样", cpy: "zěnmeyàng", cen: "how is it", ex: "这个怎么样？", expy: "Zhège zěnmeyàng?", exen: "How's this?" },
+  "个": { cw: "哪个", cpy: "nǎge", cen: "which one", ex: "你要哪个？", expy: "Nǐ yào nǎge?", exen: "Which one do you want?" },
+  "看": { ex: "我想看长城。", expy: "Wǒ xiǎng kàn Chángchéng.", exen: "I want to see the Great Wall." },
+  "听": { ex: "我在听音乐。", expy: "Wǒ zài tīng yīnyuè.", exen: "I'm listening to music." },
+  "喝": { ex: "你想喝什么？", expy: "Nǐ xiǎng hē shénme?", exen: "What would you like to drink?" },
+  "卖": { ex: "这里卖什么？", expy: "Zhèlǐ mài shénme?", exen: "What do they sell here?" },
+  "做": { ex: "你在做什么？", expy: "Nǐ zài zuò shénme?", exen: "What are you doing?" },
+  "知": { cw: "知道", cpy: "zhīdào", cen: "to know", ex: "我不知道。", expy: "Wǒ bù zhīdào.", exen: "I don't know." },
+  "道": { cw: "知道", cpy: "zhīdào", cen: "to know", ex: "你知道吗？", expy: "Nǐ zhīdào ma?", exen: "Do you know?" },
+  "觉": { cw: "觉得", cpy: "juéde", cen: "to feel/think", ex: "我觉得很好。", expy: "Wǒ juéde hěn hǎo.", exen: "I think it's very good." },
+  "得": { cw: "觉得", cpy: "juéde", cen: "to feel/think", ex: "你觉得怎么样？", expy: "Nǐ juéde zěnmeyàng?", exen: "What do you think?" },
+  "喜": { cw: "喜欢", cpy: "xǐhuan", cen: "to like", ex: "我喜欢旅行。", expy: "Wǒ xǐhuan lǚxíng.", exen: "I like traveling." },
+  "欢": { cw: "喜欢", cpy: "xǐhuan", cen: "to like", ex: "你喜欢什么运动？", expy: "Nǐ xǐhuan shénme yùndòng?", exen: "What sport do you like?" },
+  "需": { cw: "需要", cpy: "xūyào", cen: "to need", ex: "我需要帮助。", expy: "Wǒ xūyào bāngzhù.", exen: "I need help." },
+  "助": { cw: "帮助", cpy: "bāngzhù", cen: "to help", ex: "谢谢你的帮助。", expy: "Xièxie nǐ de bāngzhù.", exen: "Thank you for your help." },
+  "懂": { ex: "我不懂。", expy: "Wǒ bù dǒng.", exen: "I don't understand." },
+  "晴": { cw: "晴天", cpy: "qíngtiān", cen: "sunny day", ex: "今天是晴天。", expy: "Jīntiān shì qíngtiān.", exen: "Today is a sunny day." },
+  "阴": { cw: "阴天", cpy: "yīntiān", cen: "overcast day", ex: "明天是阴天。", expy: "Míngtiān shì yīntiān.", exen: "Tomorrow will be overcast." },
+  "雨": { ex: "外面在下雨。", expy: "Wàimiàn zài xiàyǔ.", exen: "It's raining outside." },
+  "雪": { ex: "北京冬天会下雪。", expy: "Běijīng dōngtiān huì xiàxuě.", exen: "It snows in Beijing in winter." },
+  "刮": { cw: "刮风", cpy: "guāfēng", cen: "windy", ex: "今天刮风了。", expy: "Jīntiān guāfēng le.", exen: "It's windy today." },
+  "风": { cw: "刮风", cpy: "guāfēng", cen: "windy", ex: "外面风很大。", expy: "Wàimiàn fēng hěn dà.", exen: "It's very windy outside." },
+  "夏": { cw: "夏天", cpy: "xiàtiān", cen: "summer", ex: "夏天很热。", expy: "Xiàtiān hěn rè.", exen: "Summer is very hot." },
+  "秋": { cw: "秋天", cpy: "qiūtiān", cen: "autumn", ex: "秋天很凉快。", expy: "Qiūtiān hěn liángkuai.", exen: "Autumn is nice and cool." },
+  "冬": { cw: "冬天", cpy: "dōngtiān", cen: "winter", ex: "冬天我们去滑雪。", expy: "Dōngtiān wǒmen qù huáxuě.", exen: "In winter we go skiing." },
+  "紧": { cw: "紧张", cpy: "jǐnzhāng", cen: "nervous", ex: "考试前我很紧张。", expy: "Kǎoshì qián wǒ hěn jǐnzhāng.", exen: "I'm nervous before exams." },
+  "害": { cw: "害怕", cpy: "hàipà", cen: "afraid", ex: "我有点害怕。", expy: "Wǒ yǒudiǎn hàipà.", exen: "I'm a bit scared." },
+  "怕": { cw: "害怕", cpy: "hàipà", cen: "afraid", ex: "别害怕！", expy: "Bié hàipà!", exen: "Don't be afraid!" },
+  "惊": { cw: "惊讶", cpy: "jīngyà", cen: "surprised", ex: "我很惊讶。", expy: "Wǒ hěn jīngyà.", exen: "I'm very surprised." },
+  "讶": { cw: "惊讶", cpy: "jīngyà", cen: "surprised", ex: "大家都很惊讶。", expy: "Dàjiā dōu hěn jīngyà.", exen: "Everyone was surprised." },
+  "满": { cw: "满意", cpy: "mǎnyì", cen: "satisfied", ex: "我很满意。", expy: "Wǒ hěn mǎnyì.", exen: "I'm very satisfied." },
+  "开": { cw: "开心", cpy: "kāixīn", cen: "happy", ex: "今天我很开心。", expy: "Jīntiān wǒ hěn kāixīn.", exen: "I'm very happy today." },
+  "别": { ex: "别担心。", expy: "Bié dānxīn.", exen: "Don't worry." },
+  "作": { cw: "工作", cpy: "gōngzuò", cen: "work/job", ex: "你做什么工作？", expy: "Nǐ zuò shénme gōngzuò?", exen: "What's your job?" },
+  "老": { cw: "老板", cpy: "lǎobǎn", cen: "boss", ex: "我的老板很好。", expy: "Wǒ de lǎobǎn hěn hǎo.", exen: "My boss is very nice." },
+  "板": { cw: "老板", cpy: "lǎobǎn", cen: "boss", ex: "老板在开会。", expy: "Lǎobǎn zài kāihuì.", exen: "The boss is in a meeting." },
+  "同": { cw: "同事", cpy: "tóngshì", cen: "colleague", ex: "她是我的同事。", expy: "Tā shì wǒ de tóngshì.", exen: "She is my colleague." },
+  "事": { cw: "同事", cpy: "tóngshì", cen: "colleague", ex: "我们是好同事。", expy: "Wǒmen shì hǎo tóngshì.", exen: "We're good colleagues." },
+  "议": { cw: "会议", cpy: "huìyì", cen: "meeting", ex: "明天有一个会议。", expy: "Míngtiān yǒu yí ge huìyì.", exen: "There's a meeting tomorrow." },
+  "考": { cw: "考试", cpy: "kǎoshì", cen: "exam", ex: "我明天有考试。", expy: "Wǒ míngtiān yǒu kǎoshì.", exen: "I have an exam tomorrow." },
+  "虽": { cw: "虽然", cpy: "suīrán", cen: "although", ex: "虽然很累，但是很开心。", expy: "Suīrán hěn lèi, dànshì hěn kāixīn.", exen: "Although I'm tired, I'm happy." },
+  "所": { cw: "所以", cpy: "suǒyǐ", cen: "so/therefore", ex: "下雨了，所以我们坐地铁。", expy: "Xiàyǔ le, suǒyǐ wǒmen zuò dìtiě.", exen: "It's raining, so we're taking the metro." },
+  "如": { cw: "如果", cpy: "rúguǒ", cen: "if", ex: "如果你累了，我们休息吧。", expy: "Rúguǒ nǐ lèi le, wǒmen xiūxi ba.", exen: "If you're tired, let's rest." },
+  "已": { cw: "已经", cpy: "yǐjīng", cen: "already", ex: "我已经吃了。", expy: "Wǒ yǐjīng chī le.", exen: "I've already eaten." },
+  "经": { cw: "已经", cpy: "yǐjīng", cen: "already", ex: "天已经黑了。", expy: "Tiān yǐjīng hēi le.", exen: "It's already dark." },
+  "还": { cw: "还是", cpy: "háishi", cen: "still/or", ex: "你还好吗？", expy: "Nǐ hái hǎo ma?", exen: "Are you still okay?" },
+  "休": { cw: "休息", cpy: "xiūxi", cen: "rest", ex: "我需要休息一下。", expy: "Wǒ xūyào xiūxi yíxià.", exen: "I need to rest for a bit." },
+  "息": { cw: "休息", cpy: "xiūxi", cen: "rest", ex: "今天好好休息吧。", expy: "Jīntiān hǎohǎo xiūxi ba.", exen: "Get a good rest today." },
+  "眼": { cw: "眼睛", cpy: "yǎnjīng", cen: "eyes", ex: "她的眼睛很漂亮。", expy: "Tā de yǎnjīng hěn piàoliang.", exen: "Her eyes are very pretty." },
+  "睛": { cw: "眼睛", cpy: "yǎnjīng", cen: "eyes", ex: "我的眼睛很疼。", expy: "Wǒ de yǎnjīng hěn téng.", exen: "My eyes hurt." },
+  "耳": { cw: "耳朵", cpy: "ěrduo", cen: "ears", ex: "我的耳朵很疼。", expy: "Wǒ de ěrduo hěn téng.", exen: "My ears hurt." },
+  "朵": { cw: "耳朵", cpy: "ěrduo", cen: "ears", ex: "他的耳朵很大。", expy: "Tā de ěrduo hěn dà.", exen: "His ears are very big." },
+  "头": { ex: "我头很疼。", expy: "Wǒ tóu hěn téng.", exen: "My head really hurts." },
+  "脚": { ex: "我的脚很疼。", expy: "Wǒ de jiǎo hěn téng.", exen: "My foot hurts." },
+  "鼻": { cw: "鼻子", cpy: "bízi", cen: "nose", ex: "他的鼻子很高。", expy: "Tā de bízi hěn gāo.", exen: "His nose is quite prominent." },
+  "嘴": { ex: "她的嘴很小。", expy: "Tā de zuǐ hěn xiǎo.", exen: "Her mouth is small." },
+  "衣": { cw: "衣服", cpy: "yīfu", cen: "clothes", ex: "我要买新衣服。", expy: "Wǒ yào mǎi xīn yīfu.", exen: "I want to buy new clothes." },
+  "裤": { cw: "裤子", cpy: "kùzi", cen: "pants", ex: "这条裤子太贵了。", expy: "Zhè tiáo kùzi tài guì le.", exen: "These pants are too expensive." },
+  "鞋": { ex: "我要买一双鞋。", expy: "Wǒ yào mǎi yì shuāng xié.", exen: "I want to buy a pair of shoes." },
+  "脑": { cw: "电脑", cpy: "diànnǎo", cen: "computer", ex: "我的电脑坏了。", expy: "Wǒ de diànnǎo huài le.", exen: "My computer is broken." },
+  "件": { ex: "这件衣服很漂亮。", expy: "Zhè jiàn yīfu hěn piàoliang.", exen: "This piece of clothing is very pretty." },
+  "签": { cw: "签证", cpy: "qiānzhèng", cen: "visa", ex: "我需要办签证。", expy: "Wǒ xūyào bàn qiānzhèng.", exen: "I need to get a visa." },
+  "证": { cw: "签证", cpy: "qiānzhèng", cen: "visa", ex: "请出示你的签证。", expy: "Qǐng chūshì nǐ de qiānzhèng.", exen: "Please show your visa." },
+  "图": { cw: "地图", cpy: "dìtú", cen: "map", ex: "你有地图吗？", expy: "Nǐ yǒu dìtú ma?", exen: "Do you have a map?" },
+  "李": { cw: "行李", cpy: "xínglǐ", cen: "luggage", ex: "我的行李丢了。", expy: "Wǒ de xíngli diū le.", exen: "I've lost my luggage." },
+  "给": { ex: "请给我看一下。", expy: "Qǐng gěi wǒ kàn yíxià.", exen: "Please let me have a look." },
+  "理": { cw: "经理", cpy: "jīnglǐ", cen: "manager", ex: "他是我们的经理。", expy: "Tā shì wǒmen de jīnglǐ.", exen: "He is our manager." },
+  "丹": { ex: "丹是经理。", expy: "Dān shì jīnglǐ.", exen: "Dan is a manager." },
+  "业": { cw: "行业", cpy: "hángyè", cen: "industry", ex: "我在IT行业工作。", expy: "Wǒ zài IT hángyè gōngzuò.", exen: "I work in the IT industry." },
+  "离": { cw: "离...很近", cpy: "lí...hěn jìn", cen: "close to...", ex: "我们住得离伦敦很近。", expy: "Wǒmen zhù de lí Lúndūn hěn jìn.", exen: "We live very close to London." },
+
+  "爸": { cw: "爸爸", cpy: "bàba", cen: "dad", ex: "我爸爸是医生。", expy: "Wǒ bàba shì yīshēng.", exen: "My dad is a doctor." },
+  "妈": { cw: "妈妈", cpy: "māma", cen: "mom", ex: "妈妈在家。", expy: "Māma zài jiā.", exen: "Mom is at home." },
+  "女": { cw: "女儿", cpy: "nǚ'ér", cen: "daughter", ex: "她是我的女儿。", expy: "Tā shì wǒ de nǚ'ér.", exen: "She is my daughter." },
+  "哥": { cw: "哥哥", cpy: "gēge", cen: "older brother", ex: "我哥哥住在北京。", expy: "Wǒ gēge zhù zài Běijīng.", exen: "My older brother lives in Beijing." },
+  "姐": { cw: "姐姐", cpy: "jiějie", cen: "older sister", ex: "我姐姐是护士。", expy: "Wǒ jiějie shì hùshi.", exen: "My older sister is a nurse." },
+  "弟": { cw: "弟弟", cpy: "dìdi", cen: "younger brother", ex: "我弟弟很高。", expy: "Wǒ dìdi hěn gāo.", exen: "My younger brother is very tall." },
+  "妹": { cw: "妹妹", cpy: "mèimei", cen: "younger sister", ex: "我妹妹喜欢画画。", expy: "Wǒ mèimei xǐhuan huàhuà.", exen: "My younger sister likes drawing." },
+  "朋": { cw: "朋友", cpy: "péngyou", cen: "friend", ex: "他是我的好朋友。", expy: "Tā shì wǒ de hǎo péngyou.", exen: "He is my good friend." },
+  "友": { cw: "朋友", cpy: "péngyou", cen: "friend", ex: "我们是朋友。", expy: "Wǒmen shì péngyou.", exen: "We are friends." },
+  "先": { cw: "先生", cpy: "xiānsheng", cen: "Mr./sir", ex: "王先生在吗？", expy: "Wáng xiānsheng zài ma?", exen: "Is Mr. Wang here?" },
+  "孩": { cw: "孩子", cpy: "háizi", cen: "child", ex: "他们有两个孩子。", expy: "Tāmen yǒu liǎng ge háizi.", exen: "They have two children." },
+  "家": { cw: "家人", cpy: "jiārén", cen: "family", ex: "我今晚回家。", expy: "Wǒ jīnwǎn huí jiā.", exen: "I'm going home tonight." },
+  "爷": { cw: "爷爷", cpy: "yéye", cen: "paternal grandfather", ex: "爷爷今年八十岁。", expy: "Yéye jīnnián bāshí suì.", exen: "Grandpa is 80 this year." },
+  "奶": { cw: "奶奶", cpy: "nǎinai", cen: "paternal grandmother", ex: "奶奶做的菜很好吃。", expy: "Nǎinai zuò de cài hěn hǎochī.", exen: "The food grandma makes is delicious." },
+  "外": { cw: "外婆", cpy: "wàipó", cen: "maternal grandmother", ex: "外婆住在上海。", expy: "Wàipó zhù zài Shànghǎi.", exen: "Grandma (maternal) lives in Shanghai." },
+  "叔": { cw: "叔叔", cpy: "shūshu", cen: "uncle", ex: "叔叔是厨师。", expy: "Shūshu shì chúshī.", exen: "Uncle is a chef." },
+  "阿": { cw: "阿姨", cpy: "āyí", cen: "aunt", ex: "阿姨对我很好。", expy: "Āyí duì wǒ hěn hǎo.", exen: "Auntie is very kind to me." },
+  "姨": { cw: "阿姨", cpy: "āyí", cen: "aunt", ex: "这是我阿姨。", expy: "Zhè shì wǒ āyí.", exen: "This is my aunt." },
+  "丈": { cw: "丈夫", cpy: "zhàngfu", cen: "husband", ex: "她的丈夫是工程师。", expy: "Tā de zhàngfu shì gōngchéngshī.", exen: "Her husband is an engineer." },
+  "夫": { cw: "丈夫", cpy: "zhàngfu", cen: "husband", ex: "他是我的丈夫。", expy: "Tā shì wǒ de zhàngfu.", exen: "He is my husband." },
+  "妻": { cw: "妻子", cpy: "qīzi", cen: "wife", ex: "她是我的妻子。", expy: "Tā shì wǒ de qīzi.", exen: "She is my wife." },
+  "兄": { cw: "兄弟姐妹", cpy: "xiōngdì jiěmèi", cen: "siblings", ex: "你有兄弟姐妹吗？", expy: "Nǐ yǒu xiōngdì jiěmèi ma?", exen: "Do you have siblings?" },
+  "双": { cw: "双胞胎", cpy: "shuāngbāotāi", cen: "twins", ex: "他们是双胞胎。", expy: "Tāmen shì shuāngbāotāi.", exen: "They are twins." },
+  "胞": { cw: "双胞胎", cpy: "shuāngbāotāi", cen: "twins", ex: "我有一对双胞胎表姐。", expy: "Wǒ yǒu yí duì shuāngbāotāi biǎojiě.", exen: "I have a pair of twin cousins." },
+  "胎": { cw: "双胞胎", cpy: "shuāngbāotāi", cen: "twins", ex: "这对双胞胎很像。", expy: "Zhè duì shuāngbāotāi hěn xiàng.", exen: "These twins look very alike." },
+  "登": { cw: "登机牌", cpy: "dēngjīpái", cen: "boarding pass", ex: "请出示登机牌。", expy: "Qǐng chūshì dēngjīpái.", exen: "Please show your boarding pass." },
+  "牌": { cw: "登机牌", cpy: "dēngjīpái", cen: "boarding pass", ex: "我的登机牌在哪里？", expy: "Wǒ de dēngjīpái zài nǎlǐ?", exen: "Where is my boarding pass?" },
+  "值": { cw: "值机", cpy: "zhíjī", cen: "flight check-in", ex: "值机柜台在哪里？", expy: "Zhíjī guìtái zài nǎlǐ?", exen: "Where is the check-in counter?" },
+  "租": { cw: "出租车", cpy: "chūzūchē", cen: "taxi", ex: "我要叫一辆出租车。", expy: "Wǒ yào jiào yí liàng chūzūchē.", exen: "I want to call a taxi." },
+  "酒": { cw: "酒店", cpy: "jiǔdiàn", cen: "hotel", ex: "酒店在市中心。", expy: "Jiǔdiàn zài shìzhōngxīn.", exen: "The hotel is in the city centre." },
+  "店": { cw: "酒店", cpy: "jiǔdiàn", cen: "hotel", ex: "这家酒店很好。", expy: "Zhè jiā jiǔdiàn hěn hǎo.", exen: "This hotel is very good." },
+  "前": { cw: "前台", cpy: "qiántái", cen: "front desk", ex: "请到前台登记。", expy: "Qǐng dào qiántái dēngjì.", exen: "Please register at the front desk." },
+  "台": { cw: "前台", cpy: "qiántái", cen: "front desk", ex: "前台在一楼。", expy: "Qiántái zài yī lóu.", exen: "The front desk is on the first floor." },
+  "退": { cw: "退房", cpy: "tuìfáng", cen: "check out", ex: "几点退房？", expy: "Jǐ diǎn tuìfáng?", exen: "What time is check-out?" },
+  "房": { cw: "房卡", cpy: "fángkǎ", cen: "room key card", ex: "我的房卡不能用。", expy: "Wǒ de fángkǎ bù néng yòng.", exen: "My room key card doesn't work." },
+  "卡": { cw: "房卡", cpy: "fángkǎ", cen: "room key card", ex: "请给我一张房卡。", expy: "Qǐng gěi wǒ yì zhāng fángkǎ.", exen: "Please give me a room card." },
+  "男": { ex: "男洗手间在哪里？", expy: "Nán xǐshǒujiān zài nǎlǐ?", exen: "Where's the men's restroom?" },
+  "微": { cw: "微信", cpy: "Wēixìn", cen: "WeChat", ex: "加我的微信吧。", expy: "Jiā wǒ de Wēixìn ba.", exen: "Add me on WeChat." },
+  "信": { cw: "微信", cpy: "Wēixìn", cen: "WeChat", ex: "你有微信吗？", expy: "Nǐ yǒu Wēixìn ma?", exen: "Do you have WeChat?" },
+  "宝": { cw: "支付宝", cpy: "Zhīfùbǎo", cen: "Alipay", ex: "可以用支付宝吗？", expy: "Kěyǐ yòng Zhīfùbǎo ma?", exen: "Can I use Alipay?" },
+  "扫": { cw: "扫码", cpy: "sǎomǎ", cen: "scan the QR code", ex: "请扫码付款。", expy: "Qǐng sǎomǎ fùkuǎn.", exen: "Please scan the code to pay." },
+  "码": { cw: "扫码", cpy: "sǎomǎ", cen: "scan the QR code", ex: "这是我的付款码。", expy: "Zhè shì wǒ de fùkuǎn mǎ.", exen: "This is my payment code." },
+  "滴": { cw: "滴滴", cpy: "Dīdī", cen: "Didi (ride-hailing app)", ex: "我们叫滴滴吧。", expy: "Wǒmen jiào Dīdī ba.", exen: "Let's call a Didi." },
+  "景": { cw: "景点", cpy: "jǐngdiǎn", cen: "scenic spot", ex: "这个景点很有名。", expy: "Zhège jǐngdiǎn hěn yǒumíng.", exen: "This attraction is very famous." },
+  "门": { cw: "门票", cpy: "ménpiào", cen: "admission ticket", ex: "门票多少钱？", expy: "Ménpiào duōshǎo qián?", exen: "How much is the admission ticket?" },
+  "长": { cw: "长城", cpy: "Chángchéng", cen: "Great Wall", ex: "长城很长很长。", expy: "Chángchéng hěn cháng hěn cháng.", exen: "The Great Wall is very, very long." },
+  "城": { cw: "长城", cpy: "Chángchéng", cen: "Great Wall", ex: "我们去爬长城吧。", expy: "Wǒmen qù pá Chángchéng ba.", exen: "Let's go climb the Great Wall." },
+  "兵": { cw: "兵马俑", cpy: "Bīngmǎyǒng", cen: "Terracotta Warriors", ex: "兵马俑在西安。", expy: "Bīngmǎyǒng zài Xī'ān.", exen: "The Terracotta Warriors are in Xi'an." },
+  "马": { cw: "兵马俑", cpy: "Bīngmǎyǒng", cen: "Terracotta Warriors", ex: "兵马俑非常壮观。", expy: "Bīngmǎyǒng fēicháng zhuàngguān.", exen: "The Terracotta Warriors are spectacular." },
+  "俑": { cw: "兵马俑", cpy: "Bīngmǎyǒng", cen: "Terracotta Warriors", ex: "每个兵马俑都不一样。", expy: "Měi ge bīngmǎyǒng dōu bù yíyàng.", exen: "Every terracotta warrior is different." },
+  "缆": { cw: "缆车", cpy: "lǎnchē", cen: "cable car", ex: "我们坐缆车上山。", expy: "Wǒmen zuò lǎnchē shàng shān.", exen: "We're taking the cable car up the mountain." },
+  "玻": { cw: "玻璃桥", cpy: "bōlíqiáo", cen: "glass bridge", ex: "玻璃桥很刺激。", expy: "Bōlíqiáo hěn cìjī.", exen: "The glass bridge is very thrilling." },
+  "璃": { cw: "玻璃桥", cpy: "bōlíqiáo", cen: "glass bridge", ex: "这座桥是玻璃做的。", expy: "Zhè zuò qiáo shì bōli zuò de.", exen: "This bridge is made of glass." },
+  "山": { ex: "张家界的山很美。", expy: "Zhāngjiājiè de shān hěn měi.", exen: "Zhangjiajie's mountains are beautiful." },
+  "园": { cw: "国家公园", cpy: "guójiā gōngyuán", cen: "national park", ex: "这是一个国家公园。", expy: "Zhè shì yí ge guójiā gōngyuán.", exen: "This is a national park." },
+  "博": { cw: "博物馆", cpy: "bówùguǎn", cen: "museum", ex: "我们去博物馆吧。", expy: "Wǒmen qù bówùguǎn ba.", exen: "Let's go to the museum." },
+  "物": { cw: "博物馆", cpy: "bówùguǎn", cen: "museum", ex: "博物馆里有很多文物。", expy: "Bówùguǎn lǐ yǒu hěn duō wénwù.", exen: "There are many artifacts in the museum." },
+  "馆": { cw: "博物馆", cpy: "bówùguǎn", cen: "museum", ex: "博物馆几点开门？", expy: "Bówùguǎn jǐ diǎn kāimén?", exen: "What time does the museum open?" },
+  "工": { cw: "工程师", cpy: "gōngchéngshī", cen: "engineer", ex: "他是软件工程师。", expy: "Tā shì ruǎnjiàn gōngchéngshī.", exen: "He is a software engineer." },
+  "程": { cw: "工程师", cpy: "gōngchéngshī", cen: "engineer", ex: "我在学工程。", expy: "Wǒ zài xué gōngchéng.", exen: "I'm studying engineering." },
+  "师": { cw: "工程师", cpy: "gōngchéngshī", cen: "engineer", ex: "她是一名律师。", expy: "Tā shì yì míng lǜshī.", exen: "She is a lawyer." },
+  "律": { cw: "律师", cpy: "lǜshī", cen: "lawyer", ex: "我需要一个律师。", expy: "Wǒ xūyào yí ge lǜshī.", exen: "I need a lawyer." },
+  "士": { cw: "护士", cpy: "hùshi", cen: "nurse", ex: "护士很忙。", expy: "Hùshi hěn máng.", exen: "The nurse is very busy." },
+  "厨": { cw: "厨师", cpy: "chúshī", cen: "chef", ex: "他是一位有名的厨师。", expy: "Tā shì yí wèi yǒumíng de chúshī.", exen: "He is a famous chef." },
+  "司": { cw: "司机", cpy: "sījī", cen: "driver", ex: "出租车司机很友好。", expy: "Chūzūchē sījī hěn yǒuhǎo.", exen: "The taxi driver is very friendly." },
+  "计": { cw: "会计", cpy: "kuàijì", cen: "accountant", ex: "她的工作是会计。", expy: "Tā de gōngzuò shì kuàijì.", exen: "Her job is accounting." },
+  "销": { cw: "销售", cpy: "xiāoshòu", cen: "salesperson", ex: "他在做销售工作。", expy: "Tā zài zuò xiāoshòu gōngzuò.", exen: "He works in sales." },
+  "售": { cw: "销售", cpy: "xiāoshòu", cen: "salesperson", ex: "这里有销售员吗？", expy: "Zhèlǐ yǒu xiāoshòuyuán ma?", exen: "Is there a salesperson here?" },
+  "科": { cw: "科学家", cpy: "kēxuéjiā", cen: "scientist", ex: "她想成为科学家。", expy: "Tā xiǎng chéngwéi kēxuéjiā.", exen: "She wants to become a scientist." },
+  "学": { cw: "科学家", cpy: "kēxuéjiā", cen: "scientist", ex: "我在大学学习。", expy: "Wǒ zài dàxué xuéxí.", exen: "I'm studying at university." },
+  "艺": { cw: "艺术家", cpy: "yìshùjiā", cen: "artist", ex: "我朋友是艺术家。", expy: "Wǒ péngyou shì yìshùjiā.", exen: "My friend is an artist." },
+  "术": { cw: "艺术家", cpy: "yìshùjiā", cen: "artist", ex: "这是一件艺术品。", expy: "Zhè shì yí jiàn yìshùpǐn.", exen: "This is a work of art." },
+  "农": { cw: "农民", cpy: "nóngmín", cen: "farmer", ex: "他的父母是农民。", expy: "Tā de fùmǔ shì nóngmín.", exen: "His parents are farmers." },
+  "民": { cw: "农民", cpy: "nóngmín", cen: "farmer", ex: "这里有很多农民。", expy: "Zhèlǐ yǒu hěn duō nóngmín.", exen: "There are many farmers here." },
+  "消": { cw: "消防员", cpy: "xiāofángyuán", cen: "firefighter", ex: "消防员很勇敢。", expy: "Xiāofángyuán hěn yǒnggǎn.", exen: "Firefighters are very brave." },
+  "防": { cw: "消防员", cpy: "xiāofángyuán", cen: "firefighter", ex: "消防员来了。", expy: "Xiāofángyuán lái le.", exen: "The firefighters have arrived." },
+  "行": { cw: "飞行员", cpy: "fēixíngyuán", cen: "pilot", ex: "我爸爸是飞行员。", expy: "Wǒ bàba shì fēixíngyuán.", exen: "My dad is a pilot." },
+  "空": { cw: "空姐", cpy: "kōngjiě", cen: "flight attendant", ex: "空姐很热情。", expy: "Kōngjiě hěn rèqíng.", exen: "The flight attendant is very warm/friendly." },
+  "记": { cw: "记者", cpy: "jìzhě", cen: "journalist", ex: "她是电视记者。", expy: "Tā shì diànshì jìzhě.", exen: "She is a TV journalist." },
+  "演": { cw: "演员", cpy: "yǎnyuán", cen: "actor", ex: "他是有名的演员。", expy: "Tā shì yǒumíng de yǎnyuán.", exen: "He is a famous actor." },
+  "歌": { cw: "歌手", cpy: "gēshǒu", cen: "singer", ex: "她是我最喜欢的歌手。", expy: "Tā shì wǒ zuì xǐhuan de gēshǒu.", exen: "She is my favorite singer." },
+  "教": { cw: "教授", cpy: "jiàoshòu", cen: "professor", ex: "他是大学教授。", expy: "Tā shì dàxué jiàoshòu.", exen: "He is a university professor." },
+  "授": { cw: "教授", cpy: "jiàoshòu", cen: "professor", ex: "教授在上课。", expy: "Jiàoshòu zài shàngkè.", exen: "The professor is teaching a class." },
+  "秘": { cw: "秘书", cpy: "mìshū", cen: "secretary", ex: "她是经理的秘书。", expy: "Tā shì jīnglǐ de mìshū.", exen: "She is the manager's secretary." },
+  "书": { cw: "秘书", cpy: "mìshū", cen: "secretary", ex: "我喜欢读书。", expy: "Wǒ xǐhuan dúshū.", exen: "I like reading." },
+  "兽": { cw: "兽医", cpy: "shòuyī", cen: "vet", ex: "我要带狗去看兽医。", expy: "Wǒ yào dài gǒu qù kàn shòuyī.", exen: "I need to take the dog to the vet." },
+  "医": { cw: "兽医", cpy: "shòuyī", cen: "vet", ex: "她想当兽医。", expy: "Tā xiǎng dāng shòuyī.", exen: "She wants to become a vet." },
+  "颜": { cw: "颜色", cpy: "yánsè", cen: "colour", ex: "你最喜欢什么颜色？", expy: "Nǐ zuì xǐhuan shénme yánsè?", exen: "What's your favorite colour?" },
+  "色": { cw: "颜色", cpy: "yánsè", cen: "colour", ex: "这件衣服是什么颜色？", expy: "Zhè jiàn yīfu shì shénme yánsè?", exen: "What colour is this piece of clothing?" },
+  "橙": { ex: "我喜欢橙色。", expy: "Wǒ xǐhuan chéngsè.", exen: "I like orange." },
+  "黄": { ex: "出租车是黄色的。", expy: "Chūzūchē shì huángsè de.", exen: "The taxi is yellow." },
+  "蓝": { ex: "天空是蓝色的。", expy: "Tiānkōng shì lánsè de.", exen: "The sky is blue." },
+  "紫": { ex: "她穿紫色的裙子。", expy: "Tā chuān zǐsè de qúnzi.", exen: "She's wearing a purple skirt." },
+  "黑": { ex: "我要一杯黑咖啡。", expy: "Wǒ yào yì bēi hēi kāfēi.", exen: "I'd like a black coffee." },
+  "白": { ex: "这件衬衫是白色的。", expy: "Zhè jiàn chènshān shì báisè de.", exen: "This shirt is white." },
+  "灰": { ex: "今天天空是灰色的。", expy: "Jīntiān tiānkōng shì huīsè de.", exen: "The sky is grey today." },
+  "粉": { ex: "我妹妹喜欢粉色。", expy: "Wǒ mèimei xǐhuan fěnsè.", exen: "My little sister likes pink." },
+  "棕": { ex: "他有一双棕色的鞋。", expy: "Tā yǒu yì shuāng zōngsè de xié.", exen: "He has a pair of brown shoes." },
+  "银": { ex: "这辆车是银色的。", expy: "Zhè liàng chē shì yínsè de.", exen: "This car is silver." },
+  "深": { ex: "她喜欢深蓝色。", expy: "Tā xǐhuan shēn lánsè.", exen: "She likes dark blue." },
+  "浅": { ex: "我要浅一点的颜色。", expy: "Wǒ yào qiǎn yìdiǎn de yánsè.", exen: "I'd like a lighter colour." },
+  "彩": { cw: "彩虹", cpy: "cǎihóng", cen: "rainbow", ex: "天上有一道彩虹！", expy: "Tiān shàng yǒu yí dào cǎihóng!", exen: "There's a rainbow in the sky!" },
+  "虹": { cw: "彩虹", cpy: "cǎihóng", cen: "rainbow", ex: "彩虹有七种颜色。", expy: "Cǎihóng yǒu qī zhǒng yánsè.", exen: "A rainbow has seven colours." },
+  "读": { cw: "读书", cpy: "dúshū", cen: "reading", ex: "我周末喜欢读书。", expy: "Wǒ zhōumò xǐhuan dúshū.", exen: "I like reading on weekends." },
+  "运": { cw: "运动", cpy: "yùndòng", cen: "sports/exercise", ex: "你喜欢什么运动？", expy: "Nǐ xǐhuan shénme yùndòng?", exen: "What sport do you like?" },
+  "动": { cw: "运动", cpy: "yùndòng", cen: "sports/exercise", ex: "每天运动对身体好。", expy: "Měitiān yùndòng duì shēntǐ hǎo.", exen: "Exercising every day is good for your health." },
+  "游": { cw: "游泳", cpy: "yóuyǒng", cen: "swimming", ex: "我喜欢游泳。", expy: "Wǒ xǐhuan yóuyǒng.", exen: "I like swimming." },
+  "泳": { cw: "游泳", cpy: "yóuyǒng", cen: "swimming", ex: "你会游泳吗？", expy: "Nǐ huì yóuyǒng ma?", exen: "Can you swim?" },
+  "跑": { cw: "跑步", cpy: "pǎobù", cen: "running", ex: "他每天早上跑步。", expy: "Tā měitiān zǎoshang pǎobù.", exen: "He runs every morning." },
+  "步": { cw: "跑步", cpy: "pǎobù", cen: "running", ex: "我们去散步吧。", expy: "Wǒmen qù sànbù ba.", exen: "Let's go for a walk." },
+  "音": { cw: "音乐", cpy: "yīnyuè", cen: "music", ex: "我喜欢听音乐。", expy: "Wǒ xǐhuan tīng yīnyuè.", exen: "I like listening to music." },
+  "乐": { cw: "音乐", cpy: "yīnyuè", cen: "music", ex: "这首音乐很好听。", expy: "Zhè shǒu yīnyuè hěn hǎotīng.", exen: "This music sounds great." },
+  "画": { cw: "画画", cpy: "huàhuà", cen: "drawing/painting", ex: "我妹妹很会画画。", expy: "Wǒ mèimei hěn huì huàhuà.", exen: "My little sister is really good at drawing." },
+  "摄": { cw: "摄影", cpy: "shèyǐng", cen: "photography", ex: "他的爱好是摄影。", expy: "Tā de àihào shì shèyǐng.", exen: "His hobby is photography." },
+  "影": { cw: "摄影", cpy: "shèyǐng", cen: "photography", ex: "我喜欢摄影和旅行。", expy: "Wǒ xǐhuan shèyǐng hé lǚxíng.", exen: "I like photography and traveling." },
+  "旅": { cw: "旅行", cpy: "lǚxíng", cen: "traveling", ex: "我们喜欢一起旅行。", expy: "Wǒmen xǐhuan yìqǐ lǚxíng.", exen: "We like traveling together." },
+  "打": { cw: "打篮球", cpy: "dǎ lánqiú", cen: "play basketball", ex: "他每周打篮球。", expy: "Tā měi zhōu dǎ lánqiú.", exen: "He plays basketball every week." },
+  "篮": { cw: "打篮球", cpy: "dǎ lánqiú", cen: "play basketball", ex: "你喜欢打篮球吗？", expy: "Nǐ xǐhuan dǎ lánqiú ma?", exen: "Do you like playing basketball?" },
+  "球": { cw: "打篮球", cpy: "dǎ lánqiú", cen: "play basketball", ex: "这个球很大。", expy: "Zhège qiú hěn dà.", exen: "This ball is very big." },
+  "爬": { cw: "爬山", cpy: "páshān", cen: "hiking", ex: "周末我们去爬山吧。", expy: "Zhōumò wǒmen qù páshān ba.", exen: "Let's go hiking this weekend." },
+  "唱": { cw: "唱歌", cpy: "chànggē", cen: "singing", ex: "她很会唱歌。", expy: "Tā hěn huì chànggē.", exen: "She's really good at singing." },
+  "跳": { cw: "跳舞", cpy: "tiàowǔ", cen: "dancing", ex: "我们去跳舞吧！", expy: "Wǒmen qù tiàowǔ ba!", exen: "Let's go dancing!" },
+  "舞": { cw: "跳舞", cpy: "tiàowǔ", cen: "dancing", ex: "她跳舞跳得很好。", expy: "Tā tiàowǔ tiào de hěn hǎo.", exen: "She dances very well." },
+  "骑": { cw: "骑自行车", cpy: "qí zìxíngchē", cen: "cycling", ex: "我喜欢骑自行车上班。", expy: "Wǒ xǐhuan qí zìxíngchē shàngbān.", exen: "I like cycling to work." },
+  "自": { cw: "自行车", cpy: "zìxíngchē", cen: "bicycle", ex: "这是我的自行车。", expy: "Zhè shì wǒ de zìxíngchē.", exen: "This is my bicycle." },
+  "收": { cw: "收藏", cpy: "shōucáng", cen: "collecting", ex: "他喜欢收藏邮票。", expy: "Tā xǐhuan shōucáng yóupiào.", exen: "He likes collecting stamps." },
+  "藏": { cw: "收藏", cpy: "shōucáng", cen: "collecting", ex: "这是我的收藏品。", expy: "Zhè shì wǒ de shōucángpǐn.", exen: "This is part of my collection." },
+  "钓": { cw: "钓鱼", cpy: "diàoyú", cen: "fishing", ex: "我爷爷喜欢钓鱼。", expy: "Wǒ yéye xǐhuan diàoyú.", exen: "My grandpa likes fishing." },
+  "鱼": { cw: "钓鱼", cpy: "diàoyú", cen: "fishing", ex: "湖里有很多鱼。", expy: "Hú lǐ yǒu hěn duō yú.", exen: "There are lots of fish in the lake." },
+  "号": { cw: "手机号", cpy: "shǒujī hào", cen: "phone number", ex: "你的手机号是多少？", expy: "Nǐ de shǒujī hào shì duōshǎo?", exen: "What's your phone number?" },
+  "无": { cw: "无线网络", cpy: "wúxiàn wǎngluò", cen: "WiFi", ex: "这里有无线网络吗？", expy: "Zhèlǐ yǒu wúxiàn wǎngluò ma?", exen: "Is there WiFi here?" },
+  "线": { cw: "无线网络", cpy: "wúxiàn wǎngluò", cen: "WiFi", ex: "WiFi密码是什么？", expy: "WiFi mìmǎ shì shénme?", exen: "What's the WiFi password?" },
+  "网": { cw: "无线网络", cpy: "wúxiàn wǎngluò", cen: "WiFi", ex: "这里网络很慢。", expy: "Zhèlǐ wǎngluò hěn màn.", exen: "The internet here is very slow." },
+  "络": { cw: "无线网络", cpy: "wúxiàn wǎngluò", cen: "WiFi", ex: "网络密码在哪里？", expy: "Wǎngluò mìmǎ zài nǎlǐ?", exen: "Where's the WiFi password?" },
+  "密": { cw: "密码", cpy: "mìmǎ", cen: "password", ex: "我忘记密码了。", expy: "Wǒ wàngjì mìmǎ le.", exen: "I forgot the password." },
+  "电": { cw: "打电话", cpy: "dǎ diànhuà", cen: "to make a phone call", ex: "我给你打电话。", expy: "Wǒ gěi nǐ dǎ diànhuà.", exen: "I'll give you a call." },
+  "话": { cw: "打电话", cpy: "dǎ diànhuà", cen: "to make a phone call", ex: "请给我打电话。", expy: "Qǐng gěi wǒ dǎ diànhuà.", exen: "Please call me." },
+  "充": { cw: "充电", cpy: "chōngdiàn", cen: "to charge (a battery)", ex: "我的手机需要充电。", expy: "Wǒ de shǒujī xūyào chōngdiàn.", exen: "My phone needs charging." },
+  "丢": { cw: "丢了", cpy: "diū le", cen: "lost (something)", ex: "我的护照丢了。", expy: "Wǒ de hùzhào diū le.", exen: "I've lost my passport." },
+  "帮": { cw: "帮我", cpy: "bāng wǒ", cen: "help me", ex: "你能帮我吗？", expy: "Nǐ néng bāng wǒ ma?", exen: "Can you help me?" },
+  "报": { cw: "报警", cpy: "bàojǐng", cen: "to report to police", ex: "我要报警。", expy: "Wǒ yào bàojǐng.", exen: "I need to report this to the police." },
+  "真": { cw: "真的吗", cpy: "zhēn de ma", cen: "really?", ex: "真的吗？太好了！", expy: "Zhēn de ma? Tài hǎo le!", exen: "Really? That's great!" },
+  "哎": { cw: "哎呀", cpy: "āiyā", cen: "oh no/oops", ex: "哎呀，我忘了！", expy: "Āiyā, wǒ wàng le!", exen: "Oops, I forgot!" },
+  "呀": { cw: "哎呀", cpy: "āiyā", cen: "oh no/oops", ex: "哎呀，太贵了！", expy: "Āiyā, tài guì le!", exen: "Oh, that's too expensive!" },
+  "没": { cw: "没关系", cpy: "méi guānxi", cen: "no worries", ex: "没关系，不用担心。", expy: "Méi guānxi, bú yòng dānxīn.", exen: "It's okay, no need to worry." },
+  "关": { cw: "没关系", cpy: "méi guānxi", cen: "no worries", ex: "没关系！", expy: "Méi guānxi!", exen: "No worries!" },
+  "系": { cw: "没关系", cpy: "méi guānxi", cen: "no worries", ex: "真的没关系。", expy: "Zhēn de méi guānxi.", exen: "It's really okay." },
+  "当": { cw: "当然", cpy: "dāngrán", cen: "of course", ex: "当然可以！", expy: "Dāngrán kěyǐ!", exen: "Of course you can!" },
+  "随": { cw: "随便", cpy: "suíbiàn", cen: "whatever/anything is fine", ex: "喝什么都随便。", expy: "Hē shénme dōu suíbiàn.", exen: "Anything to drink is fine." },
+  "加": { cw: "加油", cpy: "jiāyóu", cen: "go for it!/good luck!", ex: "加油！你可以的！", expy: "Jiāyóu! Nǐ kěyǐ de!", exen: "You've got this! Go for it!" },
+  "油": { cw: "加油", cpy: "jiāyóu", cen: "go for it!/good luck!", ex: "考试加油！", expy: "Kǎoshì jiāyóu!", exen: "Good luck on the exam!" },
+  "第": { cw: "第一", cpy: "dì yī", cen: "first", ex: "这是我第一次来中国。", expy: "Zhè shì wǒ dì yī cì lái Zhōngguó.", exen: "This is my first time coming to China." },
+  "二": { cw: "第二", cpy: "dì èr", cen: "second", ex: "这是第二天。", expy: "Zhè shì dì èr tiān.", exen: "This is the second day." },
+  "三": { cw: "第三", cpy: "dì sān", cen: "third", ex: "第三站是西安。", expy: "Dì sān zhàn shì Xī'ān.", exen: "The third stop is Xi'an." },
+  "了": { cw: "太好了", cpy: "tài hǎo le", cen: "great!", ex: "太好了！", expy: "Tài hǎo le!", exen: "Great!" },
+  "院": { cw: "医院", cpy: "yīyuàn", cen: "hospital", ex: "医院在哪里？", expy: "Yīyuàn zài nǎlǐ?", exen: "Where is the hospital?" },
+  "药": { ex: "我需要吃药。", expy: "Wǒ xūyào chī yào.", exen: "I need to take medicine." },
+  "疼": { ex: "我的头很疼。", expy: "Wǒ de tóu hěn téng.", exen: "My head hurts a lot." },
+  "救": { cw: "救护车", cpy: "jiùhùchē", cen: "ambulance", ex: "请叫救护车！", expy: "Qǐng jiào jiùhùchē!", exen: "Please call an ambulance!" },
+  "命": { cw: "救命", cpy: "jiùmìng", cen: "help! (emergency)", ex: "救命！", expy: "Jiùmìng!", exen: "Help!" },
+  "急": { cw: "急诊", cpy: "jízhěn", cen: "emergency room", ex: "我需要去急诊。", expy: "Wǒ xūyào qù jízhěn.", exen: "I need to go to the emergency room." },
+  "诊": { cw: "急诊", cpy: "jízhěn", cen: "emergency room", ex: "急诊在哪里？", expy: "Jízhěn zài nǎlǐ?", exen: "Where's the emergency room?" },
+  "过": { cw: "过敏", cpy: "guòmǐn", cen: "allergic", ex: "我对海鲜过敏。", expy: "Wǒ duì hǎixiān guòmǐn.", exen: "I'm allergic to seafood." },
+  "敏": { cw: "过敏", cpy: "guòmǐn", cen: "allergic", ex: "你对什么过敏？", expy: "Nǐ duì shénme guòmǐn?", exen: "What are you allergic to?" },
+  "发": { cw: "发烧", cpy: "fāshāo", cen: "fever", ex: "他在发烧。", expy: "Tā zài fāshāo.", exen: "He has a fever." },
+  "烧": { cw: "发烧", cpy: "fāshāo", cen: "fever", ex: "我发烧了。", expy: "Wǒ fāshāo le.", exen: "I have a fever." },
+  "舒": { cw: "舒服", cpy: "shūfu", cen: "well/comfortable", ex: "我今天不舒服。", expy: "Wǒ jīntiān bù shūfu.", exen: "I don't feel well today." },
+  "警": { cw: "警察", cpy: "jǐngchá", cen: "police", ex: "请叫警察！", expy: "Qǐng jiào jǐngchá!", exen: "Please call the police!" },
+  "察": { cw: "警察", cpy: "jǐngchá", cen: "police", ex: "警察来了。", expy: "Jǐngchá lái le.", exen: "The police have arrived." },
+
+  "早": { cw: "早上", cpy: "zǎoshang", cen: "morning", ex: "早安", expy: "zǎo'ān", exen: "good morning (casual)" },
+  "上": { cw: "晚上", cpy: "wǎnshang", cen: "evening", ex: "晚上好", expy: "wǎnshang hǎo", exen: "good evening" },
+  "中": { cw: "中文", cpy: "Zhōngwén", cen: "Chinese (language)", ex: "我在学中文。", expy: "Wǒ zài xué Zhōngwén.", exen: "I'm learning Chinese." },
+  "午": { cw: "中午", cpy: "zhōngwǔ", cen: "noon", ex: "中午好", expy: "zhōngwǔ hǎo", exen: "good noon" },
+  "下": { cw: "下午", cpy: "xiàwǔ", cen: "afternoon", ex: "下午见！", expy: "Xiàwǔ jiàn!", exen: "See you this afternoon!" },
+  "晚": { cw: "晚饭", cpy: "wǎnfàn", cen: "dinner", ex: "我们晚上吃晚饭。", expy: "Wǒmen wǎnshang chī wǎnfàn.", exen: "We eat dinner in the evening." },
+  "好": { ex: "你好吗？", expy: "Nǐ hǎo ma?", exen: "How are you?" },
+  "我": { ex: "我是学生。", expy: "Wǒ shì xuésheng.", exen: "I am a student." },
+  "的": { ex: "这是我的护照。", expy: "Zhè shì wǒ de hùzhào.", exen: "This is my passport." },
+  "文": { cw: "英文", cpy: "Yīngwén", cen: "English (language)", ex: "你会说英文吗？", expy: "Nǐ huì shuō Yīngwén ma?", exen: "Do you speak English?" },
+  "不": { ex: "我不知道。", expy: "Wǒ bù zhīdào.", exen: "I don't know." },
+  "太": { ex: "太贵了！", expy: "Tài guì le!", exen: "Too expensive!" },
+  "但": { cw: "但是", cpy: "dànshì", cen: "but", ex: "很好，但是很贵。", expy: "Hěn hǎo, dànshì hěn guì.", exen: "Very good, but very expensive." },
+  "是": { ex: "他是我的朋友。", expy: "Tā shì wǒ de péngyou.", exen: "He is my friend." },
+  "会": { ex: "我不会说中文。", expy: "Wǒ bú huì shuō Zhōngwén.", exen: "I can't speak Chinese." },
+  "试": { cw: "试试", cpy: "shìshi", cen: "give it a try", ex: "我可以试试吗？", expy: "Wǒ kěyǐ shìshi ma?", exen: "Can I try it?" },
+  "请": { ex: "请坐。", expy: "Qǐng zuò.", exen: "Please sit down." },
+  "说": { ex: "请再说一遍。", expy: "Qǐng zài shuō yí biàn.", exen: "Please say that again." },
+  "慢": { ex: "火车很慢。", expy: "Huǒchē hěn màn.", exen: "The train is slow." },
+  "一": { ex: "我要一杯茶。", expy: "Wǒ yào yì bēi chá.", exen: "I'd like one tea." },
+  "点": { cw: "一点儿", cpy: "yìdiǎnr", cen: "a bit", ex: "便宜一点。", expy: "Piányi yìdiǎn.", exen: "A bit cheaper." },
+  "儿": { cw: "一点儿", cpy: "yìdiǎnr", cen: "a bit", ex: "说慢一点儿。", expy: "Shuō màn yìdiǎnr.", exen: "Speak a bit slower." },
+  "遍": { cw: "一遍", cpy: "yí biàn", cen: "once/one time", ex: "请再说一遍。", expy: "Qǐng zài shuō yí biàn.", exen: "Please say that again." },
+  "再": { cw: "再见", cpy: "zàijiàn", cen: "goodbye", ex: "再见！", expy: "Zàijiàn!", exen: "Goodbye!" },
+  "也": { ex: "我也是。", expy: "Wǒ yě shì.", exen: "Me too." },
+  "很": { ex: "这个很好吃。", expy: "Zhège hěn hǎochī.", exen: "This is very delicious." },
+  "高": { cw: "高兴", cpy: "gāoxìng", cen: "happy", ex: "我很高兴。", expy: "Wǒ hěn gāoxìng.", exen: "I'm very happy." },
+  "兴": { cw: "高兴", cpy: "gāoxìng", cen: "happy", ex: "认识你很高兴。", expy: "Rènshi nǐ hěn gāoxìng.", exen: "Happy to meet you." },
+  "认": { cw: "认识", cpy: "rènshi", cen: "to know someone", ex: "很高兴认识你。", expy: "Hěn gāoxìng rènshi nǐ.", exen: "Nice to meet you." },
+  "识": { cw: "认识", cpy: "rènshi", cen: "to know someone", ex: "我不认识他。", expy: "Wǒ bú rènshi tā.", exen: "I don't know him." },
+  "你": { ex: "你叫什么名字？", expy: "Nǐ jiào shénme míngzi?", exen: "What's your name?" },
+  "谢": { cw: "谢谢", cpy: "xièxie", cen: "thank you", ex: "谢谢你的帮助。", expy: "Xièxie nǐ de bāngzhù.", exen: "Thank you for your help." },
+  "客": { cw: "客气", cpy: "kèqi", cen: "polite", ex: "你太客气了。", expy: "Nǐ tài kèqi le.", exen: "You're too polite/kind." },
+  "气": { cw: "客气", cpy: "kèqi", cen: "polite", ex: "不客气！", expy: "Bú kèqi!", exen: "You're welcome!" },
+  "见": { cw: "再见", cpy: "zàijiàn", cen: "goodbye", ex: "明天见！", expy: "Míngtiān jiàn!", exen: "See you tomorrow!" },
+  "意": { cw: "不好意思", cpy: "bù hǎoyìsi", cen: "excuse me", ex: "不好意思，请问洗手间在哪里？", expy: "Bù hǎoyìsi, qǐngwèn xǐshǒujiān zài nǎlǐ?", exen: "Excuse me, where's the restroom?" },
+  "思": { cw: "意思", cpy: "yìsi", cen: "meaning", ex: "这是什么意思？", expy: "Zhè shì shénme yìsi?", exen: "What does this mean?" },
+  "对": { cw: "对不起", cpy: "duìbuqǐ", cen: "sorry", ex: "对不起，我迟到了。", expy: "Duìbuqǐ, wǒ chídào le.", exen: "Sorry, I'm late." },
+  "起": { cw: "对不起", cpy: "duìbuqǐ", cen: "sorry", ex: "一起去吗？", expy: "Yìqǐ qù ma?", exen: "Shall we go together?" },
+  "服": { cw: "服务员", cpy: "fúwùyuán", cen: "waiter", ex: "服务员，买单！", expy: "Fúwùyuán, mǎidān!", exen: "Waiter, the bill please!" },
+  "务": { cw: "服务员", cpy: "fúwùyuán", cen: "waiter", ex: "服务很好。", expy: "Fúwù hěn hǎo.", exen: "The service is great." },
+  "员": { cw: "服务员", cpy: "fúwùyuán", cen: "waiter", ex: "他是我们的新员工。", expy: "Tā shì wǒmen de xīn yuángōng.", exen: "He is our new employee." },
+  "买": { cw: "买单", cpy: "mǎidān", cen: "pay the bill", ex: "我想买一件衣服。", expy: "Wǒ xiǎng mǎi yí jiàn yīfu.", exen: "I want to buy a piece of clothing." },
+  "单": { cw: "菜单", cpy: "càidān", cen: "menu", ex: "菜单在哪里？", expy: "Càidān zài nǎlǐ?", exen: "Where's the menu?" },
+  "吃": { cw: "吃饭", cpy: "chīfàn", cen: "to eat a meal", ex: "我们去吃饭吧。", expy: "Wǒmen qù chīfàn ba.", exen: "Let's go eat." },
+  "干": { cw: "干杯", cpy: "gānbēi", cen: "cheers", ex: "为我们的旅行干杯！", expy: "Wèi wǒmen de lǚxíng gānbēi!", exen: "Cheers to our trip!" },
+  "杯": { cw: "干杯", cpy: "gānbēi", cen: "cheers", ex: "我要一杯水。", expy: "Wǒ yào yì bēi shuǐ.", exen: "I'd like a glass of water." },
+  "想": { cw: "我想要", cpy: "wǒ xiǎng yào", cen: "I would like", ex: "我想去中国。", expy: "Wǒ xiǎng qù Zhōngguó.", exen: "I want to go to China." },
+  "要": { cw: "我想要", cpy: "wǒ xiǎng yào", cen: "I would like", ex: "你要什么？", expy: "Nǐ yào shénme?", exen: "What would you like?" },
+  "鸡": { cw: "鸡肉", cpy: "jīròu", cen: "chicken meat", ex: "我要鸡肉炒饭。", expy: "Wǒ yào jīròu chǎofàn.", exen: "I'd like chicken fried rice." },
+  "肉": { cw: "牛肉", cpy: "niúròu", cen: "beef", ex: "你吃牛肉吗？", expy: "Nǐ chī niúròu ma?", exen: "Do you eat beef?" },
+  "饺": { cw: "饺子", cpy: "jiǎozi", cen: "dumplings", ex: "饺子很好吃。", expy: "Jiǎozi hěn hǎochī.", exen: "Dumplings are delicious." },
+  "子": { cw: "饺子", cpy: "jiǎozi", cen: "dumplings", ex: "我喜欢吃包子。", expy: "Wǒ xǐhuan chī bāozi.", exen: "I like eating steamed buns." },
+  "虾": { cw: "虾仁", cpy: "xiārén", cen: "shelled prawn", ex: "这道菜有虾。", expy: "Zhè dào cài yǒu xiā.", exen: "This dish has prawns." },
+  "仁": { cw: "虾仁", cpy: "xiārén", cen: "shelled prawn", ex: "虾仁面条很新鲜。", expy: "Xiārén miàntiáo hěn xīnxiān.", exen: "The prawn noodles are very fresh." },
+  "面": { cw: "面条", cpy: "miàntiáo", cen: "noodles", ex: "我要一碗面条。", expy: "Wǒ yào yì wǎn miàntiáo.", exen: "I'd like a bowl of noodles." },
+  "条": { cw: "面条", cpy: "miàntiáo", cen: "noodles", ex: "这条路很长。", expy: "Zhè tiáo lù hěn cháng.", exen: "This road is very long." },
+  "蔬": { cw: "蔬菜", cpy: "shūcài", cen: "vegetables", ex: "我喜欢吃蔬菜。", expy: "Wǒ xǐhuan chī shūcài.", exen: "I like eating vegetables." },
+  "菜": { cw: "蔬菜", cpy: "shūcài", cen: "vegetables", ex: "这道菜真好吃。", expy: "Zhè dào cài zhēn hǎochī.", exen: "This dish is really delicious." },
+  "米": { cw: "米饭", cpy: "mǐfàn", cen: "cooked rice", ex: "我要一碗米饭。", expy: "Wǒ yào yì wǎn mǐfàn.", exen: "I'd like a bowl of rice." },
+  "饭": { cw: "米饭", cpy: "mǐfàn", cen: "cooked rice", ex: "你吃饭了吗？", expy: "Nǐ chīfàn le ma?", exen: "Have you eaten? (common greeting)" },
+  "只": { ex: "我只吃素菜。", expy: "Wǒ zhǐ chī sùcài.", exen: "I only eat vegetarian dishes." },
+  "和": { ex: "我要茶和水。", expy: "Wǒ yào chá hé shuǐ.", exen: "I'd like tea and water." },
+  "海": { cw: "海鲜", cpy: "hǎixiān", cen: "seafood", ex: "我喜欢吃海鲜。", expy: "Wǒ xǐhuan chī hǎixiān.", exen: "I like eating seafood." },
+  "鲜": { cw: "海鲜", cpy: "hǎixiān", cen: "seafood", ex: "这个很新鲜。", expy: "Zhège hěn xīnxiān.", exen: "This is very fresh." },
+  "素": { cw: "素菜", cpy: "sùcài", cen: "vegetarian dish", ex: "你们有素菜吗？", expy: "Nǐmen yǒu sùcài ma?", exen: "Do you have vegetarian dishes?" },
+  "或": { cw: "或者", cpy: "huòzhě", cen: "or", ex: "茶或者水都可以。", expy: "Chá huòzhě shuǐ dōu kěyǐ.", exen: "Either tea or water is fine." },
+  "者": { cw: "或者", cpy: "huòzhě", cen: "or", ex: "素菜或者海鲜菜。", expy: "Sùcài huòzhě hǎixiān cài.", exen: "Vegetarian or seafood dishes." },
+  "吗": { ex: "你好吗？", expy: "Nǐ hǎo ma?", exen: "How are you?" },
+  "麻": { cw: "麻婆豆腐", cpy: "mápó dòufu", cen: "mapo tofu", ex: "麻婆豆腐有点辣。", expy: "Mápó dòufu yǒudiǎn là.", exen: "Mapo tofu is a bit spicy." },
+  "婆": { cw: "麻婆豆腐", cpy: "mápó dòufu", cen: "mapo tofu", ex: "麻婆豆腐是我最爱的菜。", expy: "Mápó dòufu shì wǒ zuì ài de cài.", exen: "Mapo tofu is my favorite dish." },
+  "豆": { cw: "豆腐", cpy: "dòufu", cen: "tofu", ex: "我要一份豆腐。", expy: "Wǒ yào yí fèn dòufu.", exen: "I'd like a portion of tofu." },
+  "腐": { cw: "豆腐", cpy: "dòufu", cen: "tofu", ex: "豆腐很健康。", expy: "Dòufu hěn jiànkāng.", exen: "Tofu is very healthy." },
+  "北": { cw: "北京", cpy: "Běijīng", cen: "Beijing", ex: "北京是中国的首都。", expy: "Běijīng shì Zhōngguó de shǒudū.", exen: "Beijing is the capital of China." },
+  "京": { cw: "北京", cpy: "Běijīng", cen: "Beijing", ex: "北京在上海的北边。", expy: "Běijīng zài Shànghǎi de běibian.", exen: "Beijing is north of Shanghai." },
+  "烤": { cw: "烤鸭", cpy: "kǎoyā", cen: "roast duck", ex: "北京烤鸭很有名。", expy: "Běijīng kǎoyā hěn yǒumíng.", exen: "Peking duck is very famous." },
+  "鸭": { cw: "烤鸭", cpy: "kǎoyā", cen: "roast duck", ex: "这只鸭子很大。", expy: "Zhè zhī yāzi hěn dà.", exen: "This duck is very big." },
+  "春": { cw: "春卷", cpy: "chūnjuǎn", cen: "spring roll", ex: "春天很漂亮。", expy: "Chūntiān hěn piàoliang.", exen: "Spring is very beautiful." },
+  "卷": { cw: "春卷", cpy: "chūnjuǎn", cen: "spring roll", ex: "我要两个春卷。", expy: "Wǒ yào liǎng ge chūnjuǎn.", exen: "I'd like two spring rolls." },
+  "炒": { cw: "炒饭", cpy: "chǎofàn", cen: "fried rice", ex: "扬州炒饭很好吃。", expy: "Yángzhōu chǎofàn hěn hǎochī.", exen: "Yangzhou fried rice is delicious." },
+  "火": { cw: "火锅", cpy: "huǒguō", cen: "hot pot", ex: "冬天吃火锅很棒。", expy: "Dōngtiān chī huǒguō hěn bàng.", exen: "Eating hot pot in winter is great." },
+  "锅": { cw: "火锅", cpy: "huǒguō", cen: "hot pot", ex: "我们去吃火锅吧！", expy: "Wǒmen qù chī huǒguō ba!", exen: "Let's go eat hot pot!" },
+  "包": { cw: "包子", cpy: "bāozi", cen: "stuffed bun", ex: "早上我吃包子。", expy: "Zǎoshang wǒ chī bāozi.", exen: "In the morning I eat steamed buns." },
+  "小": { cw: "小笼包", cpy: "xiǎolóngbāo", cen: "soup dumplings", ex: "上海的小笼包很有名。", expy: "Shànghǎi de xiǎolóngbāo hěn yǒumíng.", exen: "Shanghai's soup dumplings are very famous." },
+  "笼": { cw: "小笼包", cpy: "xiǎolóngbāo", cen: "soup dumplings", ex: "小笼包要小心吃，很烫！", expy: "Xiǎolóngbāo yào xiǎoxīn chī, hěn tàng!", exen: "Eat soup dumplings carefully, they're hot!" },
+  "馄": { cw: "馄饨", cpy: "húntun", cen: "wonton", ex: "我要一碗馄饨汤。", expy: "Wǒ yào yì wǎn húntun tāng.", exen: "I'd like a bowl of wonton soup." },
+  "饨": { cw: "馄饨", cpy: "húntun", cen: "wonton", ex: "馄饨和饺子不一样。", expy: "Húntun hé jiǎozi bù yíyàng.", exen: "Wontons and dumplings are different." },
+  "糖": { cw: "糖醋里脊", cpy: "tángcù lǐjǐ", cen: "sweet & sour pork", ex: "糖醋里脊又甜又酸。", expy: "Tángcù lǐjǐ yòu tián yòu suān.", exen: "Sweet & sour pork is both sweet and sour." },
+  "醋": { cw: "糖醋里脊", cpy: "tángcù lǐjǐ", cen: "sweet & sour pork", ex: "我不喜欢醋的味道。", expy: "Wǒ bù xǐhuan cù de wèidao.", exen: "I don't like the taste of vinegar." },
+  "里": { cw: "里脊", cpy: "lǐjǐ", cen: "tenderloin", ex: "火车站在哪里？", expy: "Huǒchēzhàn zài nǎlǐ?", exen: "Where is the train station?" },
+  "脊": { cw: "里脊", cpy: "lǐjǐ", cen: "tenderloin", ex: "猪里脊肉很嫩。", expy: "Zhū lǐjǐ ròu hěn nèn.", exen: "Pork tenderloin is very tender." },
+  "猪": { cw: "猪肉", cpy: "zhūròu", cen: "pork", ex: "这道菜用猪肉做的。", expy: "Zhè dào cài yòng zhūròu zuò de.", exen: "This dish is made with pork." },
+  "牛": { cw: "牛肉", cpy: "niúròu", cen: "beef", ex: "我要一份牛肉面。", expy: "Wǒ yào yí fèn niúròu miàn.", exen: "I'd like a beef noodle dish." },
+  "住": { ex: "我住在伦敦。", expy: "Wǒ zhù zài Lúndūn.", exen: "I live in London." },
+  "在": { ex: "你在哪里？", expy: "Nǐ zài nǎlǐ?", exen: "Where are you?" },
+  "伦": { cw: "伦敦", cpy: "Lúndūn", cen: "London", ex: "伦敦是英国的首都。", expy: "Lúndūn shì Yīngguó de shǒudū.", exen: "London is the capital of the UK." },
+  "敦": { cw: "伦敦", cpy: "Lúndūn", cen: "London", ex: "我们住在伦敦。", expy: "Wǒmen zhù zài Lúndūn.", exen: "We live in London." },
+  "英": { cw: "英国", cpy: "Yīngguó", cen: "UK", ex: "你是英国人吗？", expy: "Nǐ shì Yīngguórén ma?", exen: "Are you British?" },
+  "国": { cw: "英国", cpy: "Yīngguó", cen: "UK", ex: "你是哪国人？", expy: "Nǐ shì nǎ guó rén?", exen: "What's your nationality?" },
+  "可": { cw: "可是", cpy: "kěshì", cen: "but", ex: "可是我是奥地利人。", expy: "Kěshì wǒ shì Àodìlì rén.", exen: "But I am Austrian." },
+  "奥": { cw: "奥地利", cpy: "Àodìlì", cen: "Austria", ex: "奥地利在欧洲。", expy: "Àodìlì zài Ōuzhōu.", exen: "Austria is in Europe." },
+  "地": { cw: "奥地利", cpy: "Àodìlì", cen: "Austria", ex: "这块地很大。", expy: "Zhè kuài dì hěn dà.", exen: "This piece of land is very big." },
+  "利": { cw: "奥地利", cpy: "Àodìlì", cen: "Austria", ex: "意大利菜很好吃。", expy: "Yìdàlì cài hěn hǎochī.", exen: "Italian food is delicious." },
+  "人": { cw: "家人", cpy: "jiārén", cen: "family", ex: "他是我们的家人。", expy: "Tā shì wǒmen de jiārén.", exen: "He is a family member of ours." },
+  "护": { cw: "护照", cpy: "hùzhào", cen: "passport", ex: "请给我看你的护照。", expy: "Qǐng gěi wǒ kàn nǐ de hùzhào.", exen: "Please show me your passport." },
+  "照": { cw: "护照", cpy: "hùzhào", cen: "passport", ex: "我的护照是奥地利护照。", expy: "Wǒ de hùzhào shì Àodìlì hùzhào.", exen: "My passport is Austrian." },
+  "们": { cw: "我们", cpy: "wǒmen", cen: "we", ex: "我们一起住在英格兰。", expy: "Wǒmen yìqǐ zhù zài Yīnggélán.", exen: "We live in England together." },
+  "格": { cw: "英格兰", cpy: "Yīnggélán", cen: "England", ex: "英格兰的天气经常下雨。", expy: "Yīnggélán de tiānqì jīngcháng xiàyǔ.", exen: "England's weather often has rain." },
+  "兰": { cw: "爱尔兰", cpy: "Àiěrlán", cen: "Ireland", ex: "他在爱尔兰出生。", expy: "Tā zài Àiěrlán chūshēng.", exen: "He was born in Ireland." },
+  "他": { ex: "他住在英格兰。", expy: "Tā zhù zài Yīnggélán.", exen: "He lives in England." },
+  "有": { ex: "你们有素菜吗？", expy: "Nǐmen yǒu sùcài ma?", exen: "Do you have vegetarian dishes?" },
+  "爱": { cw: "爱尔兰", cpy: "Àiěrlán", cen: "Ireland", ex: "我爱吃中国菜。", expy: "Wǒ ài chī Zhōngguó cài.", exen: "I love eating Chinese food." },
+  "因": { cw: "因为", cpy: "yīnwèi", cen: "because", ex: "因为下雨，我们坐地铁。", expy: "Yīnwèi xiàyǔ, wǒmen zuò dìtiě.", exen: "Because it's raining, we're taking the metro." },
+  "为": { cw: "因为", cpy: "yīnwèi", cen: "because", ex: "因为他在爱尔兰出生。", expy: "Yīnwèi tā zài Àiěrlán chūshēng.", exen: "Because he was born in Ireland." },
+  "出": { cw: "出口", cpy: "chūkǒu", cen: "exit", ex: "火车站的出口在哪里？", expy: "Huǒchēzhàn de chūkǒu zài nǎlǐ?", exen: "Where's the exit of the train station?" },
+  "生": { cw: "出生", cpy: "chūshēng", cen: "born", ex: "他在爱尔兰出生。", expy: "Tā zài Àiěrlán chūshēng.", exen: "He was born in Ireland." },
+  "南": { ex: "上海在北京的南边。", expy: "Shànghǎi zài Běijīng de nánbian.", exen: "Shanghai is south of Beijing." },
+  "西": { cw: "西安", cpy: "Xī'ān", cen: "Xi'an", ex: "西安在中国的西边。", expy: "Xī'ān zài Zhōngguó de xībian.", exen: "Xi'an is in the west of China." },
+  "东": { ex: "上海在中国的东边。", expy: "Shànghǎi zài Zhōngguó de dōngbian.", exen: "Shanghai is in the east of China." },
+  "车": { cw: "火车", cpy: "huǒchē", cen: "train", ex: "这辆车很快。", expy: "Zhè liàng chē hěn kuài.", exen: "This vehicle is very fast." },
+  "站": { cw: "火车站", cpy: "huǒchēzhàn", cen: "train station", ex: "下一站是什么站？", expy: "Xià yí zhàn shì shénme zhàn?", exen: "What's the next stop?" },
+  "机": { cw: "飞机", cpy: "fēijī", cen: "airplane", ex: "我们坐飞机去香港。", expy: "Wǒmen zuò fēijī qù Xiānggǎng.", exen: "We're flying to Hong Kong." },
+  "场": { cw: "机场", cpy: "jīchǎng", cen: "airport", ex: "机场离这里很远。", expy: "Jīchǎng lí zhèlǐ hěn yuǎn.", exen: "The airport is far from here." },
+  "飞": { cw: "飞机", cpy: "fēijī", cen: "airplane", ex: "飞机几点起飞？", expy: "Fēijī jǐ diǎn qǐfēi?", exen: "What time does the plane take off?" },
+  "公": { cw: "公交车", cpy: "gōngjiāochē", cen: "bus", ex: "我们坐公交车去吧。", expy: "Wǒmen zuò gōngjiāochē qù ba.", exen: "Let's take the bus there." },
+  "交": { cw: "公交车", cpy: "gōngjiāochē", cen: "bus", ex: "这里的交通很方便。", expy: "Zhèlǐ de jiāotōng hěn fāngbiàn.", exen: "The transport here is very convenient." },
+  "铁": { cw: "地铁", cpy: "dìtiě", cen: "metro", ex: "我可以坐地铁去吗？", expy: "Wǒ kěyǐ zuò dìtiě qù ma?", exen: "Can I get there by metro?" },
+  "轻": { cw: "轻轨", cpy: "qīngguǐ", cen: "light rail", ex: "重庆的轻轨很特别。", expy: "Chóngqìng de qīngguǐ hěn tèbié.", exen: "Chongqing's light rail is very special." },
+  "轨": { cw: "轻轨", cpy: "qīngguǐ", cen: "light rail", ex: "火车在轨道上行驶。", expy: "Huǒchē zài guǐdào shang xíngshǐ.", exen: "The train runs on the track." },
+  "港": { cw: "香港", cpy: "Xiānggǎng", cen: "Hong Kong", ex: "香港有很多美食。", expy: "Xiānggǎng yǒu hěn duō měishí.", exen: "Hong Kong has lots of great food." },
+  "问": { cw: "请问", cpy: "qǐngwèn", cen: "excuse me, may I ask", ex: "请问，洗手间在哪里？", expy: "Qǐngwèn, xǐshǒujiān zài nǎlǐ?", exen: "Excuse me, where's the restroom?" },
+  "哪": { cw: "哪里", cpy: "nǎlǐ", cen: "where", ex: "你要去哪里？", expy: "Nǐ yào qù nǎlǐ?", exen: "Where do you want to go?" },
+  "直": { cw: "一直走", cpy: "yìzhí zǒu", cen: "go straight", ex: "一直走，然后往左转。", expy: "Yìzhí zǒu, ránhòu wǎng zuǒ zhuǎn.", exen: "Go straight, then turn left." },
+  "走": { cw: "一直走", cpy: "yìzhí zǒu", cen: "go straight", ex: "我们走吧！", expy: "Wǒmen zǒu ba!", exen: "Let's go!" },
+  "然": { cw: "然后", cpy: "ránhòu", cen: "and then", ex: "先吃饭，然后去机场。", expy: "Xiān chīfàn, ránhòu qù jīchǎng.", exen: "First eat, then go to the airport." },
+  "后": { cw: "然后", cpy: "ránhòu", cen: "and then", ex: "下午后我们去公园。", expy: "Xiàwǔ hòu wǒmen qù gōngyuán.", exen: "After the afternoon we'll go to the park." },
+  "往": { ex: "往右转，然后一直走。", expy: "Wǎng yòu zhuǎn, ránhòu yìzhí zǒu.", exen: "Turn right, then go straight." },
+  "左": { cw: "左转", cpy: "zuǒ zhuǎn", cen: "turn left", ex: "火车站在你的左边。", expy: "Huǒchēzhàn zài nǐ de zuǒbian.", exen: "The train station is on your left." },
+  "转": { cw: "右转", cpy: "yòu zhuǎn", cen: "turn right", ex: "往右转。", expy: "Wǎng yòu zhuǎn.", exen: "Turn right." },
+  "右": { cw: "右转", cpy: "yòu zhuǎn", cen: "turn right", ex: "机场在你的右边。", expy: "Jīchǎng zài nǐ de yòubian.", exen: "The airport is on your right." },
+  "近": { ex: "我们住得离伦敦很近。", expy: "Wǒmen zhù de lí Lúndūn hěn jìn.", exen: "We live very close to London." },
+  "五": { ex: "火车五分钟后到。", expy: "Huǒchē wǔ fēnzhōng hòu dào.", exen: "The train arrives in 5 minutes." },
+  "分": { cw: "分钟", cpy: "fēnzhōng", cen: "minutes", ex: "走路五分钟就到。", expy: "Zǒulù wǔ fēnzhōng jiù dào.", exen: "It's a 5-minute walk." },
+  "钟": { cw: "分钟", cpy: "fēnzhōng", cen: "minutes", ex: "现在几点钟？", expy: "Xiànzài jǐ diǎn zhōng?", exen: "What time is it now?" },
+  "就": { ex: "过了桥就到了。", expy: "Guòle qiáo jiù dào le.", exen: "Once you cross the bridge, you're there." },
+  "到": { cw: "到了", cpy: "dào le", cen: "arrived", ex: "我们到了吗？", expy: "Wǒmen dào le ma?", exen: "Have we arrived?" },
+  "以": { cw: "可以", cpy: "kěyǐ", cen: "can/may", ex: "我可以坐地铁去吗？", expy: "Wǒ kěyǐ zuò dìtiě qù ma?", exen: "Can I get there by metro?" },
+  "坐": { ex: "请坐这里。", expy: "Qǐng zuò zhèlǐ.", exen: "Please sit here." },
+  "去": { ex: "我们去哪里？", expy: "Wǒmen qù nǎlǐ?", exen: "Where are we going?" },
+  "红": { cw: "红绿灯", cpy: "hónglǜdēng", cen: "traffic light", ex: "在红绿灯那里左转。", expy: "Zài hónglǜdēng nàlǐ zuǒ zhuǎn.", exen: "Turn left at the traffic light." },
+  "绿": { cw: "红绿灯", cpy: "hónglǜdēng", cen: "traffic light", ex: "我喜欢喝绿茶。", expy: "Wǒ xǐhuan hē lǜchá.", exen: "I like drinking green tea." },
+  "灯": { cw: "红绿灯", cpy: "hónglǜdēng", cen: "traffic light", ex: "红绿灯坏了。", expy: "Hónglǜdēng huài le.", exen: "The traffic light is broken." },
+  "桥": { ex: "过了桥就到了。", expy: "Guòle qiáo jiù dào le.", exen: "Once you cross the bridge, you're there." },
+  "路": { ex: "就在这条路的尽头。", expy: "Jiù zài zhè tiáo lù de jìntóu.", exen: "It's at the end of this road." },
+  "尽": { cw: "尽头", cpy: "jìntóu", cen: "the far end", ex: "就在这条路的尽头。", expy: "Jiù zài zhè tiáo lù de jìntóu.", exen: "It's at the end of this road." },
+  "辆": { cw: "这辆车", cpy: "zhè liàng chē", cen: "this vehicle", ex: "这辆车去机场吗？", expy: "Zhè liàng chē qù jīchǎng ma?", exen: "Does this vehicle go to the airport?" },
+  "什": { cw: "什么", cpy: "shénme", cen: "what", ex: "你要吃什么？", expy: "Nǐ yào chī shénme?", exen: "What would you like to eat?" },
+  "么": { cw: "什么", cpy: "shénme", cen: "what", ex: "下一站是什么站？", expy: "Xià yí zhàn shì shénme zhàn?", exen: "What's the next stop?" },
+  "换": { cw: "换乘", cpy: "huànchéng", cen: "transfer", ex: "我要换乘。", expy: "Wǒ yào huànchéng.", exen: "I need to transfer." },
+  "乘": { cw: "换乘", cpy: "huànchéng", cen: "transfer", ex: "在这里换乘地铁。", expy: "Zài zhèlǐ huànchéng dìtiě.", exen: "Transfer to the metro here." },
+  "票": { cw: "车票", cpy: "chēpiào", cen: "ticket", ex: "车票多少钱？", expy: "Chēpiào duōshǎo qián?", exen: "How much is the ticket?" },
+  "多": { cw: "多少", cpy: "duōshǎo", cen: "how much", ex: "多少钱？", expy: "Duōshǎo qián?", exen: "How much is it?" },
+  "少": { cw: "多少", cpy: "duōshǎo", cen: "how much", ex: "车票多少钱？", expy: "Chēpiào duōshǎo qián?", exen: "How much is the ticket?" },
+  "钱": { ex: "我没有钱。", expy: "Wǒ méiyǒu qián.", exen: "I don't have money." },
+  "用": { cw: "信用卡", cpy: "xìnyòngkǎ", cen: "credit card", ex: "我可以用手机支付吗？", expy: "Wǒ kěyǐ yòng shǒujī zhīfù ma?", exen: "Can I pay by phone?" },
+  "手": { cw: "手机", cpy: "shǒujī", cen: "mobile phone", ex: "我的手机没电了。", expy: "Wǒ de shǒujī méi diàn le.", exen: "My phone is out of battery." },
+  "支": { cw: "支付", cpy: "zhīfù", cen: "to pay", ex: "可以用支付宝吗？", expy: "Kěyǐ yòng Zhīfùbǎo ma?", exen: "Can I use Alipay?" },
+  "付": { cw: "支付", cpy: "zhīfù", cen: "to pay", ex: "我想用现金付钱。", expy: "Wǒ xiǎng yòng xiànjīn fù qián.", exen: "I want to pay with cash." },
+  "口": { cw: "出口", cpy: "chūkǒu", cen: "exit", ex: "出口在哪里？", expy: "Chūkǒu zài nǎlǐ?", exen: "Where is the exit?" },
+  "入": { cw: "入口", cpy: "rùkǒu", cen: "entrance", ex: "入口在这边。", expy: "Rùkǒu zài zhèbiān.", exen: "The entrance is this way." },
+  "安": { cw: "安检", cpy: "ānjiǎn", cen: "security check", ex: "安检需要几分钟？", expy: "Ānjiǎn xūyào jǐ fēnzhōng?", exen: "How many minutes does security take?" },
+  "检": { cw: "安检", cpy: "ānjiǎn", cen: "security check", ex: "机场的安检很严格。", expy: "Jīchǎng de ānjiǎn hěn yángé.", exen: "The airport security is very strict." },
+  "勿": { cw: "请勿吸烟", cpy: "qǐng wù xīyān", cen: "no smoking", ex: "请勿吸烟。", expy: "Qǐng wù xīyān.", exen: "No smoking." },
+  "吸": { cw: "吸烟", cpy: "xīyān", cen: "to smoke", ex: "这里禁止吸烟。", expy: "Zhèlǐ jìnzhǐ xīyān.", exen: "Smoking is prohibited here." },
+  "烟": { cw: "吸烟", cpy: "xīyān", cen: "to smoke", ex: "请勿吸烟。", expy: "Qǐng wù xīyān.", exen: "No smoking." },
+  "心": { cw: "小心", cpy: "xiǎoxīn", cen: "be careful", ex: "小心地滑！", expy: "Xiǎoxīn dì huá!", exen: "Caution: slippery floor!" },
+  "滑": { cw: "小心地滑", cpy: "xiǎoxīn dì huá", cen: "caution, slippery floor", ex: "地上很滑，小心！", expy: "Dìshang hěn huá, xiǎoxīn!", exen: "The floor is slippery, be careful!" },
+  "终": { cw: "终点站", cpy: "zhōngdiǎnzhàn", cen: "terminus", ex: "这是终点站。", expy: "Zhè shì zhōngdiǎnzhàn.", exen: "This is the last stop." },
+  "洗": { cw: "洗手间", cpy: "xǐshǒujiān", cen: "restroom", ex: "洗手间在哪里？", expy: "Xǐshǒujiān zài nǎlǐ?", exen: "Where's the restroom?" },
+  "间": { cw: "洗手间", cpy: "xǐshǒujiān", cen: "restroom", ex: "请问洗手间怎么走？", expy: "Qǐngwèn xǐshǒujiān zěnme zǒu?", exen: "Excuse me, how do I get to the restroom?" }
+};
+
+const levelWeight = { new: 0.3, learning: 0.4, weak: 0, medium: 0.6, strong: 1 };
+
+// ---- Practice setup: pick sections, skip mastered, pick a session size ----
+const SETUP_KEY = 'hanzi-quiz-setup-v1';
+function loadSetup() {
+  try {
+    const raw = localStorage.getItem(SETUP_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return { sections: quizSections.slice(), weakOnly: false, sessionSize: 20 };
+}
+function saveSetup() {
+  try { localStorage.setItem(SETUP_KEY, JSON.stringify(setup)); } catch (e) {}
+}
+let setup = loadSetup();
+
+function sectionCharCount(title) {
+  const sec = sections.find(s => s.title === title);
+  return sec ? new Set(sec.items.map(it => it.hz)).size : 0;
+}
+
+function buildPool(selectedTitles, weakOnly) {
+  const seenChars = new Set();
+  let pool = [];
+  sections.filter(s => selectedTitles.includes(s.title)).forEach(sec => {
+    sec.items.forEach(it => {
+      if (!seenChars.has(it.hz)) { seenChars.add(it.hz); pool.push(it); }
+    });
+  });
+  if (weakOnly) pool = pool.filter(it => masteryLevel(it.hz) !== 'strong');
+  return pool;
+}
+
+function getMasteryBreakdown() {
+  const counts = { new: 0, learning: 0, weak: 0, medium: 0, strong: 0 };
+  vocab.forEach(it => { counts[masteryLevel(it.hz)]++; });
+  return counts;
+}
+
+function renderSetup() {
+  practiceStarted = false;
+  const pool = buildPool(setup.sections, setup.weakOnly);
+  const breakdown = getMasteryBreakdown();
+
+  const checklist = quizSections.map(title => {
+    const checked = setup.sections.includes(title) ? 'checked' : '';
+    return `
+      <label class="section-check-row">
+        <input type="checkbox" class="section-check" value="${title}" ${checked}>
+        ${title}
+        <span class="section-check-count">${sectionCharCount(title)}</span>
+      </label>
+    `;
+  }).join('');
+
+  practiceView.innerHTML = `
+    <div class="setup-wrap">
+      <div class="setup-title">Set up this session</div>
+      <div class="setup-sub">Pick a focused batch instead of facing all ${vocab.length} at once — small, related chunks stick better.</div>
+
+      <div class="setup-block">
+        <div class="setup-block-label">Your progress across all ${vocab.length} characters</div>
+        <div class="mastery-breakdown">
+          <div class="mastery-breakdown-bar">
+            ${['strong', 'medium', 'learning', 'weak', 'new'].map(lvl =>
+              breakdown[lvl] > 0 ? `<div class="mb-segment mb-${lvl}" style="flex:${breakdown[lvl]}" title="${masteryLabel[lvl]}: ${breakdown[lvl]}"></div>` : ''
+            ).join('')}
+          </div>
+          <div class="mastery-breakdown-legend">
+            <span><i class="mb-dot mb-strong"></i>strong ${breakdown.strong}</span>
+            <span><i class="mb-dot mb-medium"></i>getting there ${breakdown.medium}</span>
+            <span><i class="mb-dot mb-learning"></i>learning ${breakdown.learning}</span>
+            <span><i class="mb-dot mb-weak"></i>needs work ${breakdown.weak}</span>
+            <span><i class="mb-dot mb-new"></i>not started ${breakdown.new}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="setup-block">
+        <div class="setup-block-label">Sections to include</div>
+        <div class="setup-quickbtns">
+          <button id="select-all-btn" type="button">Select all</button>
+          <button id="select-none-btn" type="button">Select none</button>
+        </div>
+        <div class="section-checklist" id="section-checklist">${checklist}</div>
+      </div>
+
+      <div class="setup-block">
+        <label class="setup-toggle-row">
+          <input type="checkbox" id="weak-only-toggle" ${setup.weakOnly ? 'checked' : ''}>
+          Skip characters I've already mastered (🟢 strong)
+        </label>
+      </div>
+
+      <div class="setup-block">
+        <div class="setup-select-row">
+          <span>Session length</span>
+          <select id="session-size-select">
+            ${[10, 20, 30, 50, 'all'].map(n =>
+              `<option value="${n}" ${String(setup.sessionSize) === String(n) ? 'selected' : ''}>${n === 'all' ? 'Everything selected' : n + ' cards'}</option>`
+            ).join('')}
+          </select>
+        </div>
+      </div>
+
+      <div class="setup-pool-count" id="setup-pool-count"></div>
+
+      <div class="setup-actions">
+        <button class="setup-btn-secondary" id="read-through-btn">Read through first →</button>
+        <button class="setup-btn-primary" id="start-quiz-btn">Start quiz</button>
+      </div>
+    </div>
+  `;
+
+  const updatePoolCount = () => {
+    const p = buildPool(setup.sections, setup.weakOnly);
+    document.getElementById('setup-pool-count').textContent =
+      p.length === 0 ? 'No characters match this selection.' : `${p.length} character${p.length === 1 ? '' : 's'} in this selection`;
+  };
+  updatePoolCount();
+
+  document.querySelectorAll('.section-check').forEach(cb => {
+    cb.addEventListener('change', () => {
+      setup.sections = Array.from(document.querySelectorAll('.section-check:checked')).map(c => c.value);
+      saveSetup();
+      updatePoolCount();
+    });
+  });
+  document.getElementById('select-all-btn').addEventListener('click', () => {
+    document.querySelectorAll('.section-check').forEach(cb => cb.checked = true);
+    setup.sections = quizSections.slice();
+    saveSetup();
+    updatePoolCount();
+  });
+  document.getElementById('select-none-btn').addEventListener('click', () => {
+    document.querySelectorAll('.section-check').forEach(cb => cb.checked = false);
+    setup.sections = [];
+    saveSetup();
+    updatePoolCount();
+  });
+  document.getElementById('weak-only-toggle').addEventListener('change', (e) => {
+    setup.weakOnly = e.target.checked;
+    saveSetup();
+    updatePoolCount();
+  });
+  document.getElementById('session-size-select').addEventListener('change', (e) => {
+    setup.sessionSize = e.target.value === 'all' ? 'all' : Number(e.target.value);
+    saveSetup();
+  });
+  document.getElementById('start-quiz-btn').addEventListener('click', () => startPractice());
+  document.getElementById('read-through-btn').addEventListener('click', renderReadThrough);
+}
+
+function renderReadThrough() {
+  const pool = buildPool(setup.sections, setup.weakOnly);
+  const rows = pool.map(it => `
+    <div class="pinyin-row">
+      <span class="pinyin-main">${it.py}</span>
+      <span class="pinyin-hz">${it.hz}</span>
+      <div class="pinyin-en">${it.en || ''}</div>
+    </div>
+  `).join('');
+
+  practiceView.innerHTML = `
+    <div class="readthrough-header">Read through, then quiz yourself — priming recall like this works better than testing cold.</div>
+    <div class="setup-wrap">
+      <div class="setup-block">
+        <div class="pinyin-list">${rows || '<div class="setup-sub">Nothing selected.</div>'}</div>
+      </div>
+      <div class="setup-actions">
+        <button class="setup-btn-secondary" id="back-to-setup-btn">← Back to setup</button>
+        <button class="setup-btn-primary" id="start-quiz-from-read-btn">Start quiz →</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('back-to-setup-btn').addEventListener('click', renderSetup);
+  document.getElementById('start-quiz-from-read-btn').addEventListener('click', () => startPractice());
+}
+
+function startPractice() {
+  practiceStarted = true;
+  const pool = buildPool(setup.sections, setup.weakOnly);
+  const shuffled = shuffle(pool.slice());
+  // Light weighting: weaker/unseen characters tend to sort earlier, but with
+  // enough randomness that the order still feels natural, not robotic.
+  let ordered = shuffled
+    .map(it => ({ it, sortKey: levelWeight[masteryLevel(it.hz)] + Math.random() * 0.5 }))
+    .sort((a, b) => a.sortKey - b.sortKey)
+    .map(x => x.it);
+  if (setup.sessionSize !== 'all' && ordered.length > setup.sessionSize) {
+    ordered = ordered.slice(0, setup.sessionSize);
+  }
+  deck = ordered;
+  totalCount = deck.length;
+  learnedCount = 0;
+  renderCard();
+}
+
+function renderCard() {
+  revealed = false;
+  if (deck.length === 0) {
+    practiceView.innerHTML = `
+      <div class="practice-done">
+        <div style="font-size:40px;">好</div>
+        <p>You went through all ${totalCount} characters.</p>
+        <button id="restart-btn">Practice this session again</button>
+        <div><button class="reset-stats-btn" id="new-session-btn">Choose a new session →</button></div>
+        <div><button class="reset-stats-btn" id="reset-stats-btn">Reset saved progress</button></div>
+      </div>
+    `;
+    document.getElementById('restart-btn').addEventListener('click', startPractice);
+    document.getElementById('new-session-btn').addEventListener('click', renderSetup);
+    document.getElementById('reset-stats-btn').addEventListener('click', () => {
+      if (confirm('Clear all saved practice progress? This can\'t be undone.')) resetStats();
+    });
+    return;
+  }
+  const it = deck[0];
+  const ctx = wordContext[it.hz];
+  const pct = Math.round((learnedCount / totalCount) * 100);
+  const level = masteryLevel(it.hz);
+  const s = stats[it.hz];
+  const statsLine = s ? `seen ${s.seen}× · ${Math.round((s.good / s.seen) * 100)}% got it` : '';
+
+  let contextHtml = '';
+  if (ctx) {
+    if (ctx.cw) {
+      const otherChars = Array.from(ctx.cw).filter(ch => ch !== it.hz && allCharInfo[ch]);
+      const breakdown = otherChars
+        .map(ch => `${ch} (${allCharInfo[ch].py}) = ${simpleGloss(allCharInfo[ch].en)}`)
+        .join('; ');
+      contextHtml += `
+        <div class="flash-context-row">
+          <span class="flash-context-label">Also in:</span>
+          <span class="flash-context-hz">${ctx.cw}</span>
+          <span class="flash-context-py">${ctx.cpy}</span>
+          <span class="flash-context-en">— ${ctx.cen}</span>
+          ${breakdown ? `<div class="flash-context-breakdown">${breakdown}</div>` : ''}
+        </div>
+      `;
+    }
+    if (ctx.ex) {
+      const seenInEx = new Set();
+      const exBreakdown = Array.from(ctx.ex)
+        .filter(ch => /[\u4e00-\u9fff]/.test(ch) && allCharInfo[ch] && !seenInEx.has(ch) && seenInEx.add(ch))
+        .map(ch => `${ch} (${allCharInfo[ch].py}) = ${simpleGloss(allCharInfo[ch].en)}`)
+        .join('; ');
+      contextHtml += `
+        <div class="flash-context-row flash-context-example">
+          <span class="flash-context-hz">${ctx.ex}</span>
+          <span class="flash-context-py">${ctx.expy}</span>
+          <span class="flash-context-en">— ${ctx.exen}</span>
+          ${exBreakdown ? `<div class="flash-context-breakdown">${exBreakdown}</div>` : ''}
+        </div>
+      `;
+    }
+  }
+  if (statsLine) {
+    contextHtml += `<div class="flash-stats-line">${statsLine}</div>`;
+  }
+
+  practiceView.innerHTML = `
+    <div class="practice-topbar">
+      <button class="exit-practice" id="exit-practice">✕ Exit</button>
+      <div class="progress-text" style="margin-bottom:0;">${learnedCount} / ${totalCount} learned &nbsp;·&nbsp; ${deck.length} in this round</div>
+      <button class="change-session-btn" id="change-session-btn">⚙ Change session</button>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="flash-card mastery-${level}" id="flash-card">
+      <div class="mastery-dot mastery-dot-${level}" title="${masteryLabel[level]}"></div>
+      <div class="flash-hz">${it.hz}</div>
+      <div class="flash-answer" id="flash-answer">
+        <div class="flash-py">${it.py}</div>
+        <div class="flash-en">${it.en || ''}</div>
+        ${contextHtml}
+      </div>
+      <div class="flash-hint" id="flash-hint">tap the card to reveal pinyin</div>
+    </div>
+    <div class="flash-actions" id="flash-actions" style="display:none;">
+      <button class="btn-again" id="btn-again">still learning</button>
+      <button class="btn-good" id="btn-good">got it</button>
+    </div>
+    <div class="honesty-note">Rate yourself honestly — "got it" should mean you really knew it, not that you recognized the answer once shown.</div>
+  `;
+  document.getElementById('flash-card').addEventListener('click', toggleReveal);
+  document.getElementById('exit-practice').addEventListener('click', () => activateTab({ view: browseView }));
+  document.getElementById('change-session-btn').addEventListener('click', renderSetup);
+}
+
+function toggleReveal() {
+  revealed = !revealed;
+  const answer = document.getElementById('flash-answer');
+  const hint = document.getElementById('flash-hint');
+  const actions = document.getElementById('flash-actions');
+  if (revealed) {
+    answer.classList.add('show');
+    hint.style.display = 'none';
+    actions.style.display = 'flex';
+    document.getElementById('btn-again').onclick = (e) => { e.stopPropagation(); markAgain(); };
+    document.getElementById('btn-good').onclick = (e) => { e.stopPropagation(); markGood(); };
+  } else {
+    answer.classList.remove('show');
+    hint.style.display = 'block';
+    actions.style.display = 'none';
+  }
+}
+
+function markGood() {
+  const card = deck.shift();
+  recordResult(card.hz, true);
+  learnedCount++;
+  renderCard();
+}
+
+function markAgain() {
+  const card = deck.shift();
+  recordResult(card.hz, false);
+  const pos = Math.min(deck.length, 4);
+  deck.splice(pos, 0, card);
+  renderCard();
+}
+
+</script>
+</body>
+</html>
