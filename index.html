@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Chinese restaurant phrases — stroke order practice</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Chinese">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Chinese</title>
 <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7.3/dist/hanzi-writer.min.js"></script>
 <style>
   :root{
@@ -15,12 +20,16 @@
     --line:#D9CDB4;
   }
   *{box-sizing:border-box;}
+  html, body{
+    height:100%;
+  }
   body{
     margin:0;
+    min-height:100dvh;
     background:var(--paper);
     color:var(--ink);
     font-family: "Songti SC","STSong","Noto Serif SC",Georgia,serif;
-    padding:32px 24px 56px;
+    padding:calc(32px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right)) calc(56px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
   }
   .wrap{max-width:920px;margin:0 auto;}
   header{
@@ -629,10 +638,9 @@
 
 <header>
   <div>
-    <h1>Chinese restaurant phrases</h1>
-    <div class="sub">Pinyin · characters · animated stroke order — click a card to replay</div>
+    <h1>Chinese</h1>
   </div>
-  <div class="stamp">餐</div>
+  <div class="stamp">中</div>
 </header>
 
 <div class="mode-toggle">
