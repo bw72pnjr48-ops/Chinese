@@ -2999,6 +2999,40 @@ function sectionCharCount(title) {
   return sec ? new Set(sec.items.map(it => it.hz)).size : 0;
 }
 
+// Practice setup groups the many fine-grained sections into larger thematic
+// clusters (~30-40 characters each) so choosing a session isn't 38 checkboxes.
+// Browse and Pinyin tabs are unaffected — they still show the original sections.
+const quizClusters = [
+  { label: "Greetings", sections: ["Greetings"] },
+  { label: "Courtesy & reactions", sections: ["Courtesy & extras", "Conversational reactions"] },
+  { label: "Ordering & dietary needs", sections: ["Ordering — chicken dumplings", "Ordering — prawn noodles", "Ordering — vegetable rice", "Dietary needs"] },
+  { label: "Main dishes", sections: ["Main dishes"] },
+  { label: "Drinks", sections: ["Drinks"] },
+  { label: "About me & my partner", sections: ["About me", "About my partner"] },
+  { label: "Cities, sightseeing & travel docs", sections: ["Cities", "Sightseeing", "Travel & geography extras"] },
+  { label: "Directions & transport", sections: ["Directions & transport", "Directions conversations"] },
+  { label: "Public transport", sections: ["Public transport"] },
+  { label: "Airport, hotel & connectivity", sections: ["Airport, hotel & payments", "Phone & connectivity"] },
+  { label: "Numbers & time", sections: ["Numbers", "Time & dates"] },
+  { label: "Money, shopping & clothes", sections: ["Money & shopping", "Shopping — clothes & objects"] },
+  { label: "Adjectives & question words", sections: ["Common adjectives", "Question words"] },
+  { label: "Verbs & connectors", sections: ["Common verbs", "Connectors & grammar words"] },
+  { label: "Health, emergency & body", sections: ["Health & emergency basics", "Body & senses"] },
+  { label: "Family, people & small talk", sections: ["Family & people words", "Small talk"] },
+  { label: "Weather, emotions & work", sections: ["Weather & seasons", "Emotions", "Workplace & study"] },
+  { label: "Jobs & professions", sections: ["Jobs & professions"] },
+  { label: "Colours & sound-alikes", sections: ["Colours", "Sound-alikes: shi / shu family"] },
+  { label: "Hobbies", sections: ["Hobbies"] }
+];
+
+function clusterCharCount(sectionTitles) {
+  const set = new Set();
+  sections.filter(s => sectionTitles.includes(s.title)).forEach(sec => {
+    sec.items.forEach(it => set.add(it.hz));
+  });
+  return set.size;
+}
+
 function buildPool(selectedTitles, weakOnly) {
   const seenChars = new Set();
   let pool = [];
@@ -3022,13 +3056,13 @@ function renderSetup() {
   const pool = buildPool(setup.sections, setup.weakOnly);
   const breakdown = getMasteryBreakdown();
 
-  const checklist = quizSections.map(title => {
-    const checked = setup.sections.includes(title) ? 'checked' : '';
+  const checklist = quizClusters.map((cluster, i) => {
+    const checked = cluster.sections.every(t => setup.sections.includes(t)) ? 'checked' : '';
     return `
       <label class="section-check-row">
-        <input type="checkbox" class="section-check" value="${title}" ${checked}>
-        ${title}
-        <span class="section-check-count">${sectionCharCount(title)}</span>
+        <input type="checkbox" class="section-check" data-cluster="${i}" ${checked}>
+        ${cluster.label}
+        <span class="section-check-count">${clusterCharCount(cluster.sections)}</span>
       </label>
     `;
   }).join('');
@@ -3100,8 +3134,13 @@ function renderSetup() {
   updatePoolCount();
 
   document.querySelectorAll('.section-check').forEach(cb => {
-    cb.addEventListener('change', () => {
-      setup.sections = Array.from(document.querySelectorAll('.section-check:checked')).map(c => c.value);
+    cb.addEventListener('change', (e) => {
+      const cluster = quizClusters[Number(e.target.dataset.cluster)];
+      if (e.target.checked) {
+        cluster.sections.forEach(t => { if (!setup.sections.includes(t)) setup.sections.push(t); });
+      } else {
+        setup.sections = setup.sections.filter(t => !cluster.sections.includes(t));
+      }
       saveSetup();
       updatePoolCount();
     });
